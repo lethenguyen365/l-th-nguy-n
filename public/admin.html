@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - VieclamNhaDat.com.vn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="admin-body"><div class="admin-orb admin-orb-1"></div><div class="admin-orb admin-orb-2"></div>
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <div class="admin-logo">BĐS HCM Admin</div><div class="admin-sublogo">AI vận hành · ví tiền · duyệt tin · báo cáo</div><div class="admin-badge-row"><span>UI ULTRA</span><span>AI OPS</span><span>SMART MARKET</span></div>
+      <a href="/">← Về trang chủ</a>
+      <a href="#summary">Tổng quan</a>
+      <a href="#users">Người dùng</a>
+      <a href="#posts">Tin đăng</a>
+      <a href="#payments">Thanh toán</a>
+      <a href="#topups">Nạp tiền</a>
+      <a href="#aiops">AI vận hành</a>
+      <a href="#settings">Cài đặt</a>
+    </aside>
+
+    <main class="admin-main">
+      <section class="admin-top fade-in">
+        <div>
+          <div class="tiny-title">Trang quản trị</div>
+          <h1>Dashboard quản trị bất động sản TP.HCM</h1>
+        </div>
+        <button class="btn btn-danger" onclick="logoutAdmin()">Đăng xuất</button>
+      </section>
+
+      <section id="summary" class="stats-grid">
+        <div class="stat-card"><div class="tiny-title">Người dùng</div><h2 id="sumUsers">0</h2></div>
+        <div class="stat-card"><div class="tiny-title">Tin đăng</div><h2 id="sumPosts">0</h2></div>
+        <div class="stat-card"><div class="tiny-title">Doanh thu</div><h2 id="sumRevenue">0 đ</h2></div>
+        <div class="stat-card"><div class="tiny-title">Chờ duyệt</div><h2 id="sumPending">0</h2></div>
+        <div class="stat-card"><div class="tiny-title">Yêu thích</div><h2 id="sumFavorites">0</h2></div>
+      </section>
+
+      <section id="users" class="admin-panel">
+        <div class="section-header"><div><div class="tiny-title">Quản lý user</div><h2>Danh sách người dùng</h2></div></div>
+        <div id="userTableWrap"></div>
+      </section>
+
+      <section id="posts" class="admin-panel">
+        <div class="section-header"><div><div class="tiny-title">Quản lý tin</div><h2>Danh sách tin đăng</h2></div></div>
+        <div id="postTableWrap"></div>
+      </section>
+
+      <section id="payments" class="admin-panel">
+        <div class="section-header"><div><div class="tiny-title">Thanh toán gói</div><h2>Danh sách đăng ký gói</h2></div></div>
+        <div id="subscriptionTableWrap"></div>
+      </section>
+
+      <section id="topups" class="admin-panel">
+        <div class="section-header"><div><div class="tiny-title">Ví người dùng</div><h2>Yêu cầu nạp tiền</h2></div></div>
+        <div id="topupTableWrap"></div>
+      </section>
+
+      <section id="aiops" class="admin-panel">
+        <div class="section-header">
+          <div>
+            <div class="tiny-title">AI vận hành</div>
+            <h2>Duyệt tin · Chống spam · Gợi ý VIP · Báo cáo</h2>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-primary" type="button" onclick="runAiRenewal()">Nhắc gia hạn</button>
+            <button class="btn btn-light" type="button" onclick="runAiVip()">Gợi ý VIP</button>
+            <button class="btn btn-light" type="button" onclick="runAiSpam()">Quét spam</button>
+          </div>
+        </div>
+        <div id="aiOpsSummary" class="empty-state">Chạy công cụ AI để tạo báo cáo.</div>
+        <div id="aiReportsWrap" style="margin-top:16px"></div>
+        <div id="aiActionsWrap" style="margin-top:16px"></div>
+      </section>
+
+      <section id="settings" class="admin-panel">
+        <div class="section-header"><div><div class="tiny-title">Cấu hình</div><h2>Thông tin website và QR thanh toán</h2></div></div>
+        <form id="settingsForm" class="form-grid">
+          <div><label>Tên website</label><input id="stSiteName" type="text" /></div>
+          <div><label>Slogan</label><input id="stSiteSlogan" type="text" /></div>
+          <div><label>Link ảnh QR</label><input id="stQrImage" type="text" /></div>
+          <div><label>Link banner hero</label><input id="stHeroBanner" type="text" /></div>
+          <div><label>Ngân hàng</label><input id="stBankName" type="text" /></div>
+          <div><label>Tên chủ TK</label><input id="stBankAccountName" type="text" /></div>
+          <div><label>Số tài khoản</label><input id="stBankAccountNumber" type="text" /></div>
+          <div><label>Tiền tố nội dung CK</label><input id="stTransferNotePrefix" type="text" /></div>
+          <div class="full-col"><label>Thông báo đầu trang</label><input id="stAnnouncement" type="text" /></div>
+          <div class="full-col"><button class="btn btn-primary" type="submit">Lưu cài đặt</button></div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

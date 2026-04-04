@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vieclamnhadat.vn.com</title>
+  <meta name="description" content="Nền tảng đăng tin bất động sản TP.HCM, tập trung Gò Vấp, Quận 12 và các khu vực có nhu cầu thật." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-noise"></div>
+  <div class="top-strip">
+    <div class="site-shell top-strip-inner">
+      <span>Hotline: 0908777102</span>
+      <span>Chuyên đăng tin nhà đất TP.HCM</span>
+      <span>Trọng điểm: Gò Vấp, Quận 12, TP.HCM</span>
+    </div>
+  </div>
+
+  <div class="site-shell">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <img src="/assets/logo-vieclamnhadat.png" alt="vieclamnhadat.vn.com" class="site-logo" />
+        <div class="brand-text">
+          <div class="brand" id="siteName">vieclamnhadat.vn.com</div>
+          <div class="brand-sub" id="siteSlogan">Nền tảng đăng tin bất động sản tập trung khu vực có nhu cầu thật</div>
+        </div>
+      </div>
+
+      <div class="search-large">
+        <input id="searchKeyword" type="text" placeholder="Tìm nhà bán, đất nền, căn hộ, mặt bằng, cho thuê..." />
+        <button class="btn btn-primary" onclick="loadPosts()">Tìm kiếm</button>
+      </div>
+
+      <div class="top-actions" id="guestActions">
+        <button class="btn btn-light" onclick="openModal('loginModal')">Đăng nhập</button>
+        <button class="btn btn-primary" onclick="openModal('registerModal')">Đăng ký</button>
+      </div>
+
+      <div class="top-actions hidden" id="userActions">
+        <button class="welcome-pill" id="welcomeUser" type="button" onclick="openModal('accountModal')"></button>
+        <a href="/admin" id="adminLink" class="btn btn-dark hidden">Quản trị</a>
+        <button class="btn btn-light" onclick="scrollToPost()">Đăng tin</button>
+        <button class="btn btn-danger" onclick="logout()">Đăng xuất</button>
+      </div>
+    </header>
+
+    <nav class="main-nav">
+      <a href="#" onclick="setCategory('Nhà bán');return false;">Nhà bán</a>
+      <a href="#" onclick="setCategory('Đất nền');return false;">Đất nền</a>
+      <a href="#" onclick="setCategory('Cho thuê');return false;">Cho thuê</a>
+      <a href="#" onclick="setCategory('Mặt bằng');return false;">Mặt bằng</a>
+      <a href="#" onclick="setCategory('Việc làm');return false;">Việc làm</a>
+      <a href="#marketSection">Khu vực</a>
+      <a href="#packagesSection">Gói đăng tin</a>
+      <a href="#faqSection">FAQ</a>
+      <a href="#contactSection" class="nav-cta">Nhận tư vấn BĐS</a>
+    </nav>
+
+    <section class="commercial-hero">
+      <div class="hero-slider" id="heroSlider">
+        <div class="hero-slides">
+          <div class="hero-slide active" style="background-image:linear-gradient(135deg, rgba(15,23,42,.50), rgba(29,78,216,.38)), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80');">
+            <div class="hero-slide-content">
+              <div class="hero-badge">Nền tảng đăng tin bất động sản cao cấp</div>
+              <h1>Đăng tin rõ ràng hơn. Hiển thị chuyên nghiệp hơn. Chốt khách nhanh hơn.</h1>
+              <p>Dành cho môi giới, đội nhóm bán hàng, chủ tin và đơn vị cho thuê muốn có một website nhà đất vừa đẹp, vừa hiệu quả trong việc tạo lead thật.</p>
+              <div class="hero-cta-row">
+                <button class="btn btn-primary btn-lg" onclick="scrollToPost()">Đăng tin ngay</button>
+                <button class="btn btn-light btn-lg" onclick="scrollToPackages()">Xem gói nổi bật</button>
+              </div>
+            </div>
+          </div>
+          <div class="hero-slide" style="background-image:linear-gradient(135deg, rgba(15,23,42,.54), rgba(14,165,233,.28)), url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80');">
+            <div class="hero-slide-content">
+              <div class="hero-badge">Gò Vấp - Quận 12 - TP.HCM</div>
+              <h1>Tập trung đúng khu vực trọng điểm để người mua và người thuê ra quyết định nhanh hơn.</h1>
+              <p>Từ bộ lọc, card tin đến CTA đều được sắp xếp lại để khách hàng quét giá, diện tích, vị trí và hành động liên hệ chỉ trong vài giây.</p>
+              <div class="hero-cta-row">
+                <button class="btn btn-primary btn-lg" onclick="setQuickLocation('Gò Vấp')">Xem tin Gò Vấp</button>
+                <button class="btn btn-light btn-lg" onclick="setQuickLocation('Quận 12')">Xem tin Quận 12</button>
+              </div>
+            </div>
+          </div>
+          <div class="hero-slide" style="background-image:linear-gradient(135deg, rgba(15,23,42,.56), rgba(22,163,74,.28)), url('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1600&q=80');">
+            <div class="hero-slide-content">
+              <div class="hero-badge">Gói đăng tin tối ưu hiển thị</div>
+              <h1>Free để phủ rộng. Boost để đẩy nhanh. VIP và PRO để tăng lượt hỏi thật.</h1>
+              <p>Hệ gói đăng tin được trình bày rõ ràng để môi giới và chủ tin chọn đúng mục tiêu hiển thị theo thời gian, mức độ ưu tiên và ngân sách.</p>
+              <div class="hero-cta-row">
+                <button class="btn btn-primary btn-lg" onclick="scrollToPackages()">Khám phá bảng giá</button>
+                <button class="btn btn-light btn-lg" onclick="scrollToPost()">Tạo tin mới</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-slider-dots" id="heroSliderDots">
+          <button class="active" data-slide="0"></button>
+          <button data-slide="1"></button>
+          <button data-slide="2"></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero-section">
+      <div class="hero-left reveal">
+        <span class="mini-badge">Chuyên bất động sản TP.HCM</span>
+        <h1>Website nhà đất được thiết kế lại để phục vụ đúng hành vi tìm kiếm và giao dịch.</h1>
+        <p id="announcementText">Tập trung vào trải nghiệm xem tin, lọc khu vực, hiển thị gói đăng tin và tăng hành động gọi, chat, xem chi tiết cho người mua, người thuê và môi giới.</p>
+        <div class="hero-points">
+          <span>Đăng tin dễ thao tác</span>
+          <span>Lọc khu vực rõ ràng</span>
+          <span>Card tin sạch và sâu</span>
+          <span>CTA gọi và chat rõ hơn</span>
+          <span>Tối ưu lead nhà đất</span>
+        </div>
+        <div class="hero-cta">
+          <button class="btn btn-primary" onclick="scrollToPackages()">Xem gói đăng tin</button>
+          <button class="btn btn-light" onclick="scrollToPost()">Bắt đầu đăng tin</button>
+        </div>
+      </div>
+
+      <div class="hero-summary reveal">
+        <div class="summary-card">
+          <div class="tiny-title">Nền tảng chuyên biệt</div>
+          <h3>Thiết kế riêng cho môi giới, chủ tin và đội bán hàng bất động sản.</h3>
+          <p>Không phải web rao vặt cũ. Đây là một giao diện tập trung vào độ tin cậy, tốc độ ra quyết định và khả năng chuyển đổi từ lượt xem thành khách hỏi thật.</p>
+        </div>
+        <div class="market-card reveal" id="heroImageCard">
+          <div class="tiny-title">Thị trường trọng điểm</div>
+          <h3>Gò Vấp, Quận 12 và nhóm khách hàng có nhu cầu giao dịch thật.</h3>
+          <p>Tối ưu cho nhà bán, đất nền, cho thuê, mặt bằng và các tin cần hiển thị nổi bật để tăng cơ hội chốt nhanh.</p>
+          <div class="hero-mini-stats">
+            <div><strong>Gò Vấp</strong><span>Nhà ở thực</span></div>
+            <div><strong>Quận 12</strong><span>Đất và mặt bằng</span></div>
+            <div><strong>TP.HCM</strong><span>Mở rộng nguồn khách</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-stats reveal">
+      <div class="stat-box"><strong>Nhà bán Gò Vấp</strong><span>Tập trung khu vực có nhu cầu ở thực và khả năng chốt giao dịch nhanh.</span></div>
+      <div class="stat-box"><strong>Đất nền Quận 12</strong><span>Ưu tiên khu tăng trưởng, mặt bằng rõ và dễ so sánh giữa các tin.</span></div>
+      <div class="stat-box"><strong>Cho thuê TP.HCM</strong><span>Tối ưu cho căn hộ mini, nhà nguyên căn và mặt bằng kinh doanh.</span></div>
+      <div class="stat-box"><strong>Gói đăng tin nổi bật</strong><span>Phân tầng free, boost, VIP và PRO để tăng khả năng hiển thị đúng mục tiêu.</span></div>
+    </section>
+
+    <section class="market-section reveal" id="marketSection">
+      <div class="section-intro">
+        <div>
+          <div class="tiny-title">Khu vực hot</div>
+          <h2>Đi thẳng đến khu vực giao dịch trọng điểm thay vì tìm kiếm trong một danh sách rối.</h2>
+        </div>
+        <p>Chọn nhanh quận, phường hoặc điểm nóng quen thuộc để lọc tin theo khu vực có nhu cầu thật.</p>
+      </div>
+      <div class="filter-pill-row">
+        <button class="filter-pill active" onclick="setCategory('')">Tất cả</button>
+        <button class="filter-pill" onclick="setCategory('Nhà bán')">Nhà bán</button>
+        <button class="filter-pill" onclick="setCategory('Đất nền')">Đất nền</button>
+        <button class="filter-pill" onclick="setCategory('Cho thuê')">Cho thuê</button>
+        <button class="filter-pill" onclick="setCategory('Mặt bằng')">Mặt bằng</button>
+      </div>
+      <div class="quick-locations">
+        <button onclick="setQuickLocation('Gò Vấp')" class="active">Gò Vấp</button>
+        <button onclick="setQuickLocation('Quận 12')">Quận 12</button>
+        <button onclick="setQuickLocation('Gò Vấp - Phường 1')">Gò Vấp - P.1</button>
+        <button onclick="setQuickLocation('Gò Vấp - Phường 5')">Gò Vấp - P.5</button>
+        <button onclick="setQuickLocation('Gò Vấp - Phường 10')">Gò Vấp - P.10</button>
+        <button onclick="setQuickLocation('Gò Vấp - Phường 17')">Gò Vấp - P.17</button>
+        <button onclick="setQuickLocation('Quận 12 - Hiệp Thành')">Q12 - Hiệp Thành</button>
+        <button onclick="setQuickLocation('Quận 12 - Thạnh Lộc')">Q12 - Thạnh Lộc</button>
+        <button onclick="setQuickLocation('Quận 12 - An Phú Đông')">Q12 - An Phú Đông</button>
+        <button onclick="setQuickLocation('Quận 12 - Tân Chánh Hiệp')">Q12 - Tân Chánh Hiệp</button>
+      </div>
+    </section>
+
+    <section class="panel showcase-panel reveal">
+      <div class="section-header">
+        <div>
+          <div class="tiny-title">Tin nổi bật ngoài trang chủ</div>
+          <h2>Tin demo và tin nổi bật được hiển thị ngay khi khách vừa vào website</h2>
+        </div>
+        <div class="soft-badge">Ưu tiên các tin đã duyệt và có sức hút cao</div>
+      </div>
+      <div id="showcaseList" class="cards-grid"></div>
+    </section>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="tiny-title">Tài khoản</div>
+              <h3>Hồ sơ người dùng</h3>
+            </div>
+          </div>
+          <div id="accountBox"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="tiny-title">Bộ lọc</div>
+              <h3>Lọc bất động sản</h3>
+            </div>
+          </div>
+          <div class="filter-stack">
+            <input id="filterKeyword" type="text" placeholder="Nhập từ khóa..." />
+            <select id="filterCategory">
+              <option value="">Tất cả loại hình</option>
+              <option value="Nhà bán">Nhà bán</option>
+              <option value="Đất nền">Đất nền</option>
+              <option value="Cho thuê">Cho thuê</option>
+              <option value="Mặt bằng">Mặt bằng</option>
+              <option value="Việc làm">Việc làm</option>
+            </select>
+            <select id="filterLocation">
+              <option value="">Tất cả khu vực</option>
+              <option value="Gò Vấp">Gò Vấp</option>
+              <option value="Quận 12">Quận 12</option>
+              <option value="TP.HCM">TP.HCM</option>
+              <option value="Gò Vấp - Phường 1">Gò Vấp - Phường 1</option>
+              <option value="Gò Vấp - Phường 5">Gò Vấp - Phường 5</option>
+              <option value="Gò Vấp - Phường 10">Gò Vấp - Phường 10</option>
+              <option value="Gò Vấp - Phường 17">Gò Vấp - Phường 17</option>
+              <option value="Quận 12 - Hiệp Thành">Quận 12 - Hiệp Thành</option>
+              <option value="Quận 12 - Thạnh Lộc">Quận 12 - Thạnh Lộc</option>
+              <option value="Quận 12 - An Phú Đông">Quận 12 - An Phú Đông</option>
+              <option value="Quận 12 - Tân Chánh Hiệp">Quận 12 - Tân Chánh Hiệp</option>
+            </select>
+            <div class="filter-grid">
+              <input id="filterMinPrice" type="number" placeholder="Giá từ" />
+              <input id="filterMaxPrice" type="number" placeholder="Giá đến" />
+              <input id="filterMinArea" type="number" placeholder="Diện tích từ (m²)" />
+              <input id="filterMaxArea" type="number" placeholder="Diện tích đến (m²)" />
+            </div>
+            <div class="preset-price-row">
+              <button type="button" class="btn btn-light" onclick="setPricePreset('', '')">Tất cả giá</button>
+              <button type="button" class="btn btn-light" onclick="setPricePreset('0', '3000000000')">Dưới 3 tỷ</button>
+              <button type="button" class="btn btn-light" onclick="setPricePreset('3000000000', '5000000000')">3 - 5 tỷ</button>
+              <button type="button" class="btn btn-light" onclick="setPricePreset('5000000000', '8000000000')">5 - 8 tỷ</button>
+              <button type="button" class="btn btn-light" onclick="setPricePreset('8000000000', '')">Trên 8 tỷ</button>
+            </div>
+            <select id="filterBedrooms">
+              <option value="">Số phòng ngủ</option>
+              <option value="1">Từ 1 phòng</option>
+              <option value="2">Từ 2 phòng</option>
+              <option value="3">Từ 3 phòng</option>
+              <option value="4">Từ 4 phòng</option>
+            </select>
+            <select id="filterDirection">
+              <option value="">Hướng nhà</option>
+              <option value="Đông">Đông</option>
+              <option value="Tây">Tây</option>
+              <option value="Nam">Nam</option>
+              <option value="Bắc">Bắc</option>
+              <option value="Đông Nam">Đông Nam</option>
+              <option value="Đông Bắc">Đông Bắc</option>
+              <option value="Tây Nam">Tây Nam</option>
+              <option value="Tây Bắc">Tây Bắc</option>
+            </select>
+            <select id="filterLegal">
+              <option value="">Pháp lý</option>
+              <option value="Sổ hồng riêng">Sổ hồng riêng</option>
+              <option value="Sổ riêng">Sổ riêng</option>
+              <option value="Sổ hồng hoàn công">Sổ hồng hoàn công</option>
+              <option value="Hợp đồng thuê rõ ràng">Hợp đồng thuê rõ ràng</option>
+              <option value="Hợp đồng cho thuê">Hợp đồng cho thuê</option>
+            </select>
+            <select id="sortSelect">
+              <option value="newest">Mới nhất</option>
+              <option value="price_asc">Giá tăng dần</option>
+              <option value="price_desc">Giá giảm dần</option>
+              <option value="views">Xem nhiều</option>
+            </select>
+            <button class="btn btn-primary full" onclick="loadPosts()">Lọc tin</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="tiny-title">Yêu thích</div>
+              <h3>Tin đã lưu</h3>
+            </div>
+          </div>
+          <div id="favoriteBox" class="mini-list"></div>
+        </div>
+      </aside>
+
+      <section class="content">
+        <div class="panel section-header-block">
+          <div class="section-header">
+            <div>
+              <div class="tiny-title">Tin bất động sản</div>
+              <h2>Tin đăng mới nhất khu vực TP.HCM</h2>
+            </div>
+            <div class="soft-badge">Ưu tiên hiển thị tin nổi bật</div>
+          </div>
+          <div class="featured-strip">
+            <div class="featured-chip">NHÀ BÁN</div>
+            <div class="featured-chip">ĐẤT NỀN</div>
+            <div class="featured-chip">CHO THUÊ</div>
+            <div class="featured-chip">MẶT BẰNG</div>
+          </div>
+        </div>
+        <div id="postList" class="cards-grid"></div>
+
+        <section class="panel" id="packagesSection">
+          <div class="section-header">
+            <div>
+              <div class="tiny-title">Bảng giá đăng tin</div>
+              <h2>Gói hiển thị dành cho môi giới, chủ tin và đội bán hàng nhà đất</h2>
+            </div>
+            <div class="soft-badge">Rõ giá · rõ thời gian · rõ mức ưu tiên</div>
+          </div>
+
+          <div class="pricing-hero reveal">
+            <div class="pricing-copy">
+              <strong>Tối ưu theo hành vi đăng tin bất động sản</strong>
+              <p>Free để mở rộng nguồn tin. Boost để đẩy hiển thị ngắn hạn. VIP và PRO để tăng mức độ ưu tiên cho những tin cần chốt khách nhanh.</p>
+            </div>
+            <div class="pricing-spotlight">
+              <span>Most chosen</span>
+              <h3>VIP / PRO</h3>
+              <p>Ưu tiên hiển thị mạnh hơn, phù hợp nhất cho môi giới, đội nhóm bán hàng và chủ tin muốn tăng lượng khách hỏi thật.</p>
+            </div>
+          </div>
+
+          <div class="pricing-notice">
+            <div class="notice-box">
+              <strong>Gợi ý triển khai</strong>
+              <span>Tin cần phủ rộng nên dùng gói free hoặc boost. Tin cần nổi bật ở khu vực cạnh tranh nên dùng VIP hoặc PRO để tăng cơ hội chốt khách.</span>
+            </div>
+            <div class="notice-box">
+              <strong>Nguyên tắc hiển thị</strong>
+              <span>Luôn ghi rõ thời gian hiển thị, mức ưu tiên và lợi ích từng gói để môi giới hoặc chủ tin chọn đúng theo mục tiêu đăng bán, cho thuê.</span>
+            </div>
+          </div>
+
+          <div id="packageList" class="pricing-grid"></div>
+        </section>
+
+        <section class="panel payment-panel" id="paymentPanel">
+          <div class="payment-panel-head">
+            <div>
+              <div class="tiny-title">Thanh toán gói</div>
+              <h3>Chọn nhanh gói đăng tin phù hợp</h3>
+            </div>
+            <div class="payment-note">ACB · NGUYEN TUAN ANH · 214904949</div>
+          </div>
+
+          <div class="pricing-wrap-pro">
+            <div class="pricing-group">
+              <div class="pricing-title">Nhà đất</div>
+              <div class="plan-grid" id="planGridRealEstate">
+                <button class="plan-card active" onclick="selectPlan('NHADAT_THUONG', 'Nhà đất - Tin thường', 0, 7, this)">
+                  <span class="plan-badge">FREE</span><strong>Tin thường</strong><div class="plan-price">0đ</div><p>Hiển thị 7 ngày</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('NHADAT_DAYTIN', 'Nhà đất - Đẩy tin', 10000, 1, this)">
+                  <span class="plan-badge">BOOST</span><strong>Đẩy tin</strong><div class="plan-price">10.000đ</div><p>Đẩy đầu trang 1 lần</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('NHADAT_NOIBAT', 'Nhà đất - Tin nổi bật', 20000, 7, this)">
+                  <span class="plan-badge">HOT</span><strong>Tin nổi bật</strong><div class="plan-price">20.000đ</div><p>Nổi bật 7 ngày</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('NHADAT_VIP7', 'Nhà đất - VIP 7 ngày', 30000, 7, this)">
+                  <span class="plan-badge">VIP</span><strong>VIP 7 ngày</strong><div class="plan-price">30.000đ</div><p>Ưu tiên hiển thị</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('NHADAT_VIP15', 'Nhà đất - VIP 15 ngày', 50000, 15, this)">
+                  <span class="plan-badge">VIP+</span><strong>VIP 15 ngày</strong><div class="plan-price">50.000đ</div><p>Hiển thị lâu hơn</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('NHADAT_VIP30', 'Nhà đất - VIP 30 ngày', 80000, 30, this)">
+                  <span class="plan-badge">PRO</span><strong>PRO 30 ngày</strong><div class="plan-price">80.000đ</div><p>Tối đa ưu tiên</p>
+                </button>
+              </div>
+            </div>
+
+            <div class="pricing-group">
+              <div class="pricing-title">Nhà thuê</div>
+              <div class="plan-grid" id="planGridRental">
+                <button class="plan-card" onclick="selectPlan('THUE_THUONG', 'Nhà thuê - Tin thường', 0, 7, this)">
+                  <span class="plan-badge">FREE</span><strong>Tin thường</strong><div class="plan-price">0đ</div><p>Hiển thị 7 ngày</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('THUE_DAYTIN', 'Nhà thuê - Đẩy tin', 5000, 1, this)">
+                  <span class="plan-badge">BOOST</span><strong>Đẩy tin</strong><div class="plan-price">5.000đ</div><p>Đẩy nhanh hiển thị</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('THUE_NOIBAT', 'Nhà thuê - Tin nổi bật', 15000, 7, this)">
+                  <span class="plan-badge">HOT</span><strong>Tin nổi bật</strong><div class="plan-price">15.000đ</div><p>Nổi bật 7 ngày</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('THUE_VIP7', 'Nhà thuê - VIP 7 ngày', 25000, 7, this)">
+                  <span class="plan-badge">VIP</span><strong>VIP 7 ngày</strong><div class="plan-price">25.000đ</div><p>Tăng độ ưu tiên</p>
+                </button>
+              </div>
+            </div>
+
+            <div class="pricing-group">
+              <div class="pricing-title">Việc làm</div>
+              <div class="plan-grid" id="planGridJobs">
+                <button class="plan-card" onclick="selectPlan('JOB_THUONG', 'Việc làm - Tin thường', 0, 7, this)">
+                  <span class="plan-badge">FREE</span><strong>Tin thường</strong><div class="plan-price">0đ</div><p>Hiển thị 7 ngày</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('JOB_NOIBAT', 'Việc làm - Tin nổi bật', 10000, 7, this)">
+                  <span class="plan-badge">HOT</span><strong>Tin nổi bật</strong><div class="plan-price">10.000đ</div><p>Nổi bật 7 ngày</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('JOB_VIP', 'Việc làm - VIP', 20000, 7, this)">
+                  <span class="plan-badge">VIP</span><strong>VIP</strong><div class="plan-price">20.000đ</div><p>Ưu tiên hiển thị</p>
+                </button>
+                <button class="plan-card" onclick="selectPlan('JOB_DAYTIN', 'Việc làm - Đẩy tin', 5000, 1, this)">
+                  <span class="plan-badge">BOOST</span><strong>Đẩy tin</strong><div class="plan-price">5.000đ</div><p>Đẩy nhanh hiển thị</p>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="payment-box-pro">
+            <div class="payment-qr-wrap">
+              <img id="paymentQr" src="/assets/qr-acb.png" alt="QR thanh toán" />
+            </div>
+            <div class="payment-info" id="paymentInfo">
+              <div><strong>Gói:</strong> Nhà đất - Tin thường</div>
+              <div><strong>Số tiền:</strong> 0đ</div>
+              <div><strong>Thời gian:</strong> 7 ngày</div>
+              <div><strong>Ngân hàng:</strong> ACB</div>
+              <div><strong>Chủ TK:</strong> NGUYEN TUAN ANH</div>
+              <div><strong>STK:</strong> 214904949</div>
+              <div><strong>Nội dung CK:</strong> RAOVAT_NHADAT_THUONG</div>
+              <div class="payment-tip">Chuyển khoản đúng nội dung để đối chiếu và kích hoạt gói nhanh hơn.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="double-grid">
+          <div class="panel">
+            <div class="section-header">
+              <div>
+                <div class="tiny-title">Hồ sơ</div>
+                <h2>Thông tin cá nhân</h2>
+              </div>
+            </div>
+            <form id="profileForm" class="form-grid">
+              <div><label>Họ và tên</label><input id="profileFullName" type="text" /></div>
+              <div><label>Email</label><input id="profileEmail" type="email" /></div>
+              <div><label>Số điện thoại</label><input id="profilePhone" type="text" /></div>
+              <div><label>Địa chỉ</label><input id="profileAddress" type="text" /></div>
+              <div class="full-col"><label>Giới thiệu</label><textarea id="profileBio"></textarea></div>
+              <div class="full-col"><label>Link ảnh đại diện</label><input id="profileAvatar" type="text" placeholder="https://..." /></div>
+              <div class="full-col"><button class="btn btn-primary" type="submit">Lưu thông tin</button></div>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="section-header">
+              <div>
+                <div class="tiny-title">Trạng thái</div>
+                <h2>Hồ sơ và gói đang dùng</h2>
+              </div>
+            </div>
+            <div id="profilePreview"></div>
+          </div>
+        </section>
+
+        <section class="panel" id="postSection">
+          <div class="section-header">
+            <div>
+              <div class="tiny-title">Đăng bài</div>
+              <h2>Tạo hoặc cập nhật tin bất động sản</h2>
+            </div>
+            <div class="soft-badge">Có upload ảnh từ máy</div>
+          </div>
+          <form id="postForm" class="form-grid">
+            <input id="editingPostId" type="hidden" />
+            <div><label>Tiêu đề</label><input id="postTitle" type="text" required /></div>
+            <div><label>Loại hình</label>
+              <select id="postCategory" required>
+                <option value="">Chọn loại hình</option>
+                <option value="Nhà bán">Nhà bán</option>
+                <option value="Đất nền">Đất nền</option>
+                <option value="Cho thuê">Cho thuê</option>
+                <option value="Mặt bằng">Mặt bằng</option>
+                <option value="Việc làm">Việc làm</option>
+              </select>
+            </div>
+            <div><label>Giá / mức lương</label><input id="postPrice" type="number" required /></div>
+            <div><label>Diện tích (m²)</label><input id="postArea" type="number" required /></div>
+            <div><label>Số phòng ngủ / kinh nghiệm</label><input id="postBedrooms" type="number" min="0" /></div>
+            <div><label>Hướng nhà</label>
+              <select id="postDirection">
+                <option value="">Chọn hướng</option>
+                <option value="Đông">Đông</option>
+                <option value="Tây">Tây</option>
+                <option value="Nam">Nam</option>
+                <option value="Bắc">Bắc</option>
+                <option value="Đông Nam">Đông Nam</option>
+                <option value="Đông Bắc">Đông Bắc</option>
+                <option value="Tây Nam">Tây Nam</option>
+                <option value="Tây Bắc">Tây Bắc</option>
+              </select>
+            </div>
+            <div><label>Pháp lý</label>
+              <select id="postLegal">
+                <option value="">Chọn pháp lý</option>
+                <option value="Sổ hồng riêng">Sổ hồng riêng</option>
+                <option value="Sổ riêng">Sổ riêng</option>
+                <option value="Sổ hồng hoàn công">Sổ hồng hoàn công</option>
+                <option value="Hợp đồng thuê rõ ràng">Hợp đồng thuê rõ ràng</option>
+                <option value="Hợp đồng cho thuê">Hợp đồng cho thuê</option>
+              </select>
+            </div>
+            <div><label>Khu vực</label>
+              <select id="postLocation" required>
+                <option value="">Chọn khu vực</option>
+                <option value="Gò Vấp - Phường 1">Gò Vấp - Phường 1</option>
+                <option value="Gò Vấp - Phường 5">Gò Vấp - Phường 5</option>
+                <option value="Gò Vấp - Phường 10">Gò Vấp - Phường 10</option>
+                <option value="Gò Vấp - Phường 17">Gò Vấp - Phường 17</option>
+                <option value="Quận 12 - Hiệp Thành">Quận 12 - Hiệp Thành</option>
+                <option value="Quận 12 - Thạnh Lộc">Quận 12 - Thạnh Lộc</option>
+                <option value="Quận 12 - An Phú Đông">Quận 12 - An Phú Đông</option>
+                <option value="Quận 12 - Tân Chánh Hiệp">Quận 12 - Tân Chánh Hiệp</option>
+                <option value="TP.HCM - Khu khác">TP.HCM - Khu khác</option>
+              </select>
+            </div>
+            <div class="full-col">
+              <div class="section-header">
+                <label>Mô tả</label>
+                <button class="btn btn-light" type="button" onclick="runAiSupport()">AI hỗ trợ viết tin</button>
+              </div>
+              <textarea id="postDescription" required></textarea>
+              <div id="aiSupportTips" class="empty-state" style="margin-top:12px">AI sẽ gợi ý cách viết nội dung rõ hơn cho nhà bán, cho thuê, mặt bằng và cả tin việc làm.</div>
+            </div>
+            <div class="full-col"><label>Link ảnh hoặc ảnh đã upload</label><input id="postImage" type="text" placeholder="https://... hoặc /uploads/..." /></div>
+            <div class="full-col">
+              <label>Hoặc chọn ảnh từ máy</label>
+              <div class="upload-row">
+                <input id="postImageFile" type="file" accept="image/*" />
+                <button type="button" class="btn btn-light" onclick="uploadPostImage()">Upload ảnh</button>
+              </div>
+              <small id="uploadStatus" class="muted-text"></small>
+            </div>
+            <div><label><input id="postFeatured" type="checkbox" /> Ghim tin nổi bật</label></div>
+            <div class="full-col form-actions">
+              <button class="btn btn-primary" type="submit" id="postSubmitBtn">Đăng tin ngay</button>
+              <button class="btn btn-light" type="button" onclick="resetPostForm()">Làm mới</button>
+            </div>
+          </form>
+        </section>
+        
+        <section class="panel">
+          <div class="section-header">
+            <div>
+              <div class="tiny-title">Ví doanh thu</div>
+              <h2>Nạp tiền và giao dịch ví</h2>
+            </div>
+          </div>
+          <div id="walletHistory" class="empty-state">Đăng nhập để xem ví.</div>
+        </section>
+
+        <section class="panel">
+          <div class="section-header">
+            <div>
+              <div class="tiny-title">Quản lý cá nhân</div>
+              <h2>Tin của tôi</h2>
+            </div>
+          </div>
+          <div id="myPostList"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-header">
+            <div>
+              <div class="tiny-title">Lịch sử gói</div>
+              <h2>Gói đăng ký của tôi</h2>
+            </div>
+          </div>
+          <div id="mySubscriptionList"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-header">
+            <div>
+              <div class="tiny-title">Tin nhắn</div>
+              <h2>Chat người mua / người bán</h2>
+            </div>
+          </div>
+          <div class="chat-grid">
+            <div id="conversationList" class="conversation-list"></div>
+            <div class="chat-panel">
+              <div id="chatMessages" class="chat-messages empty-state">Chọn một hội thoại để xem tin nhắn.</div>
+              <form id="chatForm" class="chat-form">
+                <input id="currentConversationIdInput" type="hidden" />
+                <input id="chatInput" type="text" placeholder="Nhập tin nhắn..." />
+                <button class="btn btn-primary" type="submit">Gửi</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel faq-panel reveal" id="faqSection">
+          <div class="section-header">
+            <div>
+              <div class="tiny-title">FAQ</div>
+              <h2>Câu hỏi thường gặp trước khi đăng tin và chọn gói hiển thị</h2>
+            </div>
+            <div class="soft-badge">Rõ ràng trước khi ra quyết định</div>
+          </div>
+          <div class="faq-list">
+            <article class="faq-item active">
+              <button class="faq-question" type="button">
+                <span>Website này phù hợp nhất với ai trong lĩnh vực bất động sản?</span>
+                <strong>+</strong>
+              </button>
+              <div class="faq-answer">
+                <p>Phù hợp cho môi giới cá nhân, đội nhóm bán hàng, sàn nhà đất, chủ đầu tư nhỏ, chủ nhà cho thuê và bất kỳ ai cần một website đăng tin bất động sản rõ ràng, chuyên nghiệp.</p>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">
+                <span>Tại sao nên có free, boost, VIP và PRO cho gói đăng tin?</span>
+                <strong>+</strong>
+              </button>
+              <div class="faq-answer">
+                <p>Vì nhu cầu đăng tin nhà đất không giống nhau. Có tin chỉ cần hiện diện, có tin cần đẩy lên nhanh, có tin cần ưu tiên hiển thị lâu hơn để tăng số lượt xem và số cuộc gọi.</p>
+              </div>
+            </article>
+            <article class="faq-item">
+              <button class="faq-question" type="button">
+                <span>Giao diện mới có ảnh hưởng đến luồng đăng tin hiện tại không?</span>
+                <strong>+</strong>
+              </button>
+              <div class="faq-answer">
+                <p>Không. Phần visual và cách trình bày đã được nâng cấp, nhưng luồng đăng nhập, đăng tin, lọc tin, xem gói và chat vẫn giữ nguyên logic để bạn tiếp tục dùng ngay.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <section class="contact-section reveal" id="contactSection">
+      <div class="contact-copy">
+        <div class="tiny-title">Liên hệ tư vấn</div>
+        <h2>Nếu bạn muốn website bất động sản nhìn chuyên nghiệp hơn và tạo nhiều khách hỏi hơn, đây là điểm bắt đầu.</h2>
+        <p>Để lại thông tin để tối ưu tiếp giao diện, gói đăng tin và hành trình liên hệ cho đúng thị trường nhà đất bạn đang làm.</p>
+        <div class="contact-points">
+          <span>Tư vấn giao diện nhà đất</span>
+          <span>Tối ưu gói đăng tin</span>
+          <span>Tăng chuyển đổi liên hệ</span>
+        </div>
+      </div>
+      <form class="contact-form" id="contactForm">
+        <div class="form-grid">
+          <div><label>Họ và tên</label><input type="text" id="contactName" placeholder="Nguyễn Văn A" required /></div>
+          <div><label>Số điện thoại</label><input type="text" id="contactPhone" placeholder="09xx xxx xxx" required /></div>
+          <div><label>Email</label><input type="email" id="contactEmail" placeholder="ban@example.com" /></div>
+          <div><label>Nhu cầu</label>
+            <select id="contactNeed">
+              <option value="Tối ưu giao diện bất động sản">Tối ưu giao diện bất động sản</option>
+              <option value="Tối ưu gói đăng tin và CTA">Tối ưu gói đăng tin và CTA</option>
+              <option value="Nâng cấp toàn bộ website nhà đất">Nâng cấp toàn bộ website nhà đất</option>
+            </select>
+          </div>
+          <div class="full-col"><label>Mô tả ngắn</label><textarea id="contactMessage" placeholder="Mình muốn website nhà đất nhìn chuyên nghiệp hơn, tăng lead và tối ưu phần đăng tin/gói VIP..."></textarea></div>
+          <div class="full-col contact-actions">
+            <button class="btn btn-primary" type="submit">Nhận tư vấn nhanh</button>
+            <a class="btn btn-light" href="tel:0908777102">Gọi ngay 0908777102</a>
+          </div>
+          <div class="contact-feedback" id="contactFeedback"></div>
+        </div>
+      </form>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <img src="/assets/logo-vieclamnhadat.png" alt="vieclamnhadat.vn.com" class="footer-logo" />
+        <div>
+          <strong>vieclamnhadat.vn.com</strong>
+          <p>Chuyên trang đăng tin bất động sản TP.HCM, tập trung Gò Vấp, Quận 12 và các khu vực có nhu cầu thật.</p>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div>
+          <h4>Loại hình</h4>
+          <a href="#" onclick="setCategory('Nhà bán');return false;">Nhà bán</a>
+          <a href="#" onclick="setCategory('Đất nền');return false;">Đất nền</a>
+          <a href="#" onclick="setCategory('Cho thuê');return false;">Cho thuê</a>
+          <a href="#" onclick="setCategory('Mặt bằng');return false;">Mặt bằng</a>
+        </div>
+        <div>
+          <h4>Khu vực</h4>
+          <a href="#" onclick="setQuickLocation('Gò Vấp');return false;">Gò Vấp</a>
+          <a href="#" onclick="setQuickLocation('Quận 12');return false;">Quận 12</a>
+          <a href="#" onclick="setQuickLocation('TP.HCM');return false;">TP.HCM</a>
+        </div>
+        <div>
+          <h4>Liên hệ</h4>
+          <span>0908777102</span>
+          <span>ltnmokhoafbne@gmail.com</span>
+          <span>TP.HCM, Việt Nam</span>
+        </div>
+      </div>
+    </footer>
+
+    <div class="floating-actions">
+      <a class="floating-btn floating-zalo" href="https://zalo.me/0908777102" target="_blank" rel="noreferrer">Zalo</a>
+      <a class="floating-btn floating-messenger" href="https://m.me/" target="_blank" rel="noreferrer">Chat</a>
+      <a class="floating-btn floating-call" href="tel:0908777102">Call</a>
+    </div>
+  </div>
+
+  <div class="chat-popup-pro" id="chatPopup">
+    <div class="chat-popup-head">
+      <div>
+        <div class="tiny-title">Hỗ trợ nhanh</div>
+        <h3>Chat với người đăng</h3>
+      </div>
+      <button class="chat-popup-close" onclick="closeChatPopup()">×</button>
+    </div>
+    <div class="chat-popup-messages" id="chatPopupMessages">
+      <div class="chat-bubble from-owner">Xin chào, mình có thể hỗ trợ thêm thông tin về tin đăng này.</div>
+      <div class="chat-bubble from-user">Cho mình xin thêm thông tin và thời gian xem thực tế nhé.</div>
+    </div>
+    <div class="chat-popup-input">
+      <input id="chatPopupInput" type="text" placeholder="Nhập tin nhắn..." />
+      <button class="btn btn-primary btn-sm" onclick="sendQuickChat()">Gửi</button>
+    </div>
+  </div>
+
+  <div class="modal detail-modal-shell" id="detailModal">
+    <div class="modal-box large-modal">
+      <div class="modal-head">
+        <h3>Chi tiết tin đăng</h3>
+        <button onclick="closeModal('detailModal');closeDetailModal()">×</button>
+      </div>
+      <div id="detailContent"></div>
+      <div class="detail-fallback hidden">
+        <div class="detail-gallery-main" id="detailGalleryMain"></div>
+        <div class="detail-gallery-thumbs" id="detailGalleryThumbs"></div>
+        <h2 id="detailTitle"></h2>
+        <div id="detailPrice"></div>
+        <div id="detailMeta"></div>
+        <div id="detailDesc"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="accountModal">
+    <div class="modal-box large-modal account-modal-box">
+      <div class="modal-head">
+        <h3>Thông tin cá nhân</h3>
+        <button onclick="closeModal('accountModal')">×</button>
+      </div>
+      <div id="accountModalContent" class="account-modal-content"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="loginModal">
+    <div class="modal-box">
+      <div class="modal-head"><h3>Đăng nhập</h3><button onclick="closeModal('loginModal')">×</button></div>
+      <form id="loginForm">
+        <label>Tên đăng nhập</label><input id="loginUsername" type="text" required />
+        <label>Mật khẩu</label><input id="loginPassword" type="password" required />
+        <button class="btn btn-primary full" type="submit">Đăng nhập</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="registerModal">
+    <div class="modal-box">
+      <div class="modal-head"><h3>Tạo tài khoản</h3><button onclick="closeModal('registerModal')">×</button></div>
+      <form id="registerForm">
+        <label>Họ và tên</label><input id="registerFullName" type="text" required />
+        <label>Tên đăng nhập</label><input id="registerUsername" type="text" required />
+        <label>Email</label><input id="registerEmail" type="email" required />
+        <label>Mật khẩu</label><input id="registerPassword" type="password" required />
+        <button class="btn btn-primary full" type="submit">Tạo tài khoản</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
