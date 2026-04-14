@@ -475,6 +475,36 @@
 }
 
 @media (max-width: 768px){
+  .hero-slide{
+    min-height:380px !important;
+  }
+
+  .hero-slide-content{
+    padding:18px 16px 72px !important;
+  }
+
+  .hero-slide-content h1{
+    font-size:clamp(1.05rem, 6.8vw, 1.85rem) !important;
+    line-height:1.02 !important;
+    letter-spacing:-0.04em !important;
+    max-width:11ch !important;
+    margin:0 0 10px !important;
+  }
+
+  .hero-slide-content p{
+    font-size:13px !important;
+    line-height:1.45 !important;
+    max-width:19.5rem !important;
+    margin:0 0 12px !important;
+  }
+
+  .hero-cta-row .btn{
+    min-height:44px !important;
+    font-size:15px !important;
+  }
+}
+
+@media (max-width: 768px){
   .top-strip,
   .top-strip-inner{
     display:none !important;
