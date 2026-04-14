@@ -270,6 +270,18 @@
 }
 
 @media (max-width: 768px){
+  .top-strip,
+  .top-strip-inner{
+    display:none !important;
+    height:0 !important;
+    min-height:0 !important;
+    max-height:0 !important;
+    padding:0 !important;
+    margin:0 !important;
+    overflow:hidden !important;
+    border:none !important;
+  }
+
   .listing-panel,
   .feature-panel,
   .showcase-panel,
@@ -458,6 +470,61 @@
 
   .showcase-card .card-location{
     font-size:11px !important;
+  }
+}
+
+@media (max-width: 768px){
+  .topbar .top-actions.hidden,
+  .topbar #guestActions.hidden,
+  .topbar #userActions.hidden,
+  .topbar .welcome-pill.hidden{
+    display:none !important;
+  }
+
+  .topbar .top-actions:not(.hidden),
+  .topbar #guestActions:not(.hidden),
+  .topbar #userActions:not(.hidden){
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+    width:100% !important;
+  }
+
+  .topbar #userActions:not(.hidden) .welcome-pill{
+    grid-column:1 / -1 !important;
+  }
+
+  .topbar{
+    gap:14px !important;
+  }
+
+  .brand-wrap{
+    align-items:center !important;
+  }
+
+  .search-large{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+  }
+
+  .search-large button,
+  .search-large .btn,
+  .search-large .search-btn{
+    width:100% !important;
+    min-height:46px !important;
+  }
+
+  .topbar .top-actions .btn,
+  .topbar #guestActions .btn,
+  .topbar #userActions .btn,
+  .topbar #adminLink,
+  .topbar #logoutBtn{
+    min-height:46px !important;
+    border-radius:18px !important;
+    justify-content:center !important;
+    text-align:center !important;
+    white-space:normal !important;
   }
 }
 
