@@ -24,6 +24,58 @@
 }
 
 @media (max-width: 768px){
+  .commercial-hero .hero-slider,
+  .commercial-hero .hero-slide,
+  .commercial-hero .hero-slides{
+    min-height:auto !important;
+  }
+
+  .commercial-hero .hero-slide{
+    min-height:360px !important;
+    overflow:hidden !important;
+    align-items:flex-end !important;
+  }
+
+  .commercial-hero .hero-slide-content{
+    max-width:72% !important;
+    padding:16px 16px 76px !important;
+  }
+
+  .commercial-hero .hero-slide-content h1{
+    font-size:clamp(1.05rem, 6.1vw, 1.7rem) !important;
+    line-height:0.98 !important;
+    letter-spacing:-0.035em !important;
+    max-width:8ch !important;
+    margin:0 0 8px !important;
+  }
+
+  .commercial-hero .hero-slide-content p{
+    font-size:12px !important;
+    line-height:1.42 !important;
+    max-width:15.5rem !important;
+    margin:0 0 10px !important;
+    opacity:0.94 !important;
+  }
+
+  .commercial-hero .hero-cta-row,
+  .commercial-hero .hero-cta{
+    gap:8px !important;
+  }
+
+  .commercial-hero .hero-cta-row .btn,
+  .commercial-hero .hero-cta .btn{
+    min-height:42px !important;
+    font-size:14px !important;
+    border-radius:16px !important;
+    padding:0 14px !important;
+  }
+
+  .commercial-hero .hero-slider-dots{
+    bottom:14px !important;
+  }
+}
+
+@media (max-width: 768px){
   html,
   body{
     overflow-x:hidden !important;
