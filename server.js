@@ -43,6 +43,114 @@ app.use(session({
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(uploadDir));
 
+function maybeRepairMojibake(value) {
+  if (typeof value !== "string" || !value) return value;
+  const suspicious = /Ã|Ä|Â|Æ|á»|áº|â†|ðŸ|�/.test(value);
+  if (!suspicious) return value;
+  try {
+    const repaired = Buffer.from(value, "latin1").toString("utf8");
+    if (!repaired || repaired.includes("\u0000")) return value;
+    return repaired;
+  } catch {
+    return value;
+  }
+}
+
+function sanitizeJsonPayload(value) {
+  if (typeof value === "string") return maybeRepairMojibake(value);
+  if (Array.isArray(value)) return value.map(sanitizeJsonPayload);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, val]) => [key, sanitizeJsonPayload(val)])
+    );
+  }
+  return value;
+}
+
+function hasBrokenVietnamese(value = "") {
+  return typeof value === "string" && /[�ÃÂÄ\?]/.test(value);
+}
+
+function normalizeSettingText(key, value) {
+  const cleaned = maybeRepairMojibake(value || "");
+  if (key === "site_slogan" && hasBrokenVietnamese(cleaned)) {
+    return "Nền tảng đăng tin bất động sản tập trung nhu cầu thật tại Gò Vấp, Quận 12 và TP.HCM.";
+  }
+  if (key === "announcement" && hasBrokenVietnamese(cleaned)) {
+    return "Chào mừng bạn đến với Việc Làm Nhà Đất";
+  }
+  if (key === "site_name" && hasBrokenVietnamese(cleaned)) {
+    return "Việc Làm Nhà Đất";
+  }
+  return cleaned;
+}
+
+function normalizeSettingsRow(row) {
+  if (!row) return row;
+  return {
+    ...row,
+    site_name: normalizeSettingText("site_name", row.site_name),
+    site_slogan: normalizeSettingText("site_slogan", row.site_slogan),
+    announcement: normalizeSettingText("announcement", row.announcement),
+  };
+}
+
+app.use((req, res, next) => {
+  const originalJson = res.json.bind(res);
+  res.json = (payload) => originalJson(sanitizeJsonPayload(payload));
+  next();
+});
+
+async function repairTableText(tableName, idColumn, textColumns) {
+  const rows = await all(
+    `SELECT ${[idColumn, ...textColumns].join(", ")} FROM ${tableName}`
+  );
+
+  for (const row of rows) {
+    const updates = [];
+    const params = [];
+
+    for (const col of textColumns) {
+      const current = row[col];
+      const repaired = maybeRepairMojibake(current);
+      if (typeof current === "string" && repaired !== current) {
+        updates.push(`${col} = ?`);
+        params.push(repaired);
+      }
+    }
+
+    if (updates.length) {
+      params.push(row[idColumn]);
+      await run(`UPDATE ${tableName} SET ${updates.join(", ")} WHERE ${idColumn} = ?`, params);
+    }
+  }
+}
+
+async function repairDatabaseText() {
+  await repairTableText("settings", "id", [
+    "site_name",
+    "site_slogan",
+    "bank_name",
+    "bank_account_name",
+    "transfer_note_prefix",
+    "announcement"
+  ]);
+
+  await repairTableText("packages", "id", ["name", "featured_badge", "description"]);
+  await repairTableText("pricing_plans", "id", ["category", "name", "feature_type"]);
+  await repairTableText("posts", "id", [
+    "title",
+    "category",
+    "location",
+    "description",
+    "house_direction",
+    "legal_status",
+    "status"
+  ]);
+  await repairTableText("ai_reports", "id", ["report_type", "title", "body"]);
+  await repairTableText("ai_actions", "id", ["action_type", "action_status", "note"]);
+}
+
 function run(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.run(sql, params, function(err) { if (err) reject(err); else resolve(this); });
@@ -104,7 +212,7 @@ async function ensureDemoData() {
   }
 
   const count = await get(`SELECT COUNT(*) as c FROM posts`);
-  if (!count || count.c < 12) {
+  if (!count || count.c < 6) {
     await run(`DELETE FROM posts`);
     await run(`INSERT INTO posts (
       title, category, price, location, description, image, area, bedrooms, house_direction, legal_status, user_id, is_featured, views, status
@@ -300,17 +408,32 @@ async function getActiveSubscription(userId) {
 async function bootstrap() {
   await run(`CREATE TABLE IF NOT EXISTS settings (
     id INTEGER PRIMARY KEY CHECK(id = 1),
-    site_name TEXT DEFAULT 'NhaDatGoVapQ12.vn',
-    site_slogan TEXT DEFAULT 'ChuyÃªn trang rao váº·t báº¥t Ä‘á»™ng sáº£n TP.HCM - GÃ² Váº¥p - Quáº­n 12',
+    site_name TEXT DEFAULT 'Việc Làm Nhà Đất',
+    site_slogan TEXT DEFAULT 'Nền tảng đăng tin bất động sản tập trung nhu cầu thật tại Gò Vấp, Quận 12 và TP.HCM.',
     qr_image TEXT DEFAULT '',
     bank_name TEXT DEFAULT 'MB Bank',
     bank_account_name TEXT DEFAULT 'NGUYEN VAN A',
     bank_account_number TEXT DEFAULT '0123456789',
     transfer_note_prefix TEXT DEFAULT 'RAOVAT',
     hero_banner TEXT DEFAULT '',
-    announcement TEXT DEFAULT 'ChÃ o má»«ng báº¡n Ä‘áº¿n vá»›i NhaDatGoVapQ12.vn'
+    announcement TEXT DEFAULT 'Chào mừng bạn đến với Việc Làm Nhà Đất'
   )`);
   await run(`INSERT OR IGNORE INTO settings (id) VALUES (1)`);
+  await run(`UPDATE settings
+    SET
+      site_name = CASE
+        WHEN site_name IS NULL OR TRIM(site_name) = '' OR site_name = 'NhaDatGoVapQ12.vn' THEN 'Việc Làm Nhà Đất'
+        ELSE site_name
+      END,
+      site_slogan = CASE
+        WHEN site_slogan IS NULL OR TRIM(site_slogan) = '' OR site_slogan LIKE 'ChuyÃªn trang%' THEN 'Nền tảng đăng tin bất động sản tập trung nhu cầu thật tại Gò Vấp, Quận 12 và TP.HCM.'
+        ELSE site_slogan
+      END,
+      announcement = CASE
+        WHEN announcement IS NULL OR TRIM(announcement) = '' OR announcement LIKE 'ChÃ o má»«ng%' OR announcement LIKE '%NhaDatGoVapQ12.vn%' THEN 'Chào mừng bạn đến với Việc Làm Nhà Đất'
+        ELSE announcement
+      END
+    WHERE id = 1`);
 
   await run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -614,6 +737,8 @@ async function bootstrap() {
         adminUser.id
       ]);
   }
+
+  await repairDatabaseText();
 }
 
 app.post("/api/upload", requireLogin, upload.single("image"), async (req, res) => {
@@ -623,7 +748,12 @@ app.post("/api/upload", requireLogin, upload.single("image"), async (req, res) =
 
 app.get("/api/settings/public", async (req, res) => {
   const row = await get(`SELECT site_name, site_slogan, qr_image, bank_name, bank_account_name, bank_account_number, transfer_note_prefix, hero_banner, announcement FROM settings WHERE id = 1`);
-  res.json(row);
+  res.json(normalizeSettingsRow(row));
+});
+
+app.get("/api/settings", async (req, res) => {
+  const row = await get(`SELECT site_name, site_slogan, qr_image, bank_name, bank_account_name, bank_account_number, transfer_note_prefix, hero_banner, announcement FROM settings WHERE id = 1`);
+  res.json(normalizeSettingsRow(row));
 });
 
 app.get("/api/me", async (req, res) => {
@@ -1478,14 +1608,17 @@ app.put("/api/admin/subscriptions/:id/reject", requireAdmin, async (req, res) =>
 });
 
 app.get("/api/admin/settings", requireAdmin, async (req, res) => {
-  res.json(await get(`SELECT * FROM settings WHERE id = 1`));
+  res.json(normalizeSettingsRow(await get(`SELECT * FROM settings WHERE id = 1`)));
 });
 
 app.put("/api/admin/settings", requireAdmin, async (req, res) => {
   const { site_name, site_slogan, qr_image, bank_name, bank_account_name, bank_account_number, transfer_note_prefix, hero_banner, announcement } = req.body;
+  const nextSiteName = normalizeSettingText("site_name", site_name);
+  const nextSiteSlogan = normalizeSettingText("site_slogan", site_slogan);
+  const nextAnnouncement = normalizeSettingText("announcement", announcement);
   await run(`UPDATE settings SET site_name=?, site_slogan=?, qr_image=?, bank_name=?, bank_account_name=?, bank_account_number=?, transfer_note_prefix=?, hero_banner=?, announcement=? WHERE id=1`,
-    [site_name, site_slogan, qr_image, bank_name, bank_account_name, bank_account_number, transfer_note_prefix, hero_banner, announcement]);
-  res.json({ message: "ÄÃ£ cáº­p nháº­t cÃ i Ä‘áº·t." });
+    [nextSiteName, nextSiteSlogan, qr_image, bank_name, bank_account_name, bank_account_number, transfer_note_prefix, hero_banner, nextAnnouncement]);
+  res.json({ message: "Đã cập nhật cài đặt." });
 });
 
 app.get("/admin", (req, res) => res.sendFile(path.join(__dirname, "public", "admin.html")));

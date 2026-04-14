@@ -1,4 +1,4 @@
-
+﻿
 function currencyVN(num){
   return Number(num || 0).toLocaleString("vi-VN") + "đ";
 }
@@ -6,13 +6,108 @@ function currencyVN(num){
 let selectedPaymentPlan = null;
 let monetizePlanRows = [];
 let subscriptionPackageRows = [];
+let activeAnnouncementTimer = null;
+let lastAnnouncementPopupText = "";
+let announcementPopupBooted = false;
+let currentAnnouncementMessage = "";
+
+function showAnnouncementPopup(message){
+  const popup = document.getElementById("announcementPopup");
+  const popupText = document.getElementById("announcementPopupText");
+  const normalized = normalizeKnownVietnamese("announcement", String(message || "").trim());
+
+  if (!popup || !popupText || !normalized) return;
+  if (lastAnnouncementPopupText === normalized && popup.dataset.visible === "true") return;
+
+  lastAnnouncementPopupText = normalized;
+  popupText.textContent = normalized;
+  popup.classList.remove("hidden");
+  popup.dataset.visible = "true";
+  popup.style.display = "flex";
+  popup.style.opacity = "1";
+  popup.style.visibility = "visible";
+
+  if (activeAnnouncementTimer) {
+    clearTimeout(activeAnnouncementTimer);
+  }
+
+  activeAnnouncementTimer = setTimeout(() => {
+    closeAnnouncementPopup();
+  }, 7000);
+}
+
+function closeAnnouncementPopup(){
+  const popup = document.getElementById("announcementPopup");
+  if (!popup) return;
+  popup.dataset.visible = "false";
+  popup.style.opacity = "0";
+  popup.style.visibility = "hidden";
+  popup.classList.add("hidden");
+  popup.style.display = "none";
+  if (activeAnnouncementTimer) {
+    clearTimeout(activeAnnouncementTimer);
+    activeAnnouncementTimer = null;
+  }
+}
+
+function bootAnnouncementPopup(){
+  if (announcementPopupBooted) return;
+  const message = String(currentAnnouncementMessage || "").trim();
+  if (!message) return;
+  announcementPopupBooted = true;
+  setTimeout(() => showAnnouncementPopup(message), 0);
+}
 
 async function loadSettingsAndPayment(){
   try{
-    const settings = await fetchJSON("/api/settings");
+    const fetchedSettings = await fetchJSON("/api/settings/public");
+    const settings = {
+      ...fetchedSettings,
+      site_name: normalizeKnownVietnamese("site_name", fetchedSettings.site_name || FRONTEND_TEXT_FALLBACKS.site_name),
+      site_slogan: normalizeKnownVietnamese("site_slogan", fetchedSettings.site_slogan || FRONTEND_TEXT_FALLBACKS.site_slogan),
+      announcement: normalizeKnownVietnamese("announcement", fetchedSettings.announcement || FRONTEND_TEXT_FALLBACKS.announcement)
+    };
     monetizePlanRows = await fetchJSON("/api/pricing-plans").catch(() => []);
     subscriptionPackageRows = await fetchJSON("/api/packages").catch(() => []);
+    const siteNameNode = document.getElementById("siteName");
+    const siteSloganNode = document.getElementById("siteSlogan");
+    const announcementNode = document.getElementById("announcementText");
+    const announcementBar = document.getElementById("homeAnnouncementBar");
+    const announcementBarText = document.getElementById("homeAnnouncementText");
     const qr = document.getElementById("paymentQr");
+
+    if (siteNameNode && settings.site_name) {
+      siteNameNode.textContent = settings.site_name;
+      document.title = settings.site_name;
+    }
+    if (siteSloganNode && settings.site_slogan) {
+      siteSloganNode.textContent = settings.site_slogan;
+    }
+    if (announcementNode && settings.announcement) {
+      announcementNode.textContent = settings.announcement;
+    }
+    if (announcementBar && announcementBarText) {
+      if (settings.announcement && String(settings.announcement).trim()) {
+        currentAnnouncementMessage = settings.announcement;
+        announcementBar.classList.remove("hidden");
+        announcementBarText.textContent = settings.announcement;
+        const popupTextNode = document.getElementById("announcementPopupText");
+        if (popupTextNode) popupTextNode.textContent = settings.announcement;
+        showAnnouncementPopup(settings.announcement);
+      } else {
+        currentAnnouncementMessage = "";
+        announcementBar.classList.add("hidden");
+      }
+    }
+
+    if (settings.hero_banner) {
+      const heroSlides = document.querySelectorAll(".hero-slide");
+      heroSlides.forEach((slide, index) => {
+        if (index > 0) return;
+        slide.style.backgroundImage = `linear-gradient(135deg, rgba(15,23,42,.50), rgba(29,78,216,.38)), url('${settings.hero_banner}')`;
+      });
+    }
+
     if (qr) {
       qr.src = settings.qr_image || "/assets/qr-acb.png";
       qr.onerror = () => { qr.src = "/assets/qr-acb.png"; };
@@ -26,7 +121,7 @@ async function loadSettingsAndPayment(){
 
 
 function slugNoSpace(txt){
-  return String(txt || "").toUpperCase().replace(/[^A-Z0-9À-Ỵ]/gi, "");
+  return String(txt || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
 
@@ -133,17 +228,17 @@ function selectPlan(code, name, price, days, el){
 
 
 async function buySelectedPlanWithWallet(){
-  if (!selectedPaymentPlan) return showToast("HÃ£y chá»n gÃ³i trÆ°á»›c.");
+  if (!selectedPaymentPlan) return showToast("Hãy chọn gói trước.");
   if (!selectedPaymentPlan.pricingPlanId) {
-    return showToast("GÃ³i nÃ y hiá»‡n chÆ°a há»— trá»£ mua tá»± Ä‘á»™ng báº±ng vÃ­. Báº¡n cÃ³ thá»ƒ thanh toÃ¡n qua QR.");
+    return showToast("Gói này hiện chưa hỗ trợ mua tự động bằng ví. Bạn có thể thanh toán qua QR.");
   }
   await buyMonetizePlan(selectedPaymentPlan.pricingPlanId);
 }
 
 async function paySelectedPlanByQr(){
-  if (!selectedPaymentPlan) return showToast("HÃ£y chá»n gÃ³i trÆ°á»›c.");
+  if (!selectedPaymentPlan) return showToast("Hãy chọn gói trước.");
   if (Number(selectedPaymentPlan.price || 0) <= 0) {
-    return showToast("GÃ³i nÃ y miá»…n phÃ­, khÃ´ng cáº§n thanh toÃ¡n qua QR.");
+    return showToast("Gói này miễn phí, không cần thanh toán qua QR.");
   }
   await createTopup(selectedPaymentPlan.price);
 }
@@ -151,13 +246,547 @@ async function paySelectedPlanByQr(){
 function showToast(msg, type="success"){
   const div = document.createElement("div");
   div.className = "toast " + type;
-  div.textContent = msg;
+  div.textContent = normalizeFrontendMessage(msg);
   document.body.appendChild(div);
   setTimeout(()=>div.classList.add("show"),50);
   setTimeout(()=>{
     div.classList.remove("show");
     setTimeout(()=>div.remove(),300);
   },2500);
+}
+
+function maybeFixVietnameseMojibake(value){
+  if (typeof value !== "string") return value;
+  if (!/[ÃÂÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßá»��?]/.test(value)) return value;
+  const directReplace = (input) => input
+    .replace(/Ä‘/g, "đ")
+    .replace(/Ä/g, "Đ")
+    .replace(/Ã /g, "à")
+    .replace(/Ã¡/g, "á")
+    .replace(/áº¡/g, "ạ")
+    .replace(/áº£/g, "ả")
+    .replace(/Ã£/g, "ã")
+    .replace(/Ã¢/g, "â")
+    .replace(/áº§/g, "ầ")
+    .replace(/áº¥/g, "ấ")
+    .replace(/áº­/g, "ậ")
+    .replace(/áº©/g, "ẩ")
+    .replace(/áº«/g, "ẫ")
+    .replace(/Äƒ/g, "ă")
+    .replace(/áº±/g, "ằ")
+    .replace(/áº¯/g, "ắ")
+    .replace(/áº·/g, "ặ")
+    .replace(/áº³/g, "ẳ")
+    .replace(/áºµ/g, "ẵ")
+    .replace(/Ã¨/g, "è")
+    .replace(/Ã©/g, "é")
+    .replace(/áº¹/g, "ẹ")
+    .replace(/áº»/g, "ẻ")
+    .replace(/áº½/g, "ẽ")
+    .replace(/Ãª/g, "ê")
+    .replace(/á»�/g, "ề")
+    .replace(/áº¿/g, "ế")
+    .replace(/á»‡/g, "ệ")
+    .replace(/á»ƒ/g, "ể")
+    .replace(/á»…/g, "ễ")
+    .replace(/Ã¬/g, "ì")
+    .replace(/Ã­/g, "í")
+    .replace(/á»‹/g, "ị")
+    .replace(/á»‰/g, "ỉ")
+    .replace(/Ä©/g, "ĩ")
+    .replace(/Ã²/g, "ò")
+    .replace(/Ã³/g, "ó")
+    .replace(/á»�/g, "ọ")
+    .replace(/á»�/g, "ỏ")
+    .replace(/Ãµ/g, "õ")
+    .replace(/Ã´/g, "ô")
+    .replace(/á»“/g, "ồ")
+    .replace(/á»‘/g, "ố")
+    .replace(/á»™/g, "ộ")
+    .replace(/á»•/g, "ổ")
+    .replace(/á»—/g, "ỗ")
+    .replace(/Æ¡/g, "ơ")
+    .replace(/á»�/g, "ờ")
+    .replace(/á»›/g, "ớ")
+    .replace(/á»£/g, "ợ")
+    .replace(/á»Ÿ/g, "ở")
+    .replace(/á»¡/g, "ỡ")
+    .replace(/Ã¹/g, "ù")
+    .replace(/Ãº/g, "ú")
+    .replace(/á»¥/g, "ụ")
+    .replace(/á»§/g, "ủ")
+    .replace(/Å©/g, "ũ")
+    .replace(/Æ°/g, "ư")
+    .replace(/á»«/g, "ừ")
+    .replace(/á»©/g, "ứ")
+    .replace(/á»±/g, "ự")
+    .replace(/á»­/g, "ử")
+    .replace(/á»¯/g, "ữ")
+    .replace(/á»³/g, "ỳ")
+    .replace(/Ã½/g, "ý")
+    .replace(/á»µ/g, "ỵ")
+    .replace(/á»·/g, "ỷ")
+    .replace(/á»¹/g, "ỹ")
+    .replace(/Ã€/g, "À")
+    .replace(/Ã�/g, "Á")
+    .replace(/áº /g, "Ạ")
+    .replace(/áº¢/g, "Ả")
+    .replace(/Ãƒ/g, "Ã")
+    .replace(/Ã‚/g, "Â")
+    .replace(/Ä‚/g, "Ă")
+    .replace(/Ãˆ/g, "È")
+    .replace(/Ã‰/g, "É")
+    .replace(/ÃŠ/g, "Ê")
+    .replace(/ÃŒ/g, "Ì")
+    .replace(/Ã�/g, "Í")
+    .replace(/Ã’/g, "Ò")
+    .replace(/Ã“/g, "Ó")
+    .replace(/Ã”/g, "Ô")
+    .replace(/Æ /g, "Ơ")
+    .replace(/Ã™/g, "Ù")
+    .replace(/Ãš/g, "Ú")
+    .replace(/Æ¯/g, "Ư")
+    .replace(/á»²/g, "Ỳ")
+    .replace(/Ã�/g, "Ý")
+    .replace(/Â·/g, "·")
+    .replace(/mÂ²/g, "m²")
+    .replace(/Â°/g, "°")
+    .replace(/Â /g, " ")
+    .replace(/â€¦/g, "…")
+    .replace(/â€“/g, "–")
+    .replace(/â€”/g, "—")
+    .replace(/â€¢/g, "•")
+    .replace(/â€˜/g, "'")
+    .replace(/â€™/g, "'")
+    .replace(/â€œ/g, '"')
+    .replace(/â€�/g, '"')
+    .replace(/â€/g, '"')
+    .replace(/�/g, "đ");
+
+  const candidates = [directReplace(value)];
+
+  try {
+    candidates.push(directReplace(decodeURIComponent(escape(value))));
+  } catch {}
+
+  try {
+    const bytes = Uint8Array.from(Array.from(value).map((char) => char.charCodeAt(0) & 255));
+    candidates.push(directReplace(new TextDecoder("utf-8").decode(bytes)));
+  } catch {}
+
+  return candidates.reduce((best, current) => {
+    const score = (text) => (text.match(/[�?ÃÂÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß]/g) || []).length;
+    return score(current) < score(best) ? current : best;
+  }, candidates[0]);
+}
+
+const FRONTEND_TEXT_FALLBACKS = {
+  site_name: "Việc Làm Nhà Đất",
+  site_slogan: "Nền tảng đăng tin bất động sản tập trung nhu cầu thật tại Gò Vấp, Quận 12 và TP.HCM.",
+  announcement: "Chào mừng bạn đến với Việc Làm Nhà Đất",
+  bio: "Tài khoản quản trị demo."
+};
+
+const FRONTEND_MESSAGE_FALLBACKS = [
+  [/^Äăng nhập thành công\.?$/i, "Đăng nhập thành công."],
+  [/^Äăng ký thành công\.?$/i, "Đăng ký thành công."],
+  [/^Äã cập nhật cài đặt\.?$/i, "Đã cập nhật cài đặt."],
+  [/Chào mừng bạn .*NhaDatGoVapQ12\.vn/i, "Chào mừng bạn đến với Việc Làm Nhà Đất"],
+  [/Chào mừng bạn .*Việc Làm Nhà Đất/i, "Chào mừng bạn đến với Việc Làm Nhà Đất"]
+];
+
+function hasBrokenVietnamese(value){
+  return typeof value === "string" && /[ÃÂÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßá»�]/.test(value);
+}
+
+function normalizeKnownVietnamese(key, value){
+  const text = typeof value === "string" ? maybeFixVietnameseMojibake(value).trim() : value;
+  if (typeof text !== "string") return text;
+
+  if (key === "site_name" && (hasBrokenVietnamese(text) || /N\?ha?Dat/i.test(text) || /Vi.?c L.?m Nh. .*t/i.test(text))) {
+    return FRONTEND_TEXT_FALLBACKS.site_name;
+  }
+  if (key === "site_slogan" && (hasBrokenVietnamese(text) || /N\?n t\?ng|b\?t \?ng s\?n|G\? V\?p/i.test(text) || /N.n t.ng .*TP\.HCM/i.test(text))) {
+    return FRONTEND_TEXT_FALLBACKS.site_slogan;
+  }
+  if (key === "announcement" && (hasBrokenVietnamese(text) || /Ch\?o m\?ng/i.test(text) || /Ch.o m.ng b.n .*Vi.c L.m Nh. .*t/i.test(text))) {
+    return FRONTEND_TEXT_FALLBACKS.announcement;
+  }
+  if (key === "bio" && (hasBrokenVietnamese(text) || /T\?i kho\?n/i.test(text))) {
+    return FRONTEND_TEXT_FALLBACKS.bio;
+  }
+  return text;
+}
+
+function normalizeFrontendMessage(value){
+  const text = typeof value === "string" ? maybeFixVietnameseMojibake(value).trim() : value;
+  if (typeof text !== "string") return text;
+  for (const [pattern, replacement] of FRONTEND_MESSAGE_FALLBACKS) {
+    if (pattern.test(text)) return replacement;
+  }
+  return text;
+}
+
+function sanitizeUserProfile(user = {}){
+  return {
+    ...user,
+    full_name: normalizeKnownVietnamese("full_name", user.full_name || ""),
+    username: normalizeKnownVietnamese("username", user.username || ""),
+    email: normalizeKnownVietnamese("email", user.email || ""),
+    phone: normalizeKnownVietnamese("phone", user.phone || ""),
+    address: normalizeKnownVietnamese("address", user.address || ""),
+    bio: normalizeKnownVietnamese("bio", user.bio || ""),
+    avatar: normalizeKnownVietnamese("avatar", user.avatar || "")
+  };
+}
+
+function setPanelHeadingByChildId(childId, tinyTitle, heading){
+  const child = document.getElementById(childId);
+  const panel = child ? child.closest(".panel") : null;
+  if (!panel) return;
+  const tiny = panel.querySelector(".tiny-title");
+  const h2 = panel.querySelector("h2");
+  if (tiny && tinyTitle) tiny.textContent = tinyTitle;
+  if (h2 && heading) h2.textContent = heading;
+}
+
+function normalizeVietnamesePayload(input){
+  if (Array.isArray(input)) return input.map(normalizeVietnamesePayload);
+  if (!input || typeof input !== "object") return maybeFixVietnameseMojibake(input);
+  return Object.fromEntries(
+    Object.entries(input).map(([key, value]) => [key, normalizeVietnamesePayload(value)])
+  );
+}
+
+function repairMojibakeInDom(root = document){
+  const attrNames = ["placeholder", "title", "aria-label", "alt", "value"];
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+
+  while (walker.nextNode()) {
+    textNodes.push(walker.currentNode);
+  }
+
+  textNodes.forEach((node) => {
+    if (!node.nodeValue || !node.nodeValue.trim()) return;
+    const fixed = maybeFixVietnameseMojibake(node.nodeValue);
+    if (fixed !== node.nodeValue) node.nodeValue = fixed;
+  });
+
+  if (!(root instanceof Element) && root !== document) return;
+  const scope = root === document ? document.body : root;
+  if (!scope) return;
+
+  scope.querySelectorAll("*").forEach((el) => {
+    attrNames.forEach((name) => {
+      const raw = el.getAttribute(name);
+      if (!raw) return;
+      const fixed = maybeFixVietnameseMojibake(raw);
+      if (fixed !== raw) el.setAttribute(name, fixed);
+    });
+  });
+}
+
+function initVietnameseTextRepair(){
+  repairMojibakeInDom(document);
+  forceVietnameseUiLabels(document);
+
+  const observedRoot = document.body;
+  if (!observedRoot) return;
+
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const fixed = maybeFixVietnameseMojibake(node.nodeValue || "");
+          if (fixed !== node.nodeValue) node.nodeValue = fixed;
+          return;
+        }
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          repairMojibakeInDom(node);
+          forceVietnameseUiLabels(node);
+        }
+      });
+    });
+  });
+
+  observer.observe(observedRoot, { childList: true, subtree: true });
+}
+
+function forceVietnameseUiLabels(root = document){
+  const scope = root === document ? document : root;
+  const setText = (selector, value) => {
+    scope.querySelectorAll(selector).forEach((node) => {
+      node.textContent = value;
+    });
+  };
+  const setPlaceholder = (selector, value) => {
+    scope.querySelectorAll(selector).forEach((node) => {
+      node.setAttribute("placeholder", value);
+    });
+  };
+
+  setText(".top-strip-inner span:nth-child(2)", "Chuyên đăng tin nhà đất TP.HCM");
+  setText(".top-strip-inner span:nth-child(3)", "Trọng điểm: Gò Vấp, Quận 12, TP.HCM");
+  setPlaceholder("#searchKeyword", "Tìm nhà bán, đất nền, căn hộ, mặt bằng, cho thuê...");
+  setText("#guestActions .btn.btn-light", "Đăng nhập");
+  setText("#guestActions .btn.btn-primary", "Đăng ký");
+
+  const navText = ["Nhà bán", "Đất nền", "Cho thuê", "Mặt bằng", "Việc làm", "Khu vực", "Gói đăng tin", "Tư vấn BĐS"];
+  scope.querySelectorAll(".main-nav a").forEach((node, index) => {
+    if (navText[index]) node.textContent = navText[index];
+  });
+
+  const heroSlides = scope.querySelectorAll(".hero-slide");
+  const heroCopy = [
+    {
+      badge: "Nền tảng đăng tin bất động sản cao cấp",
+      title: "Đăng tin rõ ràng hơn. Hiển thị chuyên nghiệp hơn. Chốt khách nhanh hơn.",
+      desc: "Dành cho môi giới, đội nhóm bán hàng, chủ tin và đơn vị cho thuê muốn có một website nhà đất vừa đẹp, vừa hiệu quả trong việc tạo lead thật.",
+      cta1: "Đăng tin ngay",
+      cta2: "Xem gói nổi bật"
+    },
+    {
+      badge: "Gò Vấp - Quận 12 - TP.HCM",
+      title: "Tập trung đúng khu vực trọng điểm để người mua và người thuê ra quyết định nhanh hơn.",
+      desc: "Từ bộ lọc, card tin đến CTA đều được sắp xếp lại để khách hàng quét giá, diện tích, vị trí và hành động liên hệ chỉ trong vài giây.",
+      cta1: "Xem tin Gò Vấp",
+      cta2: "Xem tin Quận 12"
+    },
+    {
+      badge: "Gói đăng tin tối ưu hiển thị",
+      title: "Free để phủ rộng. Boost để đẩy nhanh. VIP và PRO để tăng lượt hỏi thật.",
+      desc: "Hệ gói đăng tin được trình bày rõ ràng để môi giới và chủ tin chọn đúng mục tiêu hiển thị theo thời gian, mức độ ưu tiên và ngân sách.",
+      cta1: "Khám phá bảng giá",
+      cta2: "Tạo tin mới"
+    }
+  ];
+  heroSlides.forEach((slide, index) => {
+    const copy = heroCopy[index];
+    if (!copy) return;
+    const badge = slide.querySelector(".hero-badge");
+    const title = slide.querySelector("h1");
+    const desc = slide.querySelector("p");
+    const buttons = slide.querySelectorAll(".hero-cta-row button");
+    if (badge) badge.textContent = copy.badge;
+    if (title) title.textContent = copy.title;
+    if (desc) desc.textContent = copy.desc;
+    if (buttons[0]) buttons[0].textContent = copy.cta1;
+    if (buttons[1]) buttons[1].textContent = copy.cta2;
+  });
+
+  setText(".hero-left .mini-badge", "Chuyên bất động sản TP.HCM");
+  setText(".hero-left h1", "Website nhà đất được thiết kế lại để phục vụ đúng hành vi tìm kiếm và giao dịch.");
+  setText(".hero-left p", "Tập trung vào trải nghiệm xem tin, lọc khu vực, hiển thị gói đăng tin và tăng hành động gọi, chat, xem chi tiết cho người mua, người thuê và môi giới.");
+  const heroPoints = ["Đăng tin dễ thao tác", "Lọc khu vực rõ ràng", "Card tin sạch và sâu", "CTA gọi và chat rõ hơn", "Tối ưu lead nhà đất"];
+  scope.querySelectorAll(".hero-points span").forEach((node, index) => {
+    if (heroPoints[index]) node.textContent = heroPoints[index];
+  });
+  setText(".hero-cta .btn.btn-primary", "Xem gói đăng tin");
+  setText(".hero-cta .btn.btn-light", "Bắt đầu đăng tin");
+  setText(".summary-card .tiny-title", "Nền tảng chuyên biệt");
+  setText(".summary-card h3", "Thiết kế riêng cho môi giới, chủ tin và đội bán hàng bất động sản.");
+  setText(".summary-card p", "Không phải web rao vặt cũ. Đây là một giao diện tập trung vào độ tin cậy, tốc độ ra quyết định và khả năng chuyển đổi từ lượt xem thành khách hỏi thật.");
+  setText(".market-card .tiny-title", "Thị trường trọng điểm");
+  setText(".market-card h3", "Gò Vấp, Quận 12 và nhóm khách hàng có nhu cầu giao dịch thật.");
+  setText(".market-card p", "Tối ưu cho nhà bán, đất nền, cho thuê, mặt bằng và các tin cần hiển thị nổi bật để tăng cơ hội chốt nhanh.");
+
+  const heroMiniStats = [
+    "<strong>Gò Vấp</strong><span>Nhà ở thực</span>",
+    "<strong>Quận 12</strong><span>Đất và mặt bằng</span>",
+    "<strong>TP.HCM</strong><span>Mở rộng nguồn khách</span>"
+  ];
+  scope.querySelectorAll(".hero-mini-stats div").forEach((node, index) => {
+    if (heroMiniStats[index]) node.innerHTML = heroMiniStats[index];
+  });
+
+  const statHtml = [
+    "<strong>Nhà bán Gò Vấp</strong><span>Tập trung khu vực có nhu cầu ở thực và khả năng chốt giao dịch nhanh.</span>",
+    "<strong>Đất nền Quận 12</strong><span>Ưu tiên khu tăng trưởng, mặt bằng rõ và dễ so sánh giữa các tin.</span>",
+    "<strong>Cho thuê TP.HCM</strong><span>Tối ưu cho căn hộ mini, nhà nguyên căn và mặt bằng kinh doanh.</span>",
+    "<strong>Gói đăng tin nổi bật</strong><span>Phân tầng free, boost, VIP và PRO để tăng khả năng hiển thị đúng mục tiêu.</span>"
+  ];
+  scope.querySelectorAll(".quick-stats .stat-box").forEach((node, index) => {
+    if (statHtml[index]) node.innerHTML = statHtml[index];
+  });
+
+  setText(".showcase-panel .tiny-title", "Tin nổi bật ngoài trang chủ");
+  setText(".showcase-panel h2", "Tin demo và tin nổi bật được hiển thị ngay khi khách vừa vào website");
+  setText(".showcase-panel .soft-badge", "Ưu tiên các tin đã duyệt và có sức hút cao");
+
+  setText("#marketSection .tiny-title", "Khu vực hot");
+  setText("#marketSection .section-intro p", "Chọn nhanh quận, phường hoặc điểm nóng quen thuộc để lọc tin theo khu vực có nhu cầu thật.");
+  const marketPills = ["Tất cả", "Nhà bán", "Đất nền", "Cho thuê", "Mặt bằng"];
+  scope.querySelectorAll("#marketSection .filter-pill").forEach((node, index) => {
+    if (marketPills[index]) node.textContent = marketPills[index];
+  });
+  const locationButtons = ["Gò Vấp", "Quận 12"];
+  scope.querySelectorAll("#marketSection .quick-locations button").forEach((node, index) => {
+    if (locationButtons[index]) {
+      node.textContent = locationButtons[index];
+      node.classList.remove("hidden");
+    } else {
+      node.classList.add("hidden");
+    }
+  });
+
+  setText(".sidebar .panel:nth-of-type(1) .tiny-title", "Tài khoản");
+  setText(".sidebar .panel:nth-of-type(1) h3", "Hồ sơ người dùng");
+  setText(".sidebar .panel:nth-of-type(2) .tiny-title", "Bộ lọc");
+  setText(".sidebar .panel:nth-of-type(2) h3", "Lọc bất động sản");
+  setText(".sidebar .panel:nth-of-type(3) .tiny-title", "Yêu thích");
+  setText(".sidebar .panel:nth-of-type(3) h3", "Tin đã lưu");
+  setPanelHeadingByChildId("walletHistory", "Ví doanh thu", "Nạp tiền và giao dịch ví");
+  setPanelHeadingByChildId("myPostList", "Quản lý cá nhân", "Tin của tôi");
+  setPanelHeadingByChildId("mySubscriptionList", "Lịch sử gói", "Gói đăng ký của tôi");
+  setPanelHeadingByChildId("conversationList", "Tin nhắn", "Chat người mua / người bán");
+
+  setPlaceholder("#filterKeyword", "Nhập từ khóa...");
+  setPlaceholder("#filterMinPrice", "Giá từ");
+  setPlaceholder("#filterMaxPrice", "Giá đến");
+  setPlaceholder("#filterMinArea", "Diện tích từ");
+  setPlaceholder("#filterMaxArea", "Diện tích đến");
+  setText(".preset-price-row .btn:nth-child(1)", "Tất cả giá");
+  setText(".preset-price-row .btn:nth-child(2)", "Dưới 3 tỷ");
+  setText(".preset-price-row .btn:nth-child(3)", "3 - 5 tỷ");
+  setText(".preset-price-row .btn:nth-child(4)", "5 - 8 tỷ");
+  setText(".preset-price-row .btn:nth-child(5)", "Trên 8 tỷ");
+  setText("#filterLocation option[value='']", "Tất cả khu vực");
+  setText("#filterBedrooms option[value='']", "Số phòng ngủ");
+  setText("#filterDirection option[value='']", "Hướng nhà");
+  setText("#filterLegal option[value='']", "Pháp lý");
+
+  const directionOptions = ["Chọn hướng", "Đông", "Tây", "Nam", "Bắc", "Đông Nam", "Đông Bắc", "Tây Nam", "Tây Bắc"];
+  scope.querySelectorAll("#postDirection option").forEach((node, index) => {
+    if (directionOptions[index]) node.textContent = directionOptions[index];
+  });
+
+  const postLocationOptions = [
+    "Chọn khu vực",
+    "Gò Vấp",
+    "Quận 12"
+  ];
+  scope.querySelectorAll("#postLocation option").forEach((node, index) => {
+    if (postLocationOptions[index]) node.textContent = postLocationOptions[index];
+  });
+
+  setText(".content .section-header-block .tiny-title", "Tin bất động sản");
+  setText(".content .section-header-block h2", "Tin đăng mới nhất khu vực TP.HCM");
+  setText(".content .section-header-block .soft-badge", "Ưu tiên hiển thị tin nổi bật");
+
+  setText("#packagesSection .tiny-title", "Bảng giá đăng tin");
+  setText("#packagesSection h2", "Gói hiển thị dành cho môi giới, chủ tin và đội bán hàng nhà đất");
+  setText("#packagesSection .section-header .soft-badge", "Rõ giá · rõ thời gian · rõ mức ưu tiên");
+  setText("#paymentPanel .tiny-title", "Thanh toán gói");
+  setText("#paymentPanel h3", "Chọn nhanh gói đăng tin phù hợp");
+  setText(".payment-note", "ACB · NGUYEN TUAN ANH · 214904949");
+  setText("#paymentInfo .payment-tip", "Chuyển khoản đúng nội dung để đối chiếu và kích hoạt gói nhanh hơn.");
+
+  const pricingTitles = ["Nhà đất", "Nhà thuê", "Việc làm"];
+  scope.querySelectorAll(".pricing-group .pricing-title").forEach((node, index) => {
+    if (pricingTitles[index]) node.textContent = pricingTitles[index];
+  });
+  setText(".plan-buy-inline", "Mua gói");
+  const planTitles = {
+    FREE: "Tin thường",
+    BOOST: "Đẩy tin",
+    HOT: "Tin nổi bật",
+    VIP: "VIP 7 ngày",
+    "VIP+": "VIP 15 ngày",
+    PRO: "PRO 30 ngày"
+  };
+  const planDescriptions = {
+    "Nhà đất_FREE": "Hiển thị 7 ngày",
+    "Nhà đất_BOOST": "Đẩy đầu trang 1 lần",
+    "Nhà đất_HOT": "Nổi bật 7 ngày",
+    "Nhà đất_VIP": "Ưu tiên hiển thị",
+    "Nhà đất_VIP+": "Hiển thị lâu hơn",
+    "Nhà đất_PRO": "Tối đa ưu tiên",
+    "Nhà thuê_FREE": "Hiển thị 7 ngày",
+    "Nhà thuê_BOOST": "Đẩy nhanh hiển thị",
+    "Nhà thuê_HOT": "Nổi bật 7 ngày",
+    "Nhà thuê_VIP": "Tăng độ ưu tiên",
+    "Việc làm_FREE": "Hiển thị 7 ngày",
+    "Việc làm_HOT": "Nổi bật 7 ngày",
+    "Việc làm_VIP": "Ưu tiên hiển thị",
+    "Việc làm_BOOST": "Đẩy nhanh hiển thị"
+  };
+  scope.querySelectorAll(".pricing-group").forEach((group) => {
+    const groupName = group.querySelector(".pricing-title")?.textContent?.trim() || "";
+    group.querySelectorAll(".plan-card").forEach((card) => {
+      const badge = card.querySelector(".plan-badge")?.textContent?.trim() || "";
+      const strong = card.querySelector("strong");
+      const desc = card.querySelector("p");
+      if (strong && planTitles[badge]) strong.textContent = planTitles[badge];
+      if (desc) {
+        const key = `${groupName}_${badge}`;
+        if (planDescriptions[key]) desc.textContent = planDescriptions[key];
+      }
+    });
+  });
+
+  setText("#walletSection .tiny-title", "Ví doanh thu");
+  setText("#walletSection h2", "Nạp tiền và giao dịch ví");
+  setText("#postSection .tiny-title", "Đăng bài");
+  setText("#postSection h2", "Tạo hoặc cập nhật tin bất động sản");
+  setText("#postSection .soft-badge", "Có upload ảnh từ máy");
+
+  const postLabels = ["Tiêu đề", "Loại hình", "Giá / mức lương", "Diện tích (m²)", "Số phòng ngủ / kinh nghiệm", "Hướng nhà", "Pháp lý", "Khu vực", "Mô tả", "Link ảnh hoặc ảnh đã upload", "Hoặc chọn ảnh từ máy", "Ghim tin nổi bật"];
+  scope.querySelectorAll("#postForm label").forEach((node, index) => {
+    if (postLabels[index]) node.textContent = postLabels[index];
+  });
+  setPlaceholder("#postBedrooms", "Ví dụ: 3");
+  setPlaceholder("#postDescription", "Mô tả vị trí, diện tích, ưu điểm, pháp lý, nội thất hoặc nhu cầu tuyển dụng...");
+  setText(".ai-trigger-copy strong", "AI hỗ trợ viết tin");
+  setText(".ai-trigger-copy p", "Tạo mô tả chuyên nghiệp");
+  setText(".ai-support-panel .ai-tip-title", "Gợi ý nhanh");
+  setText(".ai-support-panel .ai-tip-copy", "AI sẽ gợi ý cách viết nội dung rõ hơn cho nhà bán, cho thuê, mặt bằng và các tin việc làm.");
+  setText(".form-actions .btn.btn-primary", "Đăng tin ngay");
+  setText(".form-actions .btn.btn-light", "Làm mới");
+  setText(".btn.btn-light[onclick='uploadPostImage()']", "Upload ảnh");
+
+  setText("#contactSection .tiny-title", "Liên hệ tư vấn");
+  setText("#contactSection .contact-copy h2", "Tư vấn cách làm website bất động sản rõ ràng hơn, lên tin tốt hơn và tăng khách hỏi thật.");
+  setText("#contactSection .contact-copy p", "Để lại thông tin nếu bạn muốn được tư vấn về cách đăng tin, chọn gói hiển thị, tối ưu khu vực trọng điểm và hành trình khách mua, khách thuê hoặc chủ tin bất động sản.");
+  const contactPoints = [
+    "Tư vấn đăng tin bất động sản",
+    "Tối ưu gói VIP và hiển thị",
+    "Tăng lead khách mua và khách thuê"
+  ];
+  scope.querySelectorAll("#contactSection .contact-points span").forEach((node, index) => {
+    if (contactPoints[index]) node.textContent = contactPoints[index];
+  });
+  const contactLabels = ["Họ và tên", "Số điện thoại", "Email", "Nhu cầu", "Mô tả ngắn"];
+  scope.querySelectorAll("#contactSection label").forEach((node, index) => {
+    if (contactLabels[index]) node.textContent = contactLabels[index];
+  });
+  setPlaceholder("#contactName", "Nguyễn Văn A");
+  setPlaceholder("#contactPhone", "09xx xxx xxx");
+  setPlaceholder("#contactMessage", "Mình cần tư vấn cách đăng tin, chọn gói hiển thị, tối ưu khu vực và làm website bất động sản chuyên nghiệp hơn để tăng khách hỏi thật...");
+  scope.querySelectorAll("#contactNeed option").forEach((node, index) => {
+    const options = [
+      "Tư vấn tối ưu tin đăng BĐS",
+      "Tư vấn gói VIP, boost và hiển thị",
+      "Tư vấn website bán nhà, cho thuê, đất nền"
+    ];
+    if (options[index]) node.textContent = options[index];
+  });
+  setText("#contactSection .contact-actions .btn.btn-primary", "Nhận tư vấn BĐS");
+  setText("#contactSection .contact-actions .btn.btn-light", "Gọi ngay 0908777102");
+
+  setText(".site-footer .footer-brand strong", "Việc Làm Nhà Đất");
+  setText(".site-footer .footer-brand p", "Chuyên trang đăng tin bất động sản TP.HCM, tập trung Gò Vấp, Quận 12 và các khu vực có nhu cầu thật.");
+  const footerTitles = ["Loại hình", "Khu vực", "Liên hệ"];
+  scope.querySelectorAll(".footer-cols h4").forEach((node, index) => {
+    if (footerTitles[index]) node.textContent = footerTitles[index];
+  });
+  setText("#chatMessages.empty-state", "Chọn một hội thoại để xem tin nhắn.");
+  setPlaceholder("#chatInput", "Nhập tin nhắn...");
+  setText("#chatForm .btn.btn-primary", "Gửi");
+  setText("#chatPopup .tiny-title", "Hỗ trợ nhanh");
+  setText("#chatPopup h3", "Chat với người đăng");
+  setPlaceholder("#chatPopupInput", "Nhập tin nhắn...");
+  setText("#chatPopup .btn.btn-primary.btn-sm", "Gửi");
 }
 
 
@@ -174,7 +803,7 @@ async function fetchJSON(url, options = {}) {
     const message = typeof payload === "string" ? payload : (payload.message || "Lỗi server");
     throw new Error(message);
   }
-  return payload;
+  return normalizeVietnamesePayload(payload);
 }
 
 
@@ -226,7 +855,6 @@ function updatePostFieldHints(){
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadSettingsAndPayment();
   initStickyPills();
   if (window.postCategory) {
     postCategory.addEventListener("change", updatePostFieldHints);
@@ -274,10 +902,9 @@ function openDetailModal(post = {}){
   if (!modal) return;
   const img = post.image || "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=80";
   const title = post.title || "Chi tiết tin đăng";
-  const price = (typeof currency === "function" && post.price) ? currency(post.price) : (post.price || "");
   const meta = post.category === "Việc làm"
-    ? `💼 ${post.category || ""} · 📍 ${post.location || ""}`
-    : `${post.category ? "📂 " + post.category + " · " : ""}📍 ${post.location || ""}${post.area ? " · 📐 " + post.area + "m²" : ""}${post.bedrooms ? " · 🛏 " + post.bedrooms : ""}`;
+    ? `${post.category || ""} · ${post.location || ""}`
+    : `${post.category ? post.category + " · " : ""}${post.location || ""}${post.area ? " · " + post.area + "m²" : ""}${post.bedrooms ? " · " + post.bedrooms + " PN" : ""}`;
   document.getElementById("detailGalleryMain").style.backgroundImage = `url('${img}')`;
   const thumbs = document.getElementById("detailGalleryThumbs");
   if (thumbs) {
@@ -328,6 +955,7 @@ function sendQuickChat(){
 document.addEventListener("DOMContentLoaded", () => {
   loadSettingsAndPayment();
   initHeroSlider();
+  initVietnameseTextRepair();
 });
 
 
@@ -472,6 +1100,7 @@ async function checkMe(){
     conversationList.innerHTML = `<div class="empty-state">Đăng nhập để dùng chat.</div>`;
     return;
   }
+  data.user = sanitizeUserProfile(data.user);
   guestActions.classList.add("hidden"); userActions.classList.remove("hidden");
   welcomeUser.textContent = `Xin chào, ${data.user.full_name}`;
   if (data.user.role === "admin") adminLink.classList.remove("hidden"); else adminLink.classList.add("hidden");
@@ -527,7 +1156,7 @@ async function loadPosts(){
       <div class="post-body">
         <div class="post-title">${post.title}</div>
         <div class="post-price">${currency(post.price)}</div>
-        <div class="post-meta">${post.category === "Việc làm" ? `💼 ${post.category} · 📍 ${post.location} · 💰 ${currency(post.price)} · 👁 ${post.views}` : `📂 ${post.category} · 📍 ${post.location} · 📐 ${post.area || 0}m² · 🛏 ${post.bedrooms || 0} · 🧭 ${post.house_direction || "—"} · 👁 ${post.views}`}</div>
+        <div class="post-meta">${post.category === "Việc làm" ? `${post.category} · ${post.location} · ${currency(post.price)} · ${post.views} lượt xem` : `${post.category} · ${post.location} · ${post.area || 0}m² · ${post.bedrooms || 0} PN · ${post.house_direction || "-"} · ${post.views} lượt xem`}</div>
         <div class="post-desc">${post.description}</div>
         <div class="post-seller"><strong>Người bán:</strong> ${post.full_name}<br><strong>SĐT:</strong> ${post.phone || "Chưa cập nhật"}</div>
         <div class="card-actions">
@@ -541,19 +1170,45 @@ async function loadPosts(){
 async function viewDetail(id){
   try{
     const post = await fetchJSON(`/api/posts/${id}`);
+    const detailFacts = post.category === "Việc làm"
+      ? `
+        <div class="detail-facts-grid">
+          <div class="info-card detail-side-card"><strong>Mức lương</strong><div>${currency(post.price)}</div></div>
+          <div class="info-card detail-side-card"><strong>Khu vực làm việc</strong><div>${post.location}</div></div>
+          <div class="info-card detail-side-card"><strong>Loại tin</strong><div>Tin tuyển dụng</div></div>
+          <div class="info-card detail-side-card"><strong>Lượt xem</strong><div>${post.views}</div></div>
+        </div>
+      `
+      : `
+        <div class="detail-facts-grid">
+          <div class="info-card detail-side-card"><strong>Diện tích</strong><div>${post.area || 0}m²</div></div>
+          <div class="info-card detail-side-card"><strong>Phòng ngủ</strong><div>${post.bedrooms || 0}</div></div>
+          <div class="info-card detail-side-card"><strong>Hướng nhà</strong><div>${post.house_direction || "Chưa cập nhật"}</div></div>
+          <div class="info-card detail-side-card"><strong>Pháp lý</strong><div>${post.legal_status || "Chưa cập nhật"}</div></div>
+          <div class="info-card detail-side-card"><strong>Lượt xem</strong><div>${post.views}</div></div>
+        </div>
+      `;
+
     detailContent.innerHTML = `
       <div class="detail-grid">
-        <div><img class="detail-image" src="${post.image || "https://via.placeholder.com/900x700?text=No+Image"}" alt="${post.title}"></div>
+        <div class="detail-main">
+          <img class="detail-image" src="${post.image || "https://via.placeholder.com/900x700?text=No+Image"}" alt="${post.title}">
+          <div class="info-card detail-description-card">
+            <strong>Mô tả</strong>
+            <div>${post.description}</div>
+          </div>
+        </div>
         <div class="detail-meta">
           <div class="tiny-title">Chi tiết tin đăng</div>
           <h2>${post.title}</h2>
           <div class="post-price">${currency(post.price)}</div>
-          <div class="info-card"><strong>Danh mục</strong><div>${post.category}</div></div>
-          <div class="info-card"><strong>Khu vực</strong><div>${post.location}</div></div>
-          <div class="info-card"><strong>Người bán</strong><div>${post.full_name} · @${post.username}</div></div>
-          <div class="info-card"><strong>Điện thoại</strong><div>${post.phone || "Chưa cập nhật"}</div></div>
-          <div class="info-card"><strong>Lượt xem</strong><div>${post.views}</div></div>${post.category === "Việc làm" ? `<div class="info-card"><strong>Mức lương</strong><div>${currency(post.price)}</div></div><div class="info-card"><strong>Khu vực làm việc</strong><div>${post.location}</div></div><div class="info-card"><strong>Loại tin</strong><div>Tin tuyển dụng</div></div>` : `<div class="info-card"><strong>Diện tích</strong><div>${post.area || 0}m²</div></div><div class="info-card"><strong>Phòng ngủ</strong><div>${post.bedrooms || 0}</div></div><div class="info-card"><strong>Hướng nhà</strong><div>${post.house_direction || "Chưa cập nhật"}</div></div><div class="info-card"><strong>Pháp lý</strong><div>${post.legal_status || "Chưa cập nhật"}</div></div>`}
-          <div class="info-card"><strong>Mô tả</strong><div>${post.description}</div></div>
+          <div class="detail-primary-grid">
+            <div class="info-card detail-side-card"><strong>Danh mục</strong><div>${post.category}</div></div>
+            <div class="info-card detail-side-card"><strong>Khu vực</strong><div>${post.location}</div></div>
+            <div class="info-card detail-side-card"><strong>Người bán</strong><div>${post.full_name} · @${post.username}</div></div>
+            <div class="info-card detail-side-card"><strong>Điện thoại</strong><div>${post.phone || "Chưa cập nhật"}</div></div>
+          </div>
+          ${detailFacts}
           <div class="card-actions">
             <button class="btn btn-primary" onclick="startChat(${post.id}, ${post.user_id})">Nhắn người bán</button>
             <button class="btn btn-light" onclick="toggleFavorite(${post.id})">${post.is_favorite ? "Bỏ yêu thích" : "Yêu thích"}</button>
@@ -642,7 +1297,7 @@ async function buyMonetizePlan(planId){
 
 async function createTopup(defaultAmount){
   try{
-    const amount = prompt("Nhập số tiền muốn nạp (tối thiểu 10.000):", "50000");
+    const amount = prompt("Nhập số tiền muốn nạp (tối thiểu 10.000):", defaultAmount ? String(defaultAmount) : "50000");
     if (!amount) return;
     const proof = prompt("Dán link ảnh biên lai nếu có:", "") || "";
     const data = await fetchJSON("/api/wallet/topup", {
@@ -655,45 +1310,6 @@ async function createTopup(defaultAmount){
   }catch(err){ showToast(err.message); }
 }
 
-async function createTopup(defaultAmount){
-  try{
-    const amount = prompt("Nhap so tien muon nap (toi thieu 10.000):", defaultAmount ? String(defaultAmount) : "50000");
-    if (!amount) return;
-    const proof = prompt("Dan link anh bien lai neu co:", "") || "";
-    const data = await fetchJSON("/api/wallet/topup", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ amount, proof_image: proof })
-    });
-    showToast(`${data.message}\nNoi dung chuyen khoan: ${data.payment_note}`);
-    await Promise.all([checkMe(), loadWalletTransactions()]);
-  }catch(err){ showToast(err.message); }
-}
-
-function renderPaymentActions(){
-  if (!selectedPaymentPlan) return "";
-  const isFree = Number(selectedPaymentPlan.price || 0) <= 0;
-  return `
-    <div class="payment-actions-row">
-      <button class="btn btn-primary" type="button" onclick="buySelectedPlanWithWallet()">${isFree ? "Kích hoạt gói" : "Mua bằng số dư ví"}</button>
-      <button class="btn btn-light" type="button" onclick="paySelectedPlanByQr()" ${isFree ? "disabled" : ""}>Thanh toán QR</button>
-    </div>
-    <div class="payment-inline-note">${isFree ? "Gói miễn phí không cần chuyển khoản." : "Khách có thể thanh toán QR đúng số tiền của gói hoặc nạp vào ví rồi mua bằng số dư."}</div>
-  `;
-}
-
-async function buySelectedPlanWithWallet(){
-  if (!selectedPaymentPlan) return showToast("Hãy chọn gói trước.");
-  await buyPackageWithWallet(selectedPaymentPlan.packageId || null);
-}
-
-async function paySelectedPlanByQr(){
-  if (!selectedPaymentPlan) return showToast("Hãy chọn gói trước.");
-  if (Number(selectedPaymentPlan.price || 0) <= 0) {
-    return showToast("Gói này miễn phí, không cần thanh toán QR.");
-  }
-  await buyPackage(selectedPaymentPlan.packageId || null);
-}
 
 async function loadWalletTransactions(){
   try{

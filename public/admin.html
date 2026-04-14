@@ -3,16 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - VieclamNhaDat.com.vn</title>
+  <title>Admin Dashboard - Việc Làm Nhà Đất</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="admin-body"><div class="admin-orb admin-orb-1"></div><div class="admin-orb admin-orb-2"></div>
+<body class="admin-body">
+  <div class="admin-orb admin-orb-1"></div>
+  <div class="admin-orb admin-orb-2"></div>
+
   <div class="admin-shell">
     <aside class="admin-sidebar">
-      <div class="admin-logo">BĐS HCM Admin</div><div class="admin-sublogo">AI vận hành · ví tiền · duyệt tin · báo cáo</div><div class="admin-badge-row"><span>UI ULTRA</span><span>AI OPS</span><span>SMART MARKET</span></div>
+      <div class="admin-logo">BĐS HCM Admin</div>
+      <div class="admin-sublogo">AI vận hành · ví tiền · duyệt tin · báo cáo</div>
+      <div class="admin-badge-row"><span>UI ULTRA</span><span>AI OPS</span><span>SMART MARKET</span></div>
       <a href="/">← Về trang chủ</a>
       <a href="#summary">Tổng quan</a>
       <a href="#users">Người dùng</a>
@@ -20,6 +25,7 @@
       <a href="#payments">Thanh toán</a>
       <a href="#topups">Nạp tiền</a>
       <a href="#aiops">AI vận hành</a>
+      <a href="#announcementManager">Thông báo</a>
       <a href="#settings">Cài đặt</a>
     </aside>
 
@@ -75,6 +81,35 @@
         <div id="aiOpsSummary" class="empty-state">Chạy công cụ AI để tạo báo cáo.</div>
         <div id="aiReportsWrap" style="margin-top:16px"></div>
         <div id="aiActionsWrap" style="margin-top:16px"></div>
+      </section>
+
+      <section id="announcementManager" class="admin-panel">
+        <div class="section-header">
+          <div>
+            <div class="tiny-title">Thông báo hằng ngày</div>
+            <h2>Cập nhật popup ngoài trang chủ</h2>
+          </div>
+        </div>
+        <div class="admin-announcement-grid">
+          <div class="admin-announcement-form">
+            <label for="dailyAnnouncement">Nội dung thông báo</label>
+            <textarea id="dailyAnnouncement" rows="4" placeholder="Ví dụ: Chào mừng bạn đến với Việc Làm Nhà Đất. Hôm nay có nhiều tin mới tại Gò Vấp và Quận 12."></textarea>
+            <div class="admin-help-text">Thông báo này sẽ hiện giữa màn hình khi người dùng vào website và tự ẩn sau 7 giây.</div>
+            <div class="card-actions">
+              <button class="btn btn-primary" type="button" id="saveAnnouncementBtn">Lưu thông báo</button>
+              <button class="btn btn-light" type="button" id="syncAnnouncementBtn">Lấy từ cài đặt hiện tại</button>
+            </div>
+          </div>
+          <div class="admin-announcement-preview">
+            <div class="tiny-title">Xem trước popup</div>
+            <div class="admin-popup-preview-card">
+              <button class="admin-popup-preview-close" type="button" aria-label="Đóng thông báo">×</button>
+              <div class="admin-popup-preview-badge">THÔNG BÁO</div>
+              <div class="admin-popup-preview-message" id="dailyAnnouncementPreview">Chào mừng bạn đến với Việc Làm Nhà Đất</div>
+              <button class="btn btn-primary" type="button">Đóng</button>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="settings" class="admin-panel">

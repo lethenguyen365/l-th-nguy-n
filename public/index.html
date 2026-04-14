@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>vieclamnhadat.vn.com</title>
+  <title>Việc Làm Nhà Đất</title>
   <meta name="description" content="Nền tảng đăng tin bất động sản TP.HCM, tập trung Gò Vấp, Quận 12 và các khu vực có nhu cầu thật." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,7 +14,6 @@
   <div class="page-noise"></div>
   <div class="top-strip">
     <div class="site-shell top-strip-inner">
-      <span>Hotline: 0908777102</span>
       <span>Chuyên đăng tin nhà đất TP.HCM</span>
       <span>Trọng điểm: Gò Vấp, Quận 12, TP.HCM</span>
     </div>
@@ -23,9 +22,9 @@
   <div class="site-shell">
     <header class="topbar">
       <div class="brand-wrap">
-        <img src="/assets/logo-vieclamnhadat.png" alt="vieclamnhadat.vn.com" class="site-logo" />
+        <img src="/assets/logo-vieclamnhadat.png" alt="Việc Làm Nhà Đất" class="site-logo" />
         <div class="brand-text">
-          <div class="brand" id="siteName">vieclamnhadat.vn.com</div>
+          <div class="brand" id="siteName">Việc Làm Nhà Đất</div>
           <div class="brand-sub" id="siteSlogan">Nền tảng đăng tin bất động sản tập trung khu vực có nhu cầu thật</div>
         </div>
       </div>
@@ -47,6 +46,20 @@
         <button class="btn btn-danger" onclick="logout()">Đăng xuất</button>
       </div>
     </header>
+
+    <div class="home-announcement hidden" id="homeAnnouncementBar">
+      <div class="home-announcement-label">Thông báo đầu trang</div>
+      <div class="home-announcement-text" id="homeAnnouncementText">Chào mừng bạn đến với Việc Làm Nhà Đất</div>
+    </div>
+
+    <div class="announcement-popup hidden" id="announcementPopup" aria-live="polite">
+      <div class="announcement-popup-card">
+        <button class="announcement-popup-close" type="button" onclick="closeAnnouncementPopup()" aria-label="Đóng thông báo">×</button>
+        <div class="announcement-popup-badge">Thông báo</div>
+        <div class="announcement-popup-message" id="announcementPopupText">Chào mừng bạn đến với Việc Làm Nhà Đất</div>
+        <button class="announcement-popup-action" type="button" onclick="closeAnnouncementPopup()">Đóng</button>
+      </div>
+    </div>
 
     <nav class="main-nav">
       <a href="#" onclick="setCategory('Nhà bán');return false;">Nhà bán</a>
@@ -167,14 +180,6 @@
       <div class="quick-locations">
         <button onclick="setQuickLocation('Gò Vấp')" class="active">Gò Vấp</button>
         <button onclick="setQuickLocation('Quận 12')">Quận 12</button>
-        <button onclick="setQuickLocation('Gò Vấp - Phường 1')">Gò Vấp - P.1</button>
-        <button onclick="setQuickLocation('Gò Vấp - Phường 5')">Gò Vấp - P.5</button>
-        <button onclick="setQuickLocation('Gò Vấp - Phường 10')">Gò Vấp - P.10</button>
-        <button onclick="setQuickLocation('Gò Vấp - Phường 17')">Gò Vấp - P.17</button>
-        <button onclick="setQuickLocation('Quận 12 - Hiệp Thành')">Q12 - Hiệp Thành</button>
-        <button onclick="setQuickLocation('Quận 12 - Thạnh Lộc')">Q12 - Thạnh Lộc</button>
-        <button onclick="setQuickLocation('Quận 12 - An Phú Đông')">Q12 - An Phú Đông</button>
-        <button onclick="setQuickLocation('Quận 12 - Tân Chánh Hiệp')">Q12 - Tân Chánh Hiệp</button>
       </div>
     </section>
 
@@ -222,15 +227,6 @@
               <option value="">Tất cả khu vực</option>
               <option value="Gò Vấp">Gò Vấp</option>
               <option value="Quận 12">Quận 12</option>
-              <option value="TP.HCM">TP.HCM</option>
-              <option value="Gò Vấp - Phường 1">Gò Vấp - Phường 1</option>
-              <option value="Gò Vấp - Phường 5">Gò Vấp - Phường 5</option>
-              <option value="Gò Vấp - Phường 10">Gò Vấp - Phường 10</option>
-              <option value="Gò Vấp - Phường 17">Gò Vấp - Phường 17</option>
-              <option value="Quận 12 - Hiệp Thành">Quận 12 - Hiệp Thành</option>
-              <option value="Quận 12 - Thạnh Lộc">Quận 12 - Thạnh Lộc</option>
-              <option value="Quận 12 - An Phú Đông">Quận 12 - An Phú Đông</option>
-              <option value="Quận 12 - Tân Chánh Hiệp">Quận 12 - Tân Chánh Hiệp</option>
             </select>
             <div class="filter-grid">
               <input id="filterMinPrice" type="number" placeholder="Giá từ" />
@@ -302,10 +298,10 @@
             <div class="soft-badge">Ưu tiên hiển thị tin nổi bật</div>
           </div>
           <div class="featured-strip">
-            <div class="featured-chip">NHÀ BÁN</div>
-            <div class="featured-chip">ĐẤT NỀN</div>
-            <div class="featured-chip">CHO THUÊ</div>
-            <div class="featured-chip">MẶT BẰNG</div>
+            <div class="featured-chip">NHÃ€ BÃN</div>
+            <div class="featured-chip">Äáº¤T Ná»€N</div>
+            <div class="featured-chip">CHO THUÃŠ</div>
+            <div class="featured-chip">Máº¶T Báº°NG</div>
           </div>
         </div>
         <div id="postList" class="cards-grid"></div>
@@ -513,24 +509,32 @@
             <div><label>Khu vực</label>
               <select id="postLocation" required>
                 <option value="">Chọn khu vực</option>
-                <option value="Gò Vấp - Phường 1">Gò Vấp - Phường 1</option>
-                <option value="Gò Vấp - Phường 5">Gò Vấp - Phường 5</option>
-                <option value="Gò Vấp - Phường 10">Gò Vấp - Phường 10</option>
-                <option value="Gò Vấp - Phường 17">Gò Vấp - Phường 17</option>
-                <option value="Quận 12 - Hiệp Thành">Quận 12 - Hiệp Thành</option>
-                <option value="Quận 12 - Thạnh Lộc">Quận 12 - Thạnh Lộc</option>
-                <option value="Quận 12 - An Phú Đông">Quận 12 - An Phú Đông</option>
-                <option value="Quận 12 - Tân Chánh Hiệp">Quận 12 - Tân Chánh Hiệp</option>
-                <option value="TP.HCM - Khu khác">TP.HCM - Khu khác</option>
+                <option value="Gò Vấp">Gò Vấp</option>
+                <option value="Quận 12">Quận 12</option>
               </select>
             </div>
-            <div class="full-col">
-              <div class="section-header">
-                <label>Mô tả</label>
-                <button class="btn btn-light" type="button" onclick="runAiSupport()">AI hỗ trợ viết tin</button>
+            <div class="full-col ai-compose-block">
+              <div class="section-header ai-compose-head">
+                <div class="ai-compose-title">
+                  <label>Mô tả</label>
+                  <div class="ai-compose-sub">Viết tin nhanh hơn, rõ hơn và có giọng bán hàng hơn với trợ lý AI.</div>
+                </div>
+                <button class="btn btn-light ai-compose-trigger" type="button" onclick="runAiSupport()">
+                  <span class="ai-trigger-badge">AI</span>
+                  <span class="ai-trigger-copy">
+                    <strong>Hỗ trợ viết tin</strong>
+                    <small>Tạo mô tả chuyên nghiệp</small>
+                  </span>
+                </button>
               </div>
-              <textarea id="postDescription" required></textarea>
-              <div id="aiSupportTips" class="empty-state" style="margin-top:12px">AI sẽ gợi ý cách viết nội dung rõ hơn cho nhà bán, cho thuê, mặt bằng và cả tin việc làm.</div>
+              <textarea id="postDescription" required placeholder="Mô tả vị trí, diện tích, ưu điểm, pháp lý, nội thất hoặc nhu cầu tuyển dụng..."></textarea>
+              <div id="aiSupportTips" class="ai-support-panel">
+                <div class="ai-support-header">
+                  <span class="ai-trigger-badge">AI</span>
+                  <strong>Gợi ý nhanh</strong>
+                </div>
+                <div class="ai-support-copy">AI sẽ gợi ý cách viết nội dung rõ hơn cho nhà bán, cho thuê, mặt bằng và cả tin việc làm.</div>
+              </div>
             </div>
             <div class="full-col"><label>Link ảnh hoặc ảnh đã upload</label><input id="postImage" type="text" placeholder="https://... hoặc /uploads/..." /></div>
             <div class="full-col">
@@ -642,7 +646,7 @@
 
     <section class="contact-section reveal" id="contactSection">
       <div class="contact-copy">
-        <div class="tiny-title">Liên hệ tư vấn</div>
+              <div class="tiny-title">Liên hệ tư vấn</div>
         <h2>Nếu bạn muốn website bất động sản nhìn chuyên nghiệp hơn và tạo nhiều khách hỏi hơn, đây là điểm bắt đầu.</h2>
         <p>Để lại thông tin để tối ưu tiếp giao diện, gói đăng tin và hành trình liên hệ cho đúng thị trường nhà đất bạn đang làm.</p>
         <div class="contact-points">
@@ -675,9 +679,9 @@
 
     <footer class="site-footer">
       <div class="footer-brand">
-        <img src="/assets/logo-vieclamnhadat.png" alt="vieclamnhadat.vn.com" class="footer-logo" />
+        <img src="/assets/logo-vieclamnhadat.png" alt="Việc Làm Nhà Đất" class="footer-logo" />
         <div>
-          <strong>vieclamnhadat.vn.com</strong>
+          <strong>Việc Làm Nhà Đất</strong>
           <p>Chuyên trang đăng tin bất động sản TP.HCM, tập trung Gò Vấp, Quận 12 và các khu vực có nhu cầu thật.</p>
         </div>
       </div>
@@ -785,3 +789,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+
