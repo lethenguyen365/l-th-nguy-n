@@ -391,6 +391,11 @@ const FRONTEND_MESSAGE_FALLBACKS = [
   [/^Äăng nhập thành công\.?$/i, "Đăng nhập thành công."],
   [/^Äăng ký thành công\.?$/i, "Đăng ký thành công."],
   [/^Äã cập nhật cài đặt\.?$/i, "Đã cập nhật cài đặt."],
+  [/^B.n ch.a.*ng nh.p.*mua g.i.*ng tin\.?$/i, "Bạn chưa đăng nhập. Hãy tạo tài khoản để mua gói và đăng tin."],
+  [/^Đ.ng nh.p .*xem h. s. .*g.i hi.n t.i\.?$/i, "Đăng nhập để xem hồ sơ và gói hiện tại."],
+  [/^B.n c.n .*ng nh.p .*xem tin c.a m.nh\.?$/i, "Bạn cần đăng nhập để xem tin của mình."],
+  [/^Đ.ng nh.p .*d.ng y.u th.ch\.?$/i, "Đăng nhập để dùng yêu thích."],
+  [/^Đ.ng nh.p .*d.ng chat\.?$/i, "Đăng nhập để dùng chat."],
   [/Chào mừng bạn .*NhaDatGoVapQ12\.vn/i, "Chào mừng bạn đến với Việc Làm Nhà Đất"],
   [/Chào mừng bạn .*Việc Làm Nhà Đất/i, "Chào mừng bạn đến với Việc Làm Nhà Đất"]
 ];
