@@ -430,6 +430,133 @@
   }
 }
 
+@media (max-width: 760px){
+  .admin-body .admin-sidebar{
+    position:sticky !important;
+    top:8px !important;
+    z-index:40 !important;
+    background:rgba(255,255,255,.96) !important;
+    backdrop-filter:blur(14px) !important;
+  }
+
+  .admin-body .admin-sidebar .admin-logo,
+  .admin-body .admin-sidebar .admin-sublogo{
+    margin-bottom:6px !important;
+  }
+
+  .admin-body .admin-sidebar > a{
+    background:#f8fafc !important;
+    border:1px solid #e2e8f0 !important;
+  }
+
+  .admin-body .admin-top{
+    padding-top:14px !important;
+  }
+
+  .admin-body .table-wrap{
+    overflow:visible !important;
+    background:transparent !important;
+    border:none !important;
+    box-shadow:none !important;
+  }
+
+  .admin-body .table-wrap table,
+  .admin-body .table-wrap thead,
+  .admin-body .table-wrap tbody,
+  .admin-body .table-wrap tr,
+  .admin-body .table-wrap th,
+  .admin-body .table-wrap td{
+    display:block !important;
+    width:100% !important;
+  }
+
+  .admin-body .table-wrap table{
+    min-width:0 !important;
+  }
+
+  .admin-body .table-wrap thead{
+    display:none !important;
+  }
+
+  .admin-body .table-wrap tbody{
+    display:grid !important;
+    gap:12px !important;
+  }
+
+  .admin-body .table-wrap tbody tr{
+    padding:14px !important;
+    border:1px solid rgba(220,227,237,.95) !important;
+    border-radius:18px !important;
+    background:#fff !important;
+    box-shadow:0 12px 32px rgba(15,23,42,.06) !important;
+  }
+
+  .admin-body .table-wrap tbody td{
+    padding:8px 0 !important;
+    border:none !important;
+    font-size:13px !important;
+    line-height:1.5 !important;
+  }
+
+  .admin-body .table-wrap tbody td::before{
+    content:attr(data-label);
+    display:block;
+    margin-bottom:4px;
+    color:#64748b;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+
+  .admin-body #userTableWrap tbody td:nth-child(1)::before{content:"ID";}
+  .admin-body #userTableWrap tbody td:nth-child(2)::before{content:"Họ tên";}
+  .admin-body #userTableWrap tbody td:nth-child(3)::before{content:"Username";}
+  .admin-body #userTableWrap tbody td:nth-child(4)::before{content:"Email";}
+  .admin-body #userTableWrap tbody td:nth-child(5)::before{content:"Vai trò";}
+  .admin-body #userTableWrap tbody td:nth-child(6)::before{content:"Trạng thái";}
+  .admin-body #userTableWrap tbody td:nth-child(7)::before{content:"Hành động";}
+
+  .admin-body #postTableWrap tbody td:nth-child(1)::before{content:"ID";}
+  .admin-body #postTableWrap tbody td:nth-child(2)::before{content:"Tiêu đề";}
+  .admin-body #postTableWrap tbody td:nth-child(3)::before{content:"User";}
+  .admin-body #postTableWrap tbody td:nth-child(4)::before{content:"Danh mục";}
+  .admin-body #postTableWrap tbody td:nth-child(5)::before{content:"Giá";}
+  .admin-body #postTableWrap tbody td:nth-child(6)::before{content:"Views";}
+  .admin-body #postTableWrap tbody td:nth-child(7)::before{content:"Ghim";}
+  .admin-body #postTableWrap tbody td:nth-child(8)::before{content:"Xóa";}
+
+  .admin-body #subscriptionTableWrap tbody td:nth-child(1)::before{content:"ID";}
+  .admin-body #subscriptionTableWrap tbody td:nth-child(2)::before{content:"User";}
+  .admin-body #subscriptionTableWrap tbody td:nth-child(3)::before{content:"Gói";}
+  .admin-body #subscriptionTableWrap tbody td:nth-child(4)::before{content:"Giá";}
+  .admin-body #subscriptionTableWrap tbody td:nth-child(5)::before{content:"Thời hạn";}
+  .admin-body #subscriptionTableWrap tbody td:nth-child(6)::before{content:"Trạng thái";}
+  .admin-body #subscriptionTableWrap tbody td:nth-child(7)::before{content:"Nội dung CK";}
+  .admin-body #subscriptionTableWrap tbody td:nth-child(8)::before{content:"Hành động";}
+
+  .admin-body #topupTableWrap tbody td:nth-child(1)::before{content:"ID";}
+  .admin-body #topupTableWrap tbody td:nth-child(2)::before{content:"User";}
+  .admin-body #topupTableWrap tbody td:nth-child(3)::before{content:"Số tiền";}
+  .admin-body #topupTableWrap tbody td:nth-child(4)::before{content:"Trạng thái";}
+  .admin-body #topupTableWrap tbody td:nth-child(5)::before{content:"Nội dung CK";}
+  .admin-body #topupTableWrap tbody td:nth-child(6)::before{content:"Hành động";}
+
+  .admin-body #aiReportsWrap tbody td:nth-child(1)::before{content:"ID";}
+  .admin-body #aiReportsWrap tbody td:nth-child(2)::before{content:"Loại";}
+  .admin-body #aiReportsWrap tbody td:nth-child(3)::before{content:"Tiêu đề";}
+  .admin-body #aiReportsWrap tbody td:nth-child(4)::before{content:"Nội dung";}
+  .admin-body #aiReportsWrap tbody td:nth-child(5)::before{content:"Thời gian";}
+
+  .admin-body #aiActionsWrap tbody td:nth-child(1)::before{content:"ID";}
+  .admin-body #aiActionsWrap tbody td:nth-child(2)::before{content:"Post";}
+  .admin-body #aiActionsWrap tbody td:nth-child(3)::before{content:"User";}
+  .admin-body #aiActionsWrap tbody td:nth-child(4)::before{content:"Loại";}
+  .admin-body #aiActionsWrap tbody td:nth-child(5)::before{content:"Trạng thái";}
+  .admin-body #aiActionsWrap tbody td:nth-child(6)::before{content:"Ghi chú";}
+  .admin-body #aiActionsWrap tbody td:nth-child(7)::before{content:"Thời gian";}
+}
+
 @media (max-width: 768px){
   .commercial-hero .hero-slider,
   .commercial-hero .hero-slide,
