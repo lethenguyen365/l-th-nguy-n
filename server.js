@@ -153,6 +153,30 @@ const DEMO_POST_FALLBACKS = {
   6: {
     title: "Tuyển nhân viên kinh doanh bất động sản khu vực Gò Vấp",
     location: "Gò Vấp - Văn phòng"
+  },
+  7: {
+    title: "Bán nhà hẻm 6m đường Quang Trung, Phường 10, Gò Vấp",
+    location: "Gò Vấp - Phường 10"
+  },
+  8: {
+    title: "Bán đất thổ cư gần Metro Hiệp Thành, Quận 12",
+    location: "Quận 12 - Hiệp Thành"
+  },
+  9: {
+    title: "Cho thuê căn hộ mini full nội thất Nguyễn Oanh, Gò Vấp",
+    location: "Gò Vấp - Phường 17"
+  },
+  10: {
+    title: "Bán nhà mặt tiền Hà Huy Giáp, Thạnh Lộc, Quận 12",
+    location: "Quận 12 - Thạnh Lộc"
+  },
+  11: {
+    title: "Cho thuê mặt bằng kinh doanh gần chợ An Phú Đông, Quận 12",
+    location: "Quận 12 - An Phú Đông"
+  },
+  12: {
+    title: "Tuyển nhân viên kinh doanh bất động sản khu vực Gò Vấp",
+    location: "Gò Vấp - Văn phòng"
   }
 };
 
