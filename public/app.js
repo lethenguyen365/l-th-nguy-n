@@ -745,13 +745,13 @@ function forceVietnameseUiLabels(root = document){
   setText(".form-actions .btn.btn-light", "Làm mới");
   setText(".btn.btn-light[onclick='uploadPostImage()']", "Upload ảnh");
 
-  setText("#contactSection .tiny-title", "Liên hệ tư vấn");
-  setText("#contactSection .contact-copy h2", "Tư vấn cách làm website bất động sản rõ ràng hơn, lên tin tốt hơn và tăng khách hỏi thật.");
-  setText("#contactSection .contact-copy p", "Để lại thông tin nếu bạn muốn được tư vấn về cách đăng tin, chọn gói hiển thị, tối ưu khu vực trọng điểm và hành trình khách mua, khách thuê hoặc chủ tin bất động sản.");
+  setText("#contactSection .tiny-title", "Liên hệ tư vấn mua bán");
+  setText("#contactSection .contact-copy h2", "Tư vấn mua đất, chọn nhà rõ ràng hơn để xuống tiền đúng khu vực và đúng nhu cầu.");
+  setText("#contactSection .contact-copy p", "Để lại thông tin nếu bạn muốn được tư vấn chọn khu vực phù hợp, so sánh giá, kiểm tra pháp lý và định hướng mua ở hoặc đầu tư an toàn hơn.");
   const contactPoints = [
-    "Tư vấn đăng tin bất động sản",
-    "Tối ưu gói VIP và hiển thị",
-    "Tăng lead khách mua và khách thuê"
+    "Tư vấn mua đất theo khu vực",
+    "Hỗ trợ chọn nhà theo ngân sách",
+    "Lọc pháp lý và so sánh giá"
   ];
   scope.querySelectorAll("#contactSection .contact-points span").forEach((node, index) => {
     if (contactPoints[index]) node.textContent = contactPoints[index];
