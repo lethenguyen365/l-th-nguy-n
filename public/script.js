@@ -559,7 +559,10 @@ function bindShowcaseNav() {
   const viewport = document.querySelector(".showcase-viewport");
   const prev = document.querySelector(".showcase-prev");
   const next = document.querySelector(".showcase-next");
-  if (!viewport || !prev || !next) return;
+  const shell = document.querySelector(".showcase-carousel-shell");
+  if (!viewport || !prev || !next || !shell) return;
+
+  ensureShowcaseMobileNav(shell, prev, next);
 
   prev.addEventListener("click", () => {
     scrollShowcaseByCard(-1);
@@ -570,6 +573,51 @@ function bindShowcaseNav() {
   });
 
   viewport.addEventListener("scroll", syncShowcaseDots);
+  window.addEventListener("resize", () => ensureShowcaseMobileNav(shell, prev, next));
+}
+
+function ensureShowcaseMobileNav(shell, prev, next) {
+  if (!shell || !prev || !next) return;
+
+  if (window.innerWidth <= 760) {
+    shell.style.setProperty("position", "relative", "important");
+    shell.style.setProperty("display", "block", "important");
+    shell.style.setProperty("padding", "0 28px", "important");
+
+    const applyNavStyles = (node, side) => {
+      node.style.setProperty("display", "flex", "important");
+      node.style.setProperty("position", "absolute", "important");
+      node.style.setProperty("top", "126px", "important");
+      node.style.setProperty("z-index", "30", "important");
+      node.style.setProperty("align-items", "center", "important");
+      node.style.setProperty("justify-content", "center", "important");
+      node.style.setProperty("width", "38px", "important");
+      node.style.setProperty("height", "38px", "important");
+      node.style.setProperty("min-width", "38px", "important");
+      node.style.setProperty("min-height", "38px", "important");
+      node.style.setProperty("border-radius", "999px", "important");
+      node.style.setProperty("background", "rgba(255,255,255,.94)", "important");
+      node.style.setProperty("border", "1px solid rgba(226,232,240,.98)", "important");
+      node.style.setProperty("color", "#1f2937", "important");
+      node.style.setProperty("font-size", "24px", "important");
+      node.style.setProperty("line-height", "1", "important");
+      node.style.setProperty("opacity", "1", "important");
+      node.style.setProperty("visibility", "visible", "important");
+      node.style.setProperty("box-shadow", "0 10px 24px rgba(15,23,42,.14)", "important");
+      node.style.setProperty("transform", "none", "important");
+      node.style.removeProperty("left");
+      node.style.removeProperty("right");
+      node.style.setProperty(side, "4px", "important");
+    };
+
+    applyNavStyles(prev, "left");
+    applyNavStyles(next, "right");
+  } else {
+    shell.style.removeProperty("position");
+    shell.style.removeProperty("display");
+    shell.style.removeProperty("padding");
+    [prev, next].forEach((node) => node.removeAttribute("style"));
+  }
 }
 
 function renderShowcaseTrack() {
