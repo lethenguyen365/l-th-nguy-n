@@ -32,6 +32,17 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }
 });
 
+const ADMIN_DEFAULTS = {
+  full_name: "Tuan Po",
+  username: "tuanpo",
+  password: "tuanbo222@",
+  email: "tuanpo@gmail.com",
+  phone: "0900000000",
+  address: "TP.HCM",
+  bio: "Tài khoản quản trị hệ thống.",
+  avatar: "https://i.pravatar.cc/150?img=12"
+};
+
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true, limit: "20mb" }));
 app.use(session({
@@ -289,13 +300,13 @@ async function ensureDemoData() {
       WHERE id = 1`, ["/assets/qr-acb.png", "ACB", "NGUYEN TUAN ANH", "214904949", "RAOVAT"]);
   }
 
-  let adminUser = await get(`SELECT id FROM users WHERE username = 'admin'`);
+  let adminUser = await get(`SELECT id FROM users WHERE role = 'admin' ORDER BY id ASC LIMIT 1`);
   if (!adminUser) {
     await run(`INSERT INTO users (full_name, username, password, email, role, wallet_balance, is_active)
       VALUES (?, ?, ?, ?, ?, ?, ?)`, [
-        "Admin Demo", "admin", "123456", "admin@gmail.com", "admin", 0, 1
+        ADMIN_DEFAULTS.full_name, ADMIN_DEFAULTS.username, ADMIN_DEFAULTS.password, ADMIN_DEFAULTS.email, "admin", 0, 1
       ]);
-    adminUser = await get(`SELECT id FROM users WHERE username = 'admin'`);
+    adminUser = await get(`SELECT id FROM users WHERE role = 'admin' ORDER BY id ASC LIMIT 1`);
   }
 
   const plans = await get(`SELECT COUNT(*) as c FROM pricing_plans`);
@@ -690,12 +701,18 @@ async function bootstrap() {
     );
   }
 
-  const admin = await get(`SELECT * FROM users WHERE username = 'admin'`);
+  const admin = await get(`SELECT * FROM users WHERE role = 'admin' ORDER BY id ASC LIMIT 1`);
   if (!admin) {
-    const hash = await bcrypt.hash("123456", 10);
+    const hash = await bcrypt.hash(ADMIN_DEFAULTS.password, 10);
     await run(`INSERT INTO users (full_name, username, email, password, role, phone, address, bio, avatar)
       VALUES (?, ?, ?, ?, 'admin', ?, ?, ?, ?)`,
-      ["Admin Demo", "admin", "admin@gmail.com", hash, "0900000000", "TP.HCM", "TÃ i khoáº£n quáº£n trá»‹ demo.", "https://i.pravatar.cc/150?img=12"]);
+      [ADMIN_DEFAULTS.full_name, ADMIN_DEFAULTS.username, ADMIN_DEFAULTS.email, hash, ADMIN_DEFAULTS.phone, ADMIN_DEFAULTS.address, ADMIN_DEFAULTS.bio, ADMIN_DEFAULTS.avatar]);
+  } else {
+    const hash = await bcrypt.hash(ADMIN_DEFAULTS.password, 10);
+    await run(`UPDATE users
+      SET full_name = ?, username = ?, email = ?, password = ?, phone = ?, address = ?, bio = ?, avatar = ?, is_active = 1
+      WHERE id = ?`,
+      [ADMIN_DEFAULTS.full_name, ADMIN_DEFAULTS.username, ADMIN_DEFAULTS.email, hash, ADMIN_DEFAULTS.phone, ADMIN_DEFAULTS.address, ADMIN_DEFAULTS.bio, ADMIN_DEFAULTS.avatar, admin.id]);
   }
 
   const pkgCount = await get(`SELECT COUNT(*) as total FROM packages`);
@@ -766,7 +783,7 @@ async function bootstrap() {
 
   const postCount = await get(`SELECT COUNT(*) as total FROM posts`);
   if (!postCount || postCount.total === 0) {
-    const adminUser = await get(`SELECT id FROM users WHERE username = 'admin'`);
+    const adminUser = await get(`SELECT id FROM users WHERE role = 'admin' ORDER BY id ASC LIMIT 1`);
     await run(`INSERT INTO posts (title, category, price, location, description, image, area, bedrooms, house_direction, legal_status, user_id, is_featured, views) VALUES
       (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 245),
       (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 192),
