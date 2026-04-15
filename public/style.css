@@ -1,6 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap");
-
 :root{
+  --font-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-display:"Manrope","Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
   --bg:#f4f7fb;
   --surface:#ffffff;
   --surface-soft:#f8fafc;
@@ -318,6 +318,124 @@
     right:10px !important;
     bottom:18px !important;
     gap:10px !important;
+  }
+}
+
+/* Final mobile typography normalization */
+@media (max-width: 768px){
+  html{
+    font-size:15px !important;
+  }
+
+  body,
+  button,
+  input,
+  select,
+  textarea{
+    font-family:var(--font-body) !important;
+    font-size:14px !important;
+    line-height:1.5 !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .brand,
+  .section-title,
+  .pricing-title,
+  .post-title{
+    font-family:var(--font-display) !important;
+    letter-spacing:-0.02em !important;
+  }
+
+  .topbar .brand,
+  .brand,
+  #siteName{
+    font-size:clamp(1.55rem, 5.8vw, 1.95rem) !important;
+    line-height:1.08 !important;
+  }
+
+  .search-large input,
+  .filter-stack input,
+  .filter-stack select,
+  .form-grid input,
+  .form-grid select,
+  .form-grid textarea,
+  #contactForm input,
+  #contactForm select,
+  #contactForm textarea{
+    font-size:14px !important;
+  }
+
+  .btn,
+  .top-actions .btn,
+  #guestActions .btn,
+  #userActions .btn,
+  .welcome-pill,
+  .main-nav a{
+    font-size:13px !important;
+    line-height:1.25 !important;
+  }
+
+  .hero-slide-content h1,
+  .hero-left h1{
+    font-size:clamp(1.45rem, 5.6vw, 1.95rem) !important;
+    line-height:1.08 !important;
+    max-width:12ch !important;
+  }
+
+  .hero-slide-content p,
+  .hero-left p,
+  .section-intro p,
+  .contact-copy p,
+  .post-desc,
+  .listing-desc{
+    font-size:13px !important;
+    line-height:1.55 !important;
+  }
+
+  .section-header h2,
+  .section-intro h2,
+  .contact-copy h2,
+  .panel h3,
+  #postSection .section-header h2,
+  .showcase-panel .section-header h2{
+    font-size:clamp(1.2rem, 4.8vw, 1.55rem) !important;
+    line-height:1.2 !important;
+  }
+
+  .tiny-title,
+  .home-announcement-label,
+  .featured-chip,
+  .post-meta,
+  .listing-meta,
+  label{
+    font-size:11.5px !important;
+    line-height:1.45 !important;
+  }
+
+  #postList .post-title,
+  .listing-item .listing-title,
+  .showcase-card .card-title{
+    font-size:15px !important;
+    line-height:1.32 !important;
+  }
+
+  #postList .post-price,
+  .listing-item .listing-price,
+  .showcase-card .card-price,
+  .plan-price,
+  .post-price{
+    font-size:16px !important;
+    line-height:1.15 !important;
+  }
+
+  .contact-form,
+  .panel,
+  .market-card,
+  .summary-card{
+    font-size:14px !important;
   }
 }
 
@@ -1048,7 +1166,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  font-family:"Be Vietnam Pro",system-ui,sans-serif;
+  font-family:var(--font-body);
   background:
     radial-gradient(circle at top left, rgba(37,99,235,.10), transparent 24%),
     radial-gradient(circle at 95% 0%, rgba(15,23,42,.06), transparent 20%),
@@ -4507,12 +4625,12 @@ button,
 input,
 select,
 textarea{
-  font-family:"Be Vietnam Pro",system-ui,sans-serif !important;
+  font-family:var(--font-body) !important;
   letter-spacing:-.01em;
 }
 
 h1,h2,h3,h4,.brand,.section-title,.post-title,.pricing-title{
-  font-family:"Manrope","Be Vietnam Pro",system-ui,sans-serif !important;
+  font-family:var(--font-display) !important;
   letter-spacing:-.04em;
 }
 
