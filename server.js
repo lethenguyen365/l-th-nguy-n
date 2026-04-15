@@ -250,11 +250,21 @@ function normalizeAiReportRow(row) {
 
 function normalizeAiActionRow(row) {
   if (!row) return row;
+  const normalizedActionType = normalizeAdminAiText(row.action_type || "");
+  const normalizedStatus = normalizeAdminAiText(row.action_status || "");
+  const normalizedUserName = normalizePostText(row.full_name || row.username || "");
+  let normalizedNote = normalizeAdminAiText(row.note || "");
+
+  if (/renewal_reminder/i.test(normalizedActionType) && normalizedUserName) {
+    normalizedNote = `Nhắc nạp tiền cho ${normalizedUserName} vì số dư thấp.`;
+  }
+
   return {
     ...row,
-    action_type: normalizeAdminAiText(row.action_type || ""),
-    action_status: normalizeAdminAiText(row.action_status || ""),
-    note: normalizeAdminAiText(row.note || "")
+    full_name: normalizedUserName,
+    action_type: normalizedActionType,
+    action_status: normalizedStatus,
+    note: normalizedNote
   };
 }
 
@@ -1723,7 +1733,11 @@ app.get("/api/admin/ai/reports", requireAdmin, async (req, res) => {
 });
 
 app.get("/api/admin/ai/actions", requireAdmin, async (req, res) => {
-  const rows = await all(`SELECT * FROM ai_actions ORDER BY id DESC LIMIT 100`);
+  const rows = await all(`SELECT a.*, u.full_name, u.username
+    FROM ai_actions a
+    LEFT JOIN users u ON a.user_id = u.id
+    ORDER BY a.id DESC
+    LIMIT 100`);
   res.json(rows.map(normalizeAiActionRow));
 });
 
