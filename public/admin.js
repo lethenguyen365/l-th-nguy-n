@@ -63,6 +63,38 @@ function normalizeAdminText(value) {
     .replace(/Â·/g, "·")
     .replace(/�/g, "");
 
+  text = text
+    .replace(/AI ch\s*ng spam/gi, "AI chống spam")
+    .replace(/AI g.i . VIP/gi, "AI gợi ý VIP")
+    .replace(/AI nh.c gia h.n/gi, "AI nhắc gia hạn")
+    .replace(/Khng pht hi!?n tin spam r rng\.?/gi, "Không phát hiện tin spam rõ ràng.")
+    .replace(/Kh.ng ph.t hi.n tin spam r. r.ng\.?/gi, "Không phát hiện tin spam rõ ràng.")
+    .replace(/Ch.a c. tin c.n g.i . VIP\.?/gi, "Chưa có tin cần gợi ý VIP.")
+    .replace(/to\/gi1 nhc nhx np tin hoc gia hn\.?/gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn.")
+    .replace(/Nh.c n.p ti.n cho/gi, "Nhắc nạp tiền cho")
+    .replace(/v. s. d. th.p\.?/gi, "vì số dư thấp.")
+    .replace(/Qu.n 12/gi, "Quận 12")
+    .replace(/G. V.p/gi, "Gò Vấp")
+    .replace(/Th.nh L.c/gi, "Thạnh Lộc")
+    .replace(/Hi.p Th.nh/gi, "Hiệp Thành")
+    .replace(/Ph..ng/gi, "Phường")
+    .replace(/N.i dung/gi, "Nội dung")
+    .replace(/Th.i gian/gi, "Thời gian")
+    .replace(/Tr.ng th.i/gi, "Trạng thái")
+    .replace(/Ghi ch./gi, "Ghi chú")
+    .replace(/Ti.u ..../gi, "Tiêu đề")
+    .replace(/Lo.i/gi, "Loại")
+    .replace(/H.nh .ng/gi, "Hành động")
+    .replace(/S. ti.n/gi, "Số tiền")
+    .replace(/Duy.t/gi, "Duyệt")
+    .replace(/T. ch.i/gi, "Từ chối")
+    .replace(/Kh.a/gi, "Khóa")
+    .replace(/M. kh.a/gi, "Mở khóa")
+    .replace(/Ho.t .ng/gi, "Hoạt động")
+    .replace(/.. kh.a/gi, "Đã khóa")
+    .replace(/Vai tr./gi, "Vai trò")
+    .replace(/H. t.n/gi, "Họ tên");
+
   const hardFixes = [
     [/AI ch ng spam/gi, "AI chống spam"],
     [/AI g.i . VIP/gi, "AI gợi ý VIP"],
@@ -162,7 +194,7 @@ function collectSettingsPayload() {
 }
 
 function tableWrap(headers, rows) {
-  return `<div class="table-wrap"><table><thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
+  return `<div class="table-wrap"><table><thead><tr>${headers.map((h) => `<th>${normalizeAdminText(h)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
 }
 
 async function loadSummary() {

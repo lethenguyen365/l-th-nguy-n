@@ -1746,7 +1746,8 @@ app.put("/api/admin/users/:id/toggle", requireAdmin, async (req, res) => {
 });
 
 app.get("/api/admin/posts", requireAdmin, async (req, res) => {
-  res.json(await all(`SELECT p.*, u.full_name, u.username FROM posts p JOIN users u ON p.user_id = u.id ORDER BY p.id DESC`));
+  const rows = await all(`SELECT p.*, u.full_name, u.username FROM posts p JOIN users u ON p.user_id = u.id ORDER BY p.id DESC`);
+  res.json(rows.map(normalizePostRow));
 });
 
 app.get("/api/admin/subscriptions", requireAdmin, async (req, res) => {
