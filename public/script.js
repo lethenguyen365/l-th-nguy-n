@@ -813,6 +813,10 @@ function fixVietnameseText(value) {
 
 function normalizeListingText(value) {
   const text = String(fixVietnameseText(value || "") || "")
+    .replace(/Cho thuc c.n h. mini full n.i th.t Nguy.n Oanh, G. V.p/gi, "Cho thuê căn hộ mini full nội thất Nguyễn Oanh, Gò Vấp")
+    .replace(/B.n d.t th. c. g.n Metro Hi.p Th.nh, Qu.n 12/gi, "Bán đất thổ cư gần Metro Hiệp Thành, Quận 12")
+    .replace(/Qu.n ?12 ?- ?Hi.p Th.nh/gi, "Quận 12 - Hiệp Thành")
+    .replace(/G. V.p ?- ?Ph..ng ?17/gi, "Gò Vấp - Phường 17")
     .replace(/Bđn/gi, "Bán")
     .replace(/nhđ/gi, "nhà")
     .replace(/hdm/gi, "hẻm")
@@ -828,6 +832,13 @@ function normalizeListingText(value) {
     .replace(/Thđnh/gi, "Thạnh")
     .replace(/Hiđp/gi, "Hiệp")
     .replace(/Gđ Vđp/gi, "Gò Vấp")
+    .replace(/thuc/gi, "thuê")
+    .replace(/c.n/gi, "căn")
+    .replace(/hđ/gi, "hộ")
+    .replace(/n.i/gi, "nội")
+    .replace(/th.t/gi, "thất")
+    .replace(/Nguy.n/gi, "Nguyễn")
+    .replace(/V.p/gi, "Vấp")
     .replace(/Lđ c/gi, "Lộc")
     .replace(/\s+/g, " ")
     .trim();
