@@ -228,6 +228,7 @@
   .admin-body .admin-sidebar{
     position:static !important;
     gap:10px !important;
+    padding:14px !important;
   }
 
   .admin-body .admin-logo{
@@ -241,62 +242,79 @@
   }
 
   .admin-body .admin-badge-row{
-    gap:6px !important;
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    gap:8px !important;
+    overflow:auto !important;
+    padding-bottom:2px !important;
+    -webkit-overflow-scrolling:touch !important;
   }
 
   .admin-body .admin-badge-row span{
     padding:6px 10px !important;
     font-size:11px !important;
+    flex:0 0 auto !important;
   }
 
   .admin-body .admin-sidebar{
     overflow:hidden !important;
   }
 
-  .admin-body .admin-sidebar a{
-    min-height:40px !important;
-    padding:0 12px !important;
-    border-radius:14px !important;
-    font-size:13px !important;
-    white-space:nowrap !important;
-  }
-
   .admin-body .admin-sidebar{
-    display:block !important;
+    display:flex !important;
+    flex-wrap:wrap !important;
   }
 
   .admin-body .admin-sidebar > a{
     display:inline-flex !important;
-    margin:0 8px 8px 0 !important;
+    flex:0 0 auto !important;
+    min-height:38px !important;
+    margin:0 !important;
+    padding:0 12px !important;
+    border-radius:999px !important;
+    font-size:13px !important;
+    white-space:nowrap !important;
+  }
+
+  .admin-body .admin-sidebar > a:first-of-type{
+    margin-right:8px !important;
+  }
+
+  .admin-body .admin-sidebar{
+    column-gap:8px !important;
+    row-gap:8px !important;
   }
 
   .admin-body .admin-top{
     flex-direction:column !important;
     align-items:stretch !important;
     gap:12px !important;
+    overflow:hidden !important;
   }
 
   .admin-body .admin-top h1{
-    font-size:clamp(1.65rem, 7vw, 2.2rem) !important;
-    line-height:1.02 !important;
+    font-size:clamp(1.45rem, 6.8vw, 1.95rem) !important;
+    line-height:1.05 !important;
+    word-break:break-word !important;
   }
 
   .admin-body .admin-top .btn{
     width:100% !important;
+    min-height:44px !important;
   }
 
   .admin-body .stats-grid{
-    grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
-    gap:12px !important;
+    grid-template-columns:1fr !important;
+    gap:10px !important;
   }
 
   .admin-body .stat-card{
-    min-height:110px !important;
+    min-height:auto !important;
     padding:16px !important;
   }
 
   .admin-body .stat-card h2{
-    font-size:1.5rem !important;
+    font-size:1.8rem !important;
   }
 
   .admin-body .section-header{
@@ -333,7 +351,7 @@
   }
 
   .admin-body .table-wrap table{
-    min-width:720px !important;
+    min-width:680px !important;
   }
 
   .admin-body .table-wrap th,
@@ -372,6 +390,43 @@
 
   .admin-body textarea{
     min-height:120px !important;
+  }
+}
+
+@media (max-width: 480px){
+  .admin-body .admin-shell{
+    width:min(100%, 96vw) !important;
+    margin:10px auto 24px !important;
+  }
+
+  .admin-body .admin-sidebar,
+  .admin-body .admin-top,
+  .admin-body .admin-panel,
+  .admin-body .stat-card{
+    border-radius:18px !important;
+  }
+
+  .admin-body .admin-logo{
+    font-size:20px !important;
+  }
+
+  .admin-body .admin-top h1{
+    font-size:1.35rem !important;
+    line-height:1.08 !important;
+  }
+
+  .admin-body .tiny-title{
+    font-size:11px !important;
+  }
+
+  .admin-body .section-header h2{
+    font-size:1.08rem !important;
+  }
+
+  .admin-body .table-wrap th,
+  .admin-body .table-wrap td{
+    padding:11px 10px !important;
+    font-size:12px !important;
   }
 }
 
