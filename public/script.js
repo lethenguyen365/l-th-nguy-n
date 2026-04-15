@@ -593,8 +593,9 @@ function renderShowcaseTrack() {
 }
 
 function renderShowcaseCard(post) {
-  const title = escapeHtml(normalizeListingText(post.title || "Tin bất động sản"));
-  const location = escapeHtml(normalizeListingText(post.location || "TP.HCM"));
+  const safePost = applyDemoPostFallback(post || {});
+  const title = escapeHtml(normalizeListingText(safePost.title || "Tin bất động sản"));
+  const location = escapeHtml(normalizeListingText(safePost.location || "TP.HCM"));
   const badge = post.is_featured ? "TIN NỔI BẬT" : "TIN MỚI";
 
   return `
@@ -844,6 +845,47 @@ function normalizeListingText(value) {
     .trim();
 
   return text || "Tin bất động sản";
+}
+
+const DEMO_POST_FALLBACKS = {
+  1: {
+    title: "Bán nhà hẻm 6m đường Quang Trung, Phường 10, Gò Vấp",
+    location: "Gò Vấp - Phường 10"
+  },
+  2: {
+    title: "Bán đất thổ cư gần Metro Hiệp Thành, Quận 12",
+    location: "Quận 12 - Hiệp Thành"
+  },
+  3: {
+    title: "Cho thuê căn hộ mini full nội thất Nguyễn Oanh, Gò Vấp",
+    location: "Gò Vấp - Phường 17"
+  },
+  4: {
+    title: "Bán nhà mặt tiền Hà Huy Giáp, Thạnh Lộc, Quận 12",
+    location: "Quận 12 - Thạnh Lộc"
+  },
+  5: {
+    title: "Cho thuê mặt bằng kinh doanh gần chợ An Phú Đông, Quận 12",
+    location: "Quận 12 - An Phú Đông"
+  },
+  6: {
+    title: "Tuyển nhân viên kinh doanh bất động sản khu vực Gò Vấp",
+    location: "Gò Vấp - Văn phòng"
+  }
+};
+
+function hasBrokenListingText(value = "") {
+  return /�|đn|đt|đng|thồn|thồnh|Lđ|Nguyđ|Hid|hđ|cđ|thuc|c.n|n.i|th.t/i.test(String(value || ""));
+}
+
+function applyDemoPostFallback(post = {}) {
+  const fallback = DEMO_POST_FALLBACKS[Number(post.id)] || null;
+  if (!fallback) return post;
+  return {
+    ...post,
+    title: hasBrokenListingText(post.title || "") ? fallback.title : post.title,
+    location: hasBrokenListingText(post.location || "") ? fallback.location : post.location
+  };
 }
 
 function escapeHtml(value) {

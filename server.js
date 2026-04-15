@@ -129,13 +129,47 @@ function normalizePostText(value = "") {
     .trim();
 }
 
+const DEMO_POST_FALLBACKS = {
+  1: {
+    title: "Bán nhà hẻm 6m đường Quang Trung, Phường 10, Gò Vấp",
+    location: "Gò Vấp - Phường 10"
+  },
+  2: {
+    title: "Bán đất thổ cư gần Metro Hiệp Thành, Quận 12",
+    location: "Quận 12 - Hiệp Thành"
+  },
+  3: {
+    title: "Cho thuê căn hộ mini full nội thất Nguyễn Oanh, Gò Vấp",
+    location: "Gò Vấp - Phường 17"
+  },
+  4: {
+    title: "Bán nhà mặt tiền Hà Huy Giáp, Thạnh Lộc, Quận 12",
+    location: "Quận 12 - Thạnh Lộc"
+  },
+  5: {
+    title: "Cho thuê mặt bằng kinh doanh gần chợ An Phú Đông, Quận 12",
+    location: "Quận 12 - An Phú Đông"
+  },
+  6: {
+    title: "Tuyển nhân viên kinh doanh bất động sản khu vực Gò Vấp",
+    location: "Gò Vấp - Văn phòng"
+  }
+};
+
+function hasBrokenPostText(value = "") {
+  return /�|đn|đt|đng|thồn|thồnh|Lđ|Nguyđ|Hid|Hid?p|hđ|cđ|thuc|c.n|n.i|th.t/i.test(String(value || ""));
+}
+
 function normalizePostRow(row) {
   if (!row) return row;
+  const fallback = DEMO_POST_FALLBACKS[Number(row.id)] || null;
+  const normalizedTitle = normalizePostText(row.title || "");
+  const normalizedLocation = normalizePostText(row.location || "");
   return {
     ...row,
-    title: normalizePostText(row.title || ""),
+    title: fallback && hasBrokenPostText(normalizedTitle) ? fallback.title : normalizedTitle,
     category: normalizePostText(row.category || ""),
-    location: normalizePostText(row.location || ""),
+    location: fallback && hasBrokenPostText(normalizedLocation) ? fallback.location : normalizedLocation,
     description: normalizePostText(row.description || ""),
     house_direction: normalizePostText(row.house_direction || ""),
     legal_status: normalizePostText(row.legal_status || ""),
