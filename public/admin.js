@@ -67,12 +67,18 @@ function normalizeAdminText(value) {
     .replace(/AI ch\s*ng spam/gi, "AI chống spam")
     .replace(/AI g.i . VIP/gi, "AI gợi ý VIP")
     .replace(/AI nh.c gia h.n/gi, "AI nhắc gia hạn")
+    .replace(/^AI đã xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
+    .replace(/^AI đã tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
+    .replace(/^AI đã quét spam\.?$/i, "AI đã quét spam.")
     .replace(/Khng pht hi!?n tin spam r rng\.?/gi, "Không phát hiện tin spam rõ ràng.")
     .replace(/Kh.ng ph.t hi.n tin spam r. r.ng\.?/gi, "Không phát hiện tin spam rõ ràng.")
     .replace(/Ch.a c. tin c.n g.i . VIP\.?/gi, "Chưa có tin cần gợi ý VIP.")
     .replace(/to\/gi1 nhc nhx np tin hoc gia hn\.?/gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn.")
+    .replace(/to\/gi\s*\d+\s*nhc\s*nhx\s*np\s*tin\s*hoc\s*gia\s*hn\.?/gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn.")
     .replace(/Nh.c n.p ti.n cho/gi, "Nhắc nạp tiền cho")
+    .replace(/Nhc np tin cho/gi, "Nhắc nạp tiền cho")
     .replace(/v. s. d. th.p\.?/gi, "vì số dư thấp.")
+    .replace(/\sv\s*d\s*thp\.?/gi, " vì số dư thấp.")
     .replace(/Qu.n 12/gi, "Quận 12")
     .replace(/G. V.p/gi, "Gò Vấp")
     .replace(/Th.nh L.c/gi, "Thạnh Lộc")
@@ -99,11 +105,17 @@ function normalizeAdminText(value) {
     [/AI ch ng spam/gi, "AI chống spam"],
     [/AI g.i . VIP/gi, "AI gợi ý VIP"],
     [/AI nh.c gia h.n/gi, "AI nhắc gia hạn"],
+    [/^AI đã xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản."],
+    [/^AI đã tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP."],
+    [/^AI đã quét spam\.?$/i, "AI đã quét spam."],
     [/Kh.ng ph.t hi.n tin spam r. r.ng\./gi, "Không phát hiện tin spam rõ ràng."],
     [/Ch.a c. tin c.n g.i . VIP\./gi, "Chưa có tin cần gợi ý VIP."],
     [/to\/g.i \d+ nh.c nh. n.p ti.n ho.c gia h.n\./gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn."],
+    [/to\/gi\s*\d+\s*nhc\s*nhx\s*np\s*tin\s*hoc\s*gia\s*hn\.?/gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn."],
     [/Nh.c n.p ti.n cho/gi, "Nhắc nạp tiền cho"],
+    [/Nhc np tin cho/gi, "Nhắc nạp tiền cho"],
     [/v. s. d. th.p\./gi, "vì số dư thấp."],
+    [/\sv\s*d\s*thp\.?/gi, " vì số dư thấp."],
     [/Qu.n 12/gi, "Quận 12"],
     [/G. V.p/gi, "Gò Vấp"],
     [/Th.nh L.c/gi, "Thạnh Lộc"],
@@ -158,7 +170,32 @@ async function fetchJSON(url, options = {}) {
 }
 
 function showAlert(message) {
-  alert(normalizeAdminText(message));
+  const text = normalizeAdminText(message || "");
+  let backdrop = document.getElementById("adminAlertBackdrop");
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.id = "adminAlertBackdrop";
+    backdrop.className = "admin-alert-backdrop";
+    backdrop.innerHTML = `
+      <div class="admin-alert-card" role="alertdialog" aria-modal="true" aria-labelledby="adminAlertTitle">
+        <div class="admin-alert-title" id="adminAlertTitle">Thông báo</div>
+        <div class="admin-alert-message" id="adminAlertMessage"></div>
+        <div class="admin-alert-actions">
+          <button type="button" class="btn btn-primary admin-alert-ok" id="adminAlertOk">OK</button>
+        </div>
+      </div>`;
+    document.body.appendChild(backdrop);
+    backdrop.addEventListener("click", (event) => {
+      if (event.target === backdrop) backdrop.classList.remove("show");
+    });
+    backdrop.querySelector("#adminAlertOk").addEventListener("click", () => {
+      backdrop.classList.remove("show");
+    });
+  }
+
+  const messageNode = backdrop.querySelector("#adminAlertMessage");
+  if (messageNode) messageNode.textContent = text;
+  backdrop.classList.add("show");
 }
 
 function settingValue(key, value) {

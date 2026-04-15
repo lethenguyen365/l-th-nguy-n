@@ -557,6 +557,81 @@
   .admin-body #aiActionsWrap tbody td:nth-child(7)::before{content:"Thời gian";}
 }
 
+.admin-alert-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:1200;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(15,23,42,.42);
+  backdrop-filter:blur(6px);
+}
+
+.admin-alert-backdrop.show{
+  display:flex;
+}
+
+.admin-alert-card{
+  width:min(520px, 100%);
+  padding:22px 22px 18px;
+  border-radius:24px;
+  background:#ffffff;
+  border:1px solid rgba(226,232,240,.98);
+  box-shadow:0 24px 60px rgba(15,23,42,.22);
+}
+
+.admin-alert-title{
+  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-size:22px;
+  font-weight:800;
+  line-height:1.1;
+  color:#182230;
+}
+
+.admin-alert-message{
+  margin-top:12px;
+  font-size:16px;
+  line-height:1.7;
+  color:#475569;
+}
+
+.admin-alert-actions{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:18px;
+}
+
+.admin-alert-ok{
+  min-width:104px;
+}
+
+@media (max-width:760px){
+  .admin-alert-card{
+    width:min(100%, 92vw);
+    padding:18px 18px 16px;
+    border-radius:20px;
+  }
+
+  .admin-alert-title{
+    font-size:19px;
+  }
+
+  .admin-alert-message{
+    font-size:15px;
+    line-height:1.65;
+  }
+
+  .admin-alert-actions{
+    margin-top:16px;
+  }
+
+  .admin-alert-ok{
+    width:100%;
+  }
+}
+
 @media (max-width: 768px){
   .commercial-hero .hero-slider,
   .commercial-hero .hero-slide,
