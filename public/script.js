@@ -318,13 +318,13 @@ function initRealEstateConsultingCopy() {
   const submitButton = section.querySelector('.contact-actions .btn.btn-primary');
   const callButton = section.querySelector('.contact-actions .btn.btn-light');
 
-  if (tinyTitle) tinyTitle.textContent = "Liên hệ tư vấn BĐS";
-  if (heading) heading.textContent = "Tư vấn cách làm website bất động sản rõ ràng hơn, lên tin tốt hơn và tăng khách hỏi thật.";
-  if (paragraph) paragraph.textContent = "Để lại thông tin nếu bạn muốn được tư vấn về cách đăng tin, chọn gói hiển thị, tối ưu khu vực trọng điểm và hành trình khách mua, khách thuê hoặc chủ tin bất động sản.";
+  if (tinyTitle) tinyTitle.textContent = "Liên hệ tư vấn mua bán";
+  if (heading) heading.textContent = "Tư vấn mua đất, chọn nhà rõ ràng hơn để xuống tiền đúng khu vực và đúng nhu cầu.";
+  if (paragraph) paragraph.textContent = "Để lại thông tin nếu bạn muốn được tư vấn chọn khu vực phù hợp, so sánh giá, kiểm tra pháp lý và định hướng mua ở hoặc đầu tư an toàn hơn.";
 
-  if (points[0]) points[0].textContent = "Tư vấn đăng tin bất động sản";
-  if (points[1]) points[1].textContent = "Tối ưu gói VIP và hiển thị";
-  if (points[2]) points[2].textContent = "Tăng lead khách mua và khách thuê";
+  if (points[0]) points[0].textContent = "Tư vấn mua đất theo khu vực";
+  if (points[1]) points[1].textContent = "Hỗ trợ chọn nhà theo ngân sách";
+  if (points[2]) points[2].textContent = "Lọc pháp lý và so sánh giá";
 
   if (nameLabel) nameLabel.textContent = "Họ và tên";
   if (phoneLabel) phoneLabel.textContent = "Số điện thoại";
