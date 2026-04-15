@@ -392,6 +392,9 @@ const FRONTEND_MESSAGE_FALLBACKS = [
   [/^Äăng ký thành công\.?$/i, "Đăng ký thành công."],
   [/^Äã cập nhật cài đặt\.?$/i, "Đã cập nhật cài đặt."],
   [/^B.n ch.a.*ng nh.p.*mua g.i.*ng tin\.?$/i, "Bạn chưa đăng nhập. Hãy tạo tài khoản để mua gói và đăng tin."],
+  [/^B.n ch.a.*ng nh.p\.?$/i, "Bạn chưa đăng nhập."],
+  [/^B.n ch.a.*ng nh.p.*y.u th.ch\.?$/i, "Bạn chưa đăng nhập. Hãy đăng nhập để dùng yêu thích."],
+  [/^Vui l.ng.*ng nh.p.*y.u th.ch\.?$/i, "Bạn chưa đăng nhập. Hãy đăng nhập để dùng yêu thích."],
   [/^Đ.ng nh.p .*xem h. s. .*g.i hi.n t.i\.?$/i, "Đăng nhập để xem hồ sơ và gói hiện tại."],
   [/^B.n c.n .*ng nh.p .*xem tin c.a m.nh\.?$/i, "Bạn cần đăng nhập để xem tin của mình."],
   [/^Đ.ng nh.p .*d.ng y.u th.ch\.?$/i, "Đăng nhập để dùng yêu thích."],
@@ -1442,7 +1445,14 @@ async function toggleFavorite(id){
     const data = await fetchJSON(`/api/favorites/${id}`, { method:"POST" });
     showToast(data.message);
     await loadFavorites(); await loadPosts();
-  }catch(err){ showToast(err.message); }
+  }catch(err){
+    const raw = String(err?.message || "").trim();
+    if (!raw || /đăng nhập|dang nhap|nhap/i.test(raw)) {
+      showToast("Bạn chưa đăng nhập. Hãy đăng nhập để dùng yêu thích.");
+      return;
+    }
+    showToast(raw);
+  }
 }
 
 async function loadFavorites(){

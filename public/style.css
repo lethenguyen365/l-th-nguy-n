@@ -1099,16 +1099,21 @@
   }
 
   .showcase-heart{
-    width:34px !important;
-    height:34px !important;
-    min-width:34px !important;
-    min-height:34px !important;
+    width:32px !important;
+    height:32px !important;
+    min-width:32px !important;
+    min-height:32px !important;
     border-radius:999px !important;
     background:rgba(255,255,255,.96) !important;
     border:1px solid rgba(226,232,240,.95) !important;
-    color:#667085 !important;
-    font-size:18px !important;
-    box-shadow:0 8px 18px rgba(15,23,42,.10) !important;
+    color:#98a2b3 !important;
+    font-size:16px !important;
+    font-weight:700 !important;
+    box-shadow:0 6px 14px rgba(15,23,42,.10) !important;
+  }
+
+  .showcase-card-top{
+    padding:10px !important;
   }
 }
 
