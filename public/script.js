@@ -557,10 +557,11 @@ function bindShowcaseTabs() {
 
 function bindShowcaseNav() {
   const viewport = document.querySelector(".showcase-viewport");
+  const track = document.getElementById("showcaseTrack");
   const prev = document.querySelector(".showcase-prev");
   const next = document.querySelector(".showcase-next");
   const shell = document.querySelector(".showcase-carousel-shell");
-  if (!viewport || !prev || !next || !shell) return;
+  if (!viewport || !track || !prev || !next || !shell) return;
 
   ensureShowcaseMobileNav(shell, prev, next);
 
@@ -572,7 +573,7 @@ function bindShowcaseNav() {
     scrollShowcaseByCard(1);
   });
 
-  viewport.addEventListener("scroll", syncShowcaseDots);
+  track.addEventListener("scroll", syncShowcaseDots);
   window.addEventListener("resize", () => ensureShowcaseMobileNav(shell, prev, next));
 }
 
@@ -700,31 +701,31 @@ function getShowcaseStep() {
 }
 
 function scrollShowcaseByCard(direction) {
-  const viewport = document.querySelector(".showcase-viewport");
-  if (!viewport) return;
+  const track = document.getElementById("showcaseTrack");
+  if (!track) return;
 
-  viewport.scrollBy({
+  track.scrollBy({
     left: getShowcaseStep() * direction,
     behavior: "smooth"
   });
 }
 
 function scrollShowcaseToIndex(index) {
-  const viewport = document.querySelector(".showcase-viewport");
-  if (!viewport) return;
+  const track = document.getElementById("showcaseTrack");
+  if (!track) return;
 
-  viewport.scrollTo({
+  track.scrollTo({
     left: getShowcaseStep() * index,
     behavior: "smooth"
   });
 }
 
 function syncShowcaseDots() {
-  const viewport = document.querySelector(".showcase-viewport");
+  const track = document.getElementById("showcaseTrack");
   const dots = document.querySelectorAll(".showcase-dot");
-  if (!viewport || !dots.length) return;
+  if (!track || !dots.length) return;
 
-  const activeIndex = Math.round(viewport.scrollLeft / getShowcaseStep());
+  const activeIndex = Math.round(track.scrollLeft / getShowcaseStep());
   dots.forEach((dot, index) => {
     dot.classList.toggle("active", index === activeIndex);
   });
