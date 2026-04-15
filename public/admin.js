@@ -62,6 +62,46 @@ function normalizeAdminText(value) {
     .replace(/á»/g, "ỏ")
     .replace(/Â·/g, "·")
     .replace(/�/g, "");
+
+  const hardFixes = [
+    [/AI ch ng spam/gi, "AI chống spam"],
+    [/AI g.i . VIP/gi, "AI gợi ý VIP"],
+    [/AI nh.c gia h.n/gi, "AI nhắc gia hạn"],
+    [/Kh.ng ph.t hi.n tin spam r. r.ng\./gi, "Không phát hiện tin spam rõ ràng."],
+    [/Ch.a c. tin c.n g.i . VIP\./gi, "Chưa có tin cần gợi ý VIP."],
+    [/to\/g.i \d+ nh.c nh. n.p ti.n ho.c gia h.n\./gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn."],
+    [/Nh.c n.p ti.n cho/gi, "Nhắc nạp tiền cho"],
+    [/v. s. d. th.p\./gi, "vì số dư thấp."],
+    [/Qu.n 12/gi, "Quận 12"],
+    [/G. V.p/gi, "Gò Vấp"],
+    [/Th.nh L.c/gi, "Thạnh Lộc"],
+    [/Hi.p Th.nh/gi, "Hiệp Thành"],
+    [/Ph..ng/gi, "Phường"],
+    [/N.i dung/gi, "Nội dung"],
+    [/Th.i gian/gi, "Thời gian"],
+    [/Tr.ng th.i/gi, "Trạng thái"],
+    [/Ghi ch./gi, "Ghi chú"],
+    [/Ti.u ..../gi, "Tiêu đề"],
+    [/Lo.i/gi, "Loại"],
+    [/H.nh .ng/gi, "Hành động"],
+    [/S. ti.n/gi, "Số tiền"],
+    [/Duy.t/gi, "Duyệt"],
+    [/T. ch.i/gi, "Từ chối"],
+    [/Kh.a/gi, "Khóa"],
+    [/M. kh.a/gi, "Mở khóa"],
+    [/Ho.t .ng/gi, "Hoạt động"],
+    [/.. kh.a/gi, "Đã khóa"],
+    [/Vai tr./gi, "Vai trò"],
+    [/H. t.n/gi, "Họ tên"],
+    [/Khng pht hin tin spam r rng\./gi, "Không phát hiện tin spam rõ ràng."],
+    [/AI ch ng spam/gi, "AI chống spam"],
+    [/AI nh.c gia h.n/gi, "AI nhắc gia hạn"]
+  ];
+
+  for (const [pattern, replacement] of hardFixes) {
+    text = text.replace(pattern, replacement);
+  }
+
   for (const [pattern, replacement] of ADMIN_TEXT_FIXUPS) {
     text = text.replace(pattern, replacement);
   }

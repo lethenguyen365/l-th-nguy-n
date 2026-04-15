@@ -213,6 +213,45 @@ function normalizePostRow(row) {
   };
 }
 
+function normalizeAdminAiText(value = "") {
+  return String(maybeRepairMojibake(value || ""))
+    .replace(/AI ch ng spam/gi, "AI chống spam")
+    .replace(/AI g.i . VIP/gi, "AI gợi ý VIP")
+    .replace(/AI nh.c gia h.n/gi, "AI nhắc gia hạn")
+    .replace(/Khng pht hin tin spam r rng\./gi, "Không phát hiện tin spam rõ ràng.")
+    .replace(/Kh.ng ph.t hi.n tin spam r. r.ng\./gi, "Không phát hiện tin spam rõ ràng.")
+    .replace(/Ch.a c. tin c.n g.i . VIP\./gi, "Chưa có tin cần gợi ý VIP.")
+    .replace(/Nh.c n.p ti.n cho/gi, "Nhắc nạp tiền cho")
+    .replace(/v. s. d. th.p\./gi, "vì số dư thấp.")
+    .replace(/to\/g.i \d+ nh.c nh. n.p ti.n ho.c gia h.n\./gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn.")
+    .replace(/Qu.n 12/gi, "Quận 12")
+    .replace(/G. V.p/gi, "Gò Vấp")
+    .replace(/Th.nh L.c/gi, "Thạnh Lộc")
+    .replace(/Hi.p Th.nh/gi, "Hiệp Thành")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeAiReportRow(row) {
+  if (!row) return row;
+  return {
+    ...row,
+    report_type: normalizeAdminAiText(row.report_type || ""),
+    title: normalizeAdminAiText(row.title || ""),
+    body: normalizeAdminAiText(row.body || "")
+  };
+}
+
+function normalizeAiActionRow(row) {
+  if (!row) return row;
+  return {
+    ...row,
+    action_type: normalizeAdminAiText(row.action_type || ""),
+    action_status: normalizeAdminAiText(row.action_status || ""),
+    note: normalizeAdminAiText(row.note || "")
+  };
+}
+
 app.use((req, res, next) => {
   const originalJson = res.json.bind(res);
   res.json = (payload) => originalJson(sanitizeJsonPayload(payload));
@@ -1674,12 +1713,12 @@ app.post("/api/ai/spam-scan", requireAdmin, async (req, res) => {
 
 app.get("/api/admin/ai/reports", requireAdmin, async (req, res) => {
   const rows = await all(`SELECT * FROM ai_reports ORDER BY id DESC LIMIT 50`);
-  res.json(rows);
+  res.json(rows.map(normalizeAiReportRow));
 });
 
 app.get("/api/admin/ai/actions", requireAdmin, async (req, res) => {
   const rows = await all(`SELECT * FROM ai_actions ORDER BY id DESC LIMIT 100`);
-  res.json(rows);
+  res.json(rows.map(normalizeAiActionRow));
 });
 
 app.get("/api/admin/summary", requireAdmin, async (req, res) => {
