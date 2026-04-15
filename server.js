@@ -95,6 +95,44 @@ function normalizeSettingsRow(row) {
   };
 }
 
+function normalizePostText(value = "") {
+  const cleaned = maybeRepairMojibake(value || "");
+  return String(cleaned)
+    .replace(/\bBđn\b/gi, "Bán")
+    .replace(/\bnhđ\b/gi, "nhà")
+    .replace(/\bhdm\b/gi, "hẻm")
+    .replace(/\bdđng\b/gi, "đường")
+    .replace(/\bdđt\b/gi, "đất")
+    .replace(/\bthđ\b/gi, "thổ")
+    .replace(/\bcđ\b/gi, "cư")
+    .replace(/\bmđt\b/gi, "mặt")
+    .replace(/\btiđn\b/gi, "tiền")
+    .replace(/\bgđn\b/gi, "gần")
+    .replace(/\bPhđng\b/gi, "Phường")
+    .replace(/\bQuđn\b/gi, "Quận")
+    .replace(/\bThđnh\b/gi, "Thạnh")
+    .replace(/\bHiđp\b/gi, "Hiệp")
+    .replace(/\bGđ Vđp\b/gi, "Gò Vấp")
+    .replace(/\bLđc\b/gi, "Lộc")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizePostRow(row) {
+  if (!row) return row;
+  return {
+    ...row,
+    title: normalizePostText(row.title || ""),
+    category: normalizePostText(row.category || ""),
+    location: normalizePostText(row.location || ""),
+    description: normalizePostText(row.description || ""),
+    house_direction: normalizePostText(row.house_direction || ""),
+    legal_status: normalizePostText(row.legal_status || ""),
+    full_name: normalizePostText(row.full_name || ""),
+    username: normalizePostText(row.username || "")
+  };
+}
+
 app.use((req, res, next) => {
   const originalJson = res.json.bind(res);
   res.json = (payload) => originalJson(sanitizeJsonPayload(payload));
@@ -873,7 +911,8 @@ app.get("/api/posts", async (req, res) => {
   else if (sort === "views") sql += ` ORDER BY p.is_featured DESC, p.views DESC`;
   else sql += ` ORDER BY p.is_featured DESC, p.id DESC`;
 
-  res.json(await all(sql, params));
+  const posts = await all(sql, params);
+  res.json(posts.map(normalizePostRow));
 });
 
 app.get("/api/posts/:id", async (req, res) => {
@@ -888,11 +927,12 @@ app.get("/api/posts/:id", async (req, res) => {
     LEFT JOIN favorites f ON f.post_id = p.id AND f.user_id = ?
     WHERE p.id = ?`, [userId, id]);
   if (!post) return res.status(404).json({ message: "KhÃ´ng tÃ¬m tháº¥y bÃ i Ä‘Äƒng." });
-  res.json(post);
+  res.json(normalizePostRow(post));
 });
 
 app.get("/api/my-posts", requireLogin, async (req, res) => {
-  res.json(await all(`SELECT * FROM posts WHERE user_id = ? ORDER BY id DESC`, [req.session.user.id]));
+  const posts = await all(`SELECT * FROM posts WHERE user_id = ? ORDER BY id DESC`, [req.session.user.id]);
+  res.json(posts.map(normalizePostRow));
 });
 
 app.post("/api/posts", requireLogin, async (req, res) => {
