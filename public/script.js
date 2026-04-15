@@ -593,8 +593,8 @@ function renderShowcaseTrack() {
 }
 
 function renderShowcaseCard(post) {
-  const title = escapeHtml(post.title || "Tin bất động sản");
-  const location = escapeHtml(post.location || "TP.HCM");
+  const title = escapeHtml(normalizeListingText(post.title || "Tin bất động sản"));
+  const location = escapeHtml(normalizeListingText(post.location || "TP.HCM"));
   const badge = post.is_featured ? "TIN NỔI BẬT" : "TIN MỚI";
 
   return `
@@ -683,6 +683,152 @@ function syncShowcaseDots() {
 
 function formatCurrency(value) {
   return `${Number(value || 0).toLocaleString("vi-VN")} đ`;
+}
+
+function fixVietnameseText(value) {
+  if (typeof value !== "string") return value || "";
+  if (!/[ÃÂÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßá»��?]/.test(value)) return value;
+
+  const directReplace = (input) => String(input || "")
+    .replace(/Ä‘/g, "đ")
+    .replace(/Ä/g, "Đ")
+    .replace(/Ã /g, "à")
+    .replace(/Ã¡/g, "á")
+    .replace(/áº¡/g, "ạ")
+    .replace(/áº£/g, "ả")
+    .replace(/Ã£/g, "ã")
+    .replace(/Ã¢/g, "â")
+    .replace(/áº§/g, "ầ")
+    .replace(/áº¥/g, "ấ")
+    .replace(/áº­/g, "ậ")
+    .replace(/áº©/g, "ẩ")
+    .replace(/áº«/g, "ẫ")
+    .replace(/Äƒ/g, "ă")
+    .replace(/áº±/g, "ằ")
+    .replace(/áº¯/g, "ắ")
+    .replace(/áº·/g, "ặ")
+    .replace(/áº³/g, "ẳ")
+    .replace(/áºµ/g, "ẵ")
+    .replace(/Ã¨/g, "è")
+    .replace(/Ã©/g, "é")
+    .replace(/áº¹/g, "ẹ")
+    .replace(/áº»/g, "ẻ")
+    .replace(/áº½/g, "ẽ")
+    .replace(/Ãª/g, "ê")
+    .replace(/á»�/g, "ề")
+    .replace(/áº¿/g, "ế")
+    .replace(/á»‡/g, "ệ")
+    .replace(/á»ƒ/g, "ể")
+    .replace(/á»…/g, "ễ")
+    .replace(/Ã¬/g, "ì")
+    .replace(/Ã­/g, "í")
+    .replace(/á»‹/g, "ị")
+    .replace(/á»‰/g, "ỉ")
+    .replace(/Ä©/g, "ĩ")
+    .replace(/Ã²/g, "ò")
+    .replace(/Ã³/g, "ó")
+    .replace(/á»�/g, "ọ")
+    .replace(/á»�/g, "ỏ")
+    .replace(/Ãµ/g, "õ")
+    .replace(/Ã´/g, "ô")
+    .replace(/á»“/g, "ồ")
+    .replace(/á»‘/g, "ố")
+    .replace(/á»™/g, "ộ")
+    .replace(/á»•/g, "ổ")
+    .replace(/á»—/g, "ỗ")
+    .replace(/Æ¡/g, "ơ")
+    .replace(/á»�/g, "ờ")
+    .replace(/á»›/g, "ớ")
+    .replace(/á»£/g, "ợ")
+    .replace(/á»Ÿ/g, "ở")
+    .replace(/á»¡/g, "ỡ")
+    .replace(/Ã¹/g, "ù")
+    .replace(/Ãº/g, "ú")
+    .replace(/á»¥/g, "ụ")
+    .replace(/á»§/g, "ủ")
+    .replace(/Å©/g, "ũ")
+    .replace(/Æ°/g, "ư")
+    .replace(/á»«/g, "ừ")
+    .replace(/á»©/g, "ứ")
+    .replace(/á»±/g, "ự")
+    .replace(/á»­/g, "ử")
+    .replace(/á»¯/g, "ữ")
+    .replace(/á»³/g, "ỳ")
+    .replace(/Ã½/g, "ý")
+    .replace(/á»µ/g, "ỵ")
+    .replace(/á»·/g, "ỷ")
+    .replace(/á»¹/g, "ỹ")
+    .replace(/Ã€/g, "À")
+    .replace(/Ã�/g, "Á")
+    .replace(/áº /g, "Ạ")
+    .replace(/áº¢/g, "Ả")
+    .replace(/Ãƒ/g, "Ã")
+    .replace(/Ã‚/g, "Â")
+    .replace(/Ä‚/g, "Ă")
+    .replace(/Ãˆ/g, "È")
+    .replace(/Ã‰/g, "É")
+    .replace(/ÃŠ/g, "Ê")
+    .replace(/ÃŒ/g, "Ì")
+    .replace(/Ã�/g, "Í")
+    .replace(/Ã’/g, "Ò")
+    .replace(/Ã“/g, "Ó")
+    .replace(/Ã”/g, "Ô")
+    .replace(/Æ /g, "Ơ")
+    .replace(/Ã™/g, "Ù")
+    .replace(/Ãš/g, "Ú")
+    .replace(/Æ¯/g, "Ư")
+    .replace(/á»²/g, "Ỳ")
+    .replace(/Ã�/g, "Ý")
+    .replace(/Â·/g, "·")
+    .replace(/mÂ²/g, "m²")
+    .replace(/Â°/g, "°")
+    .replace(/Â /g, " ")
+    .replace(/â€¦/g, "…")
+    .replace(/â€“/g, "–")
+    .replace(/â€”/g, "—")
+    .replace(/â€¢/g, "•")
+    .replace(/â€˜/g, "'")
+    .replace(/â€™/g, "'")
+    .replace(/â€œ/g, '"')
+    .replace(/â€�/g, '"')
+    .replace(/â€/g, '"')
+    .replace(/�/g, "đ");
+
+  const candidates = [directReplace(value)];
+
+  try {
+    candidates.push(directReplace(decodeURIComponent(escape(value))));
+  } catch {}
+
+  try {
+    const bytes = Uint8Array.from(Array.from(value).map((char) => char.charCodeAt(0) & 255));
+    candidates.push(directReplace(new TextDecoder("utf-8").decode(bytes)));
+  } catch {}
+
+  return candidates.reduce((best, current) => {
+    const score = (text) => (String(text).match(/[�?ÃÂÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß]/g) || []).length;
+    return score(current) < score(best) ? current : best;
+  }, candidates[0]);
+}
+
+function normalizeListingText(value) {
+  const text = String(fixVietnameseText(value || "") || "")
+    .replace(/\bBđn\b/gi, "Bán")
+    .replace(/\bnhđ\b/gi, "nhà")
+    .replace(/\bdđt\b/gi, "đất")
+    .replace(/\bmđt\b/gi, "mặt")
+    .replace(/\btiđn\b/gi, "tiền")
+    .replace(/\bgđn\b/gi, "gần")
+    .replace(/\bPhđng\b/gi, "Phường")
+    .replace(/\bQuđn\b/gi, "Quận")
+    .replace(/\bThđnh\b/gi, "Thạnh")
+    .replace(/\bHiđp\b/gi, "Hiệp")
+    .replace(/\bGđ Vđp\b/gi, "Gò Vấp")
+    .replace(/\bLđc\b/gi, "Lộc")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return text || "Tin bất động sản";
 }
 
 function escapeHtml(value) {
