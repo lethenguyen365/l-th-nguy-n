@@ -234,6 +234,27 @@ function tableWrap(headers, rows) {
   return `<div class="table-wrap"><table><thead><tr>${headers.map((h) => `<th>${normalizeAdminText(h)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
 }
 
+function formatAdminDateTime(value) {
+  if (!value) return "";
+  const text = String(value).trim();
+  const normalized = text.replace(" ", "T");
+  const date = new Date(normalized);
+
+  if (!Number.isNaN(date.getTime())) {
+    return new Intl.DateTimeFormat("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false
+    }).format(date);
+  }
+
+  return text;
+}
+
 async function loadSummary() {
   try {
     const s = await fetchJSON("/api/admin/summary");
@@ -309,7 +330,7 @@ async function loadSubscriptions() {
         <td>${normalizeAdminText(s.full_name || "")} (@${normalizeAdminText(s.username || "")})</td>
         <td>${normalizeAdminText(s.package_name || "")}</td>
         <td>${currency(s.price)}</td>
-        <td>${s.start_date} → ${s.end_date}</td>
+        <td>${formatAdminDateTime(s.start_date)} → ${formatAdminDateTime(s.end_date)}</td>
         <td>${normalizeAdminText(s.status || "")}</td>
         <td>${normalizeAdminText(s.payment_note || "")}</td>
         <td><div class="admin-action-row"><button class="btn btn-primary admin-action-btn" onclick="approveSub(${s.id})">Duyệt</button><button class="btn btn-danger admin-action-btn" onclick="rejectSub(${s.id})">Từ chối</button></div></td>
@@ -377,12 +398,12 @@ async function loadAiOps() {
 
   aiReportsWrap.innerHTML = tableWrap(
     ["ID", "Loại", "Tiêu đề", "Nội dung", "Thời gian"],
-    reports.map((r) => `<tr><td>${r.id}</td><td>${normalizeAdminText(r.report_type || "")}</td><td>${normalizeAdminText(r.title || "")}</td><td>${normalizeAdminText(r.body || "")}</td><td>${r.created_at}</td></tr>`)
+    reports.map((r) => `<tr><td>${r.id}</td><td>${normalizeAdminText(r.report_type || "")}</td><td>${normalizeAdminText(r.title || "")}</td><td>${normalizeAdminText(r.body || "")}</td><td>${formatAdminDateTime(r.created_at)}</td></tr>`)
   );
 
   aiActionsWrap.innerHTML = tableWrap(
     ["ID", "Post", "User", "Loại", "Trạng thái", "Ghi chú", "Thời gian"],
-    actions.map((a) => `<tr><td>${a.id}</td><td>${a.post_id || ""}</td><td>${a.user_id || ""}</td><td>${normalizeAdminText(a.action_type || "")}</td><td>${normalizeAdminText(a.action_status || "")}</td><td>${normalizeAdminText(a.note || "")}</td><td>${a.created_at}</td></tr>`)
+    actions.map((a) => `<tr><td>${a.id}</td><td>${a.post_id || ""}</td><td>${a.user_id || ""}</td><td>${normalizeAdminText(a.action_type || "")}</td><td>${normalizeAdminText(a.action_status || "")}</td><td>${normalizeAdminText(a.note || "")}</td><td>${formatAdminDateTime(a.created_at)}</td></tr>`)
   );
 }
 
