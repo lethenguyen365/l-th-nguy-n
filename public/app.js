@@ -389,8 +389,14 @@ const FRONTEND_TEXT_FALLBACKS = {
 
 const FRONTEND_MESSAGE_FALLBACKS = [
   [/^Äăng nhập thành công\.?$/i, "Đăng nhập thành công."],
+  [/^ĐEng nhập thành công\.?$/i, "Đăng nhập thành công."],
+  [/^DEng nhập thành công\.?$/i, "Đăng nhập thành công."],
   [/^Äăng ký thành công\.?$/i, "Đăng ký thành công."],
+  [/^ĐEng ký thành công\.?$/i, "Đăng ký thành công."],
   [/^Äã cập nhật cài đặt\.?$/i, "Đã cập nhật cài đặt."],
+  [/^AI . xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản."],
+  [/^AI . tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP."],
+  [/^AI . quét spam\.?$/i, "AI đã quét spam."],
   [/^B.n ch.a.*ng nh.p.*mua g.i.*ng tin\.?$/i, "Bạn chưa đăng nhập. Hãy tạo tài khoản để mua gói và đăng tin."],
   [/^B.n ch.a.*ng nh.p\.?$/i, "Bạn chưa đăng nhập."],
   [/^B.n ch.a.*ng nh.p.*y.u th.ch\.?$/i, "Bạn chưa đăng nhập. Hãy đăng nhập để dùng yêu thích."],
