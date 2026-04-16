@@ -151,12 +151,16 @@ function normalizeAdminText(value) {
   }
 
   text = text
-    .replace(/^AI\s*ã\s+xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
-    .replace(/^AI\s*ã\s+tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
-    .replace(/^AI\s*ã\s+quét spam\.?$/i, "AI đã quét spam.")
+    .replace(/^AI ch ng spam\.?$/i, "AI chống spam")
+    .replace(/^AI nh.c gia h.n\.?$/i, "AI nhắc gia hạn")
+    .replace(/^AI g.i . VIP\.?$/i, "AI gợi ý VIP.")
     .replace(/^AI\s*ã\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
     .replace(/^AI\s*ã\s*tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
-    .replace(/^AI\s*ã\s*quét spam\.?$/i, "AI đã quét spam.");
+    .replace(/^AI\s*ã\s*quét spam\.?$/i, "AI đã quét spam.")
+    .replace(/^Khng pht hi.?n tin spam r.? r.ng\.?$/i, "Không phát hiện tin spam rõ ràng.")
+    .replace(/^Ch.a c. tin c.n g.i . VIP\.?$/i, "Chưa có tin cần gợi ý VIP.")
+    .replace(/^to\/gi\s*\d+\s*nhc.*gia hn\.?$/i, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn.")
+    .replace(/^Nh.c n.p ti.n cho\s+(.+?)\s+v.*th.p\.?$/i, "Nhắc nạp tiền cho $1 vì số dư thấp.");
 
   return text;
 }
@@ -180,11 +184,11 @@ async function fetchJSON(url, options = {}) {
 
 function showAlert(message) {
   const text = normalizeAdminText(message || "")
+    .replace(/^AI ch ng spam\.?$/i, "AI chống spam")
+    .replace(/^AI nh.c gia h.n\.?$/i, "AI nhắc gia hạn")
+    .replace(/^AI g.i . VIP\.?$/i, "AI gợi ý VIP.")
     .replace(/^AI\s*ã\s+xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
     .replace(/^AI\s*ã\s+tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
-    .replace(/^AI\s*ã\s+quét spam\.?$/i, "AI đã quét spam.")
-    .replace(/^AI\s*ã\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
-    .replace(/^AI\s*ã\s*tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
     .replace(/^AI\s*ã\s*quét spam\.?$/i, "AI đã quét spam.");
   let backdrop = document.getElementById("adminAlertBackdrop");
   if (!backdrop) {
