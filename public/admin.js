@@ -149,6 +149,12 @@ function normalizeAdminText(value) {
   for (const [pattern, replacement] of ADMIN_TEXT_FIXUPS) {
     text = text.replace(pattern, replacement);
   }
+
+  text = text
+    .replace(/^AI\s*ã\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
+    .replace(/^AI\s*ã\s*tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
+    .replace(/^AI\s*ã\s*quét spam\.?$/i, "AI đã quét spam.");
+
   return text;
 }
 
