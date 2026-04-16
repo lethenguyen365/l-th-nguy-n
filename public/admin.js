@@ -179,7 +179,13 @@ async function fetchJSON(url, options = {}) {
 }
 
 function showAlert(message) {
-  const text = normalizeAdminText(message || "");
+  const text = normalizeAdminText(message || "")
+    .replace(/^AI\s*ã\s+xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
+    .replace(/^AI\s*ã\s+tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
+    .replace(/^AI\s*ã\s+quét spam\.?$/i, "AI đã quét spam.")
+    .replace(/^AI\s*ã\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
+    .replace(/^AI\s*ã\s*tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
+    .replace(/^AI\s*ã\s*quét spam\.?$/i, "AI đã quét spam.");
   let backdrop = document.getElementById("adminAlertBackdrop");
   if (!backdrop) {
     backdrop = document.createElement("div");
