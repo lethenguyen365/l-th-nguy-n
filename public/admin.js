@@ -238,10 +238,14 @@ function formatAdminDateTime(value) {
   if (!value) return "";
   const text = String(value).trim();
   const normalized = text.replace(" ", "T");
-  const date = new Date(normalized);
+  const utcLike = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(normalized)
+    ? `${normalized}Z`
+    : normalized;
+  const date = new Date(utcLike);
 
   if (!Number.isNaN(date.getTime())) {
-    return new Intl.DateTimeFormat("vi-VN", {
+    const parts = new Intl.DateTimeFormat("vi-VN", {
+      timeZone: "Asia/Ho_Chi_Minh",
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -249,7 +253,10 @@ function formatAdminDateTime(value) {
       minute: "2-digit",
       second: "2-digit",
       hour12: false
-    }).format(date);
+    }).formatToParts(date);
+
+    const pick = (type) => parts.find((part) => part.type === type)?.value || "";
+    return `${pick("hour")}:${pick("minute")}:${pick("second")} ${pick("day")}/${pick("month")}/${pick("year")}`;
   }
 
   return text;
