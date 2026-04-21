@@ -1050,6 +1050,388 @@
   }
 }
 
+/* Hard final override for the new home header frame */
+.top-strip{display:none !important;}
+.site-shell > .topbar,
+header.topbar{
+  position:relative !important;
+  top:auto !important;
+  display:grid !important;
+  grid-template-columns:minmax(270px,390px) minmax(360px,1fr) 46px auto !important;
+  align-items:center !important;
+  gap:18px !important;
+  margin:22px auto 14px !important;
+  padding:16px 22px !important;
+  border-radius:28px !important;
+  background:#fff !important;
+  border:1px solid rgba(226,232,240,.96) !important;
+  box-shadow:0 18px 44px rgba(15,23,42,.08) !important;
+}
+.topbar .brand-wrap{display:grid !important;grid-template-columns:76px minmax(0,1fr) !important;align-items:center !important;gap:14px !important;}
+.topbar .site-logo{width:76px !important;height:76px !important;min-width:76px !important;padding:10px !important;object-fit:contain !important;border-radius:18px !important;background:#fff !important;border:1px solid #e5eaf3 !important;box-shadow:0 10px 24px rgba(15,23,42,.08) !important;}
+.topbar .brand,#siteName{color:#2457d6 !important;font-family:Georgia,"Times New Roman","Be Vietnam Pro",serif !important;font-size:clamp(22px,2vw,28px) !important;line-height:1.05 !important;font-weight:900 !important;letter-spacing:-.035em !important;max-width:none !important;}
+.topbar .brand-sub,#siteSlogan{display:block !important;margin-top:5px !important;color:#64748b !important;font-size:12.5px !important;line-height:1.35 !important;font-weight:600 !important;max-width:34ch !important;}
+.topbar .search-large{display:grid !important;grid-template-columns:minmax(0,1fr) 132px !important;align-items:center !important;gap:8px !important;min-height:54px !important;padding:6px !important;border-radius:16px !important;background:#f3f6fb !important;border:1px solid #dce4f0 !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9) !important;}
+.topbar .search-large input{width:100% !important;min-width:0 !important;min-height:42px !important;padding:0 18px !important;border:0 !important;outline:0 !important;background:transparent !important;color:#334155 !important;font-size:15px !important;font-weight:600 !important;}
+.topbar .search-large .btn{width:100% !important;min-width:0 !important;min-height:40px !important;padding:0 18px !important;border:0 !important;border-radius:10px !important;background:#1d56db !important;color:#fff !important;box-shadow:0 8px 16px rgba(29,86,219,.22) !important;font-size:14px !important;font-weight:900 !important;}
+.theme-toggle{width:42px !important;height:42px !important;display:inline-grid !important;place-items:center !important;border-radius:999px !important;border:1px solid #dce4f0 !important;background:#fff !important;color:#1d4ed8 !important;box-shadow:0 8px 20px rgba(15,23,42,.06) !important;}
+.topbar .top-actions.hidden,.topbar #guestActions.hidden,.topbar #userActions.hidden,.topbar #adminLink.hidden{display:none !important;}
+.topbar .top-actions:not(.hidden),.topbar #guestActions:not(.hidden),.topbar #userActions:not(.hidden){display:flex !important;align-items:center !important;justify-content:flex-end !important;gap:10px !important;min-width:max-content !important;}
+.topbar .top-actions .btn,.topbar #guestActions .btn,.topbar #userActions .btn,.topbar #userActions a,.topbar .welcome-pill{min-height:42px !important;width:auto !important;min-width:112px !important;padding:0 18px !important;border-radius:12px !important;font-size:14px !important;font-weight:900 !important;line-height:1 !important;justify-content:center !important;box-shadow:none !important;}
+.topbar #guestActions .btn-light,.topbar #userActions .welcome-pill{background:#eef4ff !important;border:1px solid transparent !important;color:#1d4ed8 !important;}
+.topbar #guestActions .btn-primary,.topbar #userActions .btn.btn-light{background:#fff !important;border:1px solid #dce4f0 !important;color:#0f172a !important;}
+.topbar #adminLink{background:#fff7db !important;border:1px solid #f2d271 !important;color:#7a5200 !important;}
+.topbar #userActions .btn.btn-danger{background:#e11d2e !important;border:1px solid #e11d2e !important;color:#fff !important;}
+.main-nav{position:relative !important;top:auto !important;display:flex !important;align-items:center !important;flex-wrap:wrap !important;gap:8px 24px !important;margin:0 auto 18px !important;padding:16px 28px !important;border-radius:18px !important;background:#fff !important;border:1px solid rgba(226,232,240,.96) !important;box-shadow:0 12px 30px rgba(15,23,42,.07) !important;overflow:visible !important;}
+.main-nav a,.main-nav a.nav-cta{width:auto !important;min-width:0 !important;min-height:34px !important;display:inline-flex !important;align-items:center !important;justify-content:center !important;padding:0 2px !important;border:0 !important;border-radius:0 !important;background:transparent !important;color:#1f2d45 !important;font-size:14px !important;font-weight:800 !important;line-height:1.2 !important;white-space:nowrap !important;box-shadow:none !important;transform:none !important;}
+@media (max-width:1100px){
+  .site-shell > .topbar,header.topbar{grid-template-columns:1fr !important;gap:12px !important;padding:14px !important;}
+  .theme-toggle{display:none !important;}
+  .topbar .top-actions:not(.hidden),.topbar #guestActions:not(.hidden),.topbar #userActions:not(.hidden){display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;width:100% !important;min-width:0 !important;}
+  .topbar #userActions .welcome-pill{grid-column:1 / -1 !important;}
+  .topbar .top-actions .btn,.topbar #guestActions .btn,.topbar #userActions .btn,.topbar #userActions a,.topbar .welcome-pill{width:100% !important;min-width:0 !important;}
+}
+@media (max-width:760px){
+  .site-shell > .topbar,header.topbar{margin:12px auto 10px !important;border-radius:22px !important;}
+  .topbar .brand-wrap{grid-template-columns:62px minmax(0,1fr) !important;}
+  .topbar .site-logo{width:62px !important;height:62px !important;min-width:62px !important;border-radius:16px !important;}
+  .topbar .brand,#siteName{font-size:22px !important;}
+  .topbar .brand-sub,#siteSlogan{font-size:12px !important;max-width:30ch !important;}
+  .topbar .search-large{grid-template-columns:1fr !important;border-radius:18px !important;}
+  .main-nav{display:flex !important;flex-wrap:nowrap !important;gap:18px !important;margin-bottom:14px !important;padding:12px 16px !important;overflow-x:auto !important;overflow-y:hidden !important;-webkit-overflow-scrolling:touch !important;scrollbar-width:none !important;}
+  .main-nav::-webkit-scrollbar{display:none !important;}
+  .main-nav a,.main-nav a.nav-cta{flex:0 0 auto !important;font-size:13.5px !important;}
+}
+
+/* Final header frame refresh */
+body{
+  background:
+    radial-gradient(circle at 5% 0%, rgba(37,99,235,.08), transparent 26rem),
+    linear-gradient(180deg, #f4f7fb 0%, #f8fafc 42%, #fff 100%) !important;
+}
+
+.top-strip{
+  display:none !important;
+}
+
+.site-shell > .topbar,
+header.topbar{
+  position:relative !important;
+  top:auto !important;
+  z-index:35 !important;
+  display:grid !important;
+  grid-template-columns:minmax(270px, 390px) minmax(360px, 1fr) 46px auto !important;
+  align-items:center !important;
+  gap:18px !important;
+  margin:22px auto 14px !important;
+  padding:16px 22px !important;
+  border-radius:28px !important;
+  background:#ffffff !important;
+  border:1px solid rgba(226,232,240,.96) !important;
+  box-shadow:0 18px 44px rgba(15,23,42,.08) !important;
+}
+
+.topbar .brand-wrap{
+  display:grid !important;
+  grid-template-columns:76px minmax(0, 1fr) !important;
+  align-items:center !important;
+  gap:14px !important;
+  min-width:0 !important;
+}
+
+.topbar .site-logo{
+  width:76px !important;
+  height:76px !important;
+  min-width:76px !important;
+  padding:10px !important;
+  object-fit:contain !important;
+  border-radius:18px !important;
+  background:#fff !important;
+  border:1px solid #e5eaf3 !important;
+  box-shadow:0 10px 24px rgba(15,23,42,.08) !important;
+}
+
+.topbar .brand-text{
+  min-width:0 !important;
+}
+
+.topbar .brand,
+#siteName{
+  color:#2457d6 !important;
+  font-family:Georgia, "Times New Roman", "Be Vietnam Pro", serif !important;
+  font-size:clamp(22px, 2vw, 28px) !important;
+  line-height:1.05 !important;
+  font-weight:900 !important;
+  letter-spacing:-.035em !important;
+  max-width:none !important;
+}
+
+.topbar .brand-sub,
+#siteSlogan{
+  display:block !important;
+  margin-top:5px !important;
+  color:#64748b !important;
+  font-size:12.5px !important;
+  line-height:1.35 !important;
+  font-weight:600 !important;
+  max-width:34ch !important;
+}
+
+.topbar .search-large{
+  display:grid !important;
+  grid-template-columns:minmax(0, 1fr) 132px !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-height:54px !important;
+  padding:6px !important;
+  border-radius:16px !important;
+  background:#f3f6fb !important;
+  border:1px solid #dce4f0 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+
+.topbar .search-large input{
+  width:100% !important;
+  min-width:0 !important;
+  min-height:42px !important;
+  padding:0 18px !important;
+  border:0 !important;
+  outline:0 !important;
+  background:transparent !important;
+  color:#334155 !important;
+  font-size:15px !important;
+  font-weight:600 !important;
+}
+
+.topbar .search-large input::placeholder{
+  color:#728099 !important;
+}
+
+.topbar .search-large .btn{
+  width:100% !important;
+  min-width:0 !important;
+  min-height:40px !important;
+  padding:0 18px !important;
+  border:0 !important;
+  border-radius:10px !important;
+  background:#1d56db !important;
+  color:#fff !important;
+  box-shadow:0 8px 16px rgba(29,86,219,.22) !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+}
+
+.theme-toggle{
+  width:42px !important;
+  height:42px !important;
+  display:inline-grid !important;
+  place-items:center !important;
+  border-radius:999px !important;
+  border:1px solid #dce4f0 !important;
+  background:#ffffff !important;
+  color:#1d4ed8 !important;
+  box-shadow:0 8px 20px rgba(15,23,42,.06) !important;
+  cursor:pointer !important;
+  font-size:17px !important;
+}
+
+.topbar .top-actions.hidden,
+.topbar #guestActions.hidden,
+.topbar #userActions.hidden,
+.topbar #adminLink.hidden{
+  display:none !important;
+}
+
+.topbar .top-actions:not(.hidden),
+.topbar #guestActions:not(.hidden),
+.topbar #userActions:not(.hidden){
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:10px !important;
+  min-width:max-content !important;
+}
+
+.topbar .top-actions .btn,
+.topbar #guestActions .btn,
+.topbar #userActions .btn,
+.topbar #userActions a,
+.topbar .welcome-pill{
+  min-height:42px !important;
+  width:auto !important;
+  min-width:112px !important;
+  padding:0 18px !important;
+  border-radius:12px !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  justify-content:center !important;
+  box-shadow:none !important;
+}
+
+.topbar #guestActions .btn-light,
+.topbar #userActions .welcome-pill{
+  background:#eef4ff !important;
+  border:1px solid transparent !important;
+  color:#1d4ed8 !important;
+}
+
+.topbar #guestActions .btn-primary,
+.topbar #userActions .btn.btn-light{
+  background:#ffffff !important;
+  border:1px solid #dce4f0 !important;
+  color:#0f172a !important;
+}
+
+.topbar #adminLink{
+  background:#fff7db !important;
+  border:1px solid #f2d271 !important;
+  color:#7a5200 !important;
+}
+
+.topbar #userActions .btn.btn-danger{
+  background:#e11d2e !important;
+  border:1px solid #e11d2e !important;
+  color:#ffffff !important;
+}
+
+.main-nav{
+  position:relative !important;
+  top:auto !important;
+  z-index:30 !important;
+  display:flex !important;
+  align-items:center !important;
+  flex-wrap:wrap !important;
+  gap:8px 24px !important;
+  margin:0 auto 18px !important;
+  padding:16px 28px !important;
+  border-radius:18px !important;
+  background:#ffffff !important;
+  border:1px solid rgba(226,232,240,.96) !important;
+  box-shadow:0 12px 30px rgba(15,23,42,.07) !important;
+  overflow:visible !important;
+}
+
+.main-nav a,
+.main-nav a.nav-cta{
+  width:auto !important;
+  min-width:0 !important;
+  min-height:34px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 2px !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:#1f2d45 !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  white-space:nowrap !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+
+.main-nav a:hover,
+.main-nav a.nav-cta:hover{
+  color:#1d56db !important;
+  background:transparent !important;
+  border-color:transparent !important;
+}
+
+@media (max-width:1100px){
+  .site-shell > .topbar,
+  header.topbar{
+    grid-template-columns:1fr !important;
+    gap:12px !important;
+    padding:14px !important;
+  }
+
+  .theme-toggle{
+    display:none !important;
+  }
+
+  .topbar .top-actions:not(.hidden),
+  .topbar #guestActions:not(.hidden),
+  .topbar #userActions:not(.hidden){
+    display:grid !important;
+    grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  .topbar #userActions .welcome-pill{
+    grid-column:1 / -1 !important;
+  }
+
+  .topbar .top-actions .btn,
+  .topbar #guestActions .btn,
+  .topbar #userActions .btn,
+  .topbar #userActions a,
+  .topbar .welcome-pill{
+    width:100% !important;
+    min-width:0 !important;
+  }
+}
+
+@media (max-width:760px){
+  .site-shell > .topbar,
+  header.topbar{
+    margin:12px auto 10px !important;
+    border-radius:22px !important;
+  }
+
+  .topbar .brand-wrap{
+    grid-template-columns:62px minmax(0, 1fr) !important;
+  }
+
+  .topbar .site-logo{
+    width:62px !important;
+    height:62px !important;
+    min-width:62px !important;
+    border-radius:16px !important;
+  }
+
+  .topbar .brand,
+  #siteName{
+    font-size:22px !important;
+  }
+
+  .topbar .brand-sub,
+  #siteSlogan{
+    font-size:12px !important;
+    max-width:30ch !important;
+  }
+
+  .topbar .search-large{
+    grid-template-columns:1fr !important;
+    border-radius:18px !important;
+  }
+
+  .main-nav{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    gap:18px !important;
+    margin-bottom:14px !important;
+    padding:12px 16px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scrollbar-width:none !important;
+  }
+
+  .main-nav::-webkit-scrollbar{
+    display:none !important;
+  }
+
+  .main-nav a,
+  .main-nav a.nav-cta{
+    flex:0 0 auto !important;
+    font-size:13.5px !important;
+  }
+}
+
 @media (max-width: 760px){
   .showcase-carousel-shell{
     position:relative !important;

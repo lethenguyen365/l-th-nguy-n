@@ -546,7 +546,7 @@ function forceVietnameseUiLabels(root = document){
   setText("#guestActions .btn.btn-light", "Đăng nhập");
   setText("#guestActions .btn.btn-primary", "Đăng ký");
 
-  const navText = ["Nhà bán", "Đất nền", "Cho thuê", "Mặt bằng", "Việc làm", "Khu vực", "Gói đăng tin", "Tư vấn BĐS"];
+  const navText = ["🏠 Nhà bán", "🏙️ Đất nền", "🔑 Cho thuê", "🏢 Mặt bằng", "📍 Gò Vấp", "📍 Quận 12", "💎 Gói dịch vụ", "✏️ Đăng bài", "🗺️ Bản đồ"];
   scope.querySelectorAll(".main-nav a").forEach((node, index) => {
     if (navText[index]) node.textContent = navText[index];
   });
