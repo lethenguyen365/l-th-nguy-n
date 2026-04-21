@@ -526,7 +526,6 @@ async function loadShowcasePosts() {
         </div>
         <button class="showcase-nav showcase-next" type="button" aria-label="Xem mục sau">&#8250;</button>
       </div>
-      <div class="showcase-dots" id="showcaseDots"></div>
     `;
 
     bindShowcaseTabs();
@@ -573,7 +572,6 @@ function bindShowcaseNav() {
     scrollShowcaseByCard(1);
   });
 
-  track.addEventListener("scroll", syncShowcaseDots);
   window.addEventListener("resize", () => ensureShowcaseMobileNav(shell, prev, next));
 }
 
@@ -636,9 +634,7 @@ function renderShowcaseTrack() {
     : fallbackItems;
 
   track.innerHTML = items.map((post) => renderShowcaseCard(post)).join("");
-  viewport.scrollTo({ left: 0, behavior: "auto" });
-  renderShowcaseDots(items.length);
-  syncShowcaseDots();
+  track.scrollTo({ left: 0, behavior: "auto" });
 }
 
 function renderShowcaseCard(post) {
@@ -674,21 +670,8 @@ function renderShowcaseCard(post) {
 function renderShowcaseDots(count) {
   const dots = document.getElementById("showcaseDots");
   if (!dots) return;
-
-  dots.innerHTML = Array.from({ length: count }, (_, index) => `
-    <button
-      class="showcase-dot ${index === 0 ? "active" : ""}"
-      type="button"
-      data-index="${index}"
-      aria-label="Äi tá»›i tin ${index + 1}"
-    ></button>
-  `).join("");
-
-  dots.querySelectorAll(".showcase-dot").forEach((dot) => {
-    dot.addEventListener("click", () => {
-      scrollShowcaseToIndex(Number(dot.dataset.index || 0));
-    });
-  });
+  dots.innerHTML = "";
+  dots.style.display = "none";
 }
 
 function getShowcaseStep() {
@@ -704,8 +687,17 @@ function scrollShowcaseByCard(direction) {
   const track = document.getElementById("showcaseTrack");
   if (!track) return;
 
-  track.scrollBy({
-    left: getShowcaseStep() * direction,
+  const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+  const step = getShowcaseStep() * direction;
+  let target = track.scrollLeft + step;
+
+  if (direction > 0 && target >= maxScroll - 4) target = maxScroll;
+  if (direction > 0 && track.scrollLeft >= maxScroll - 4) target = 0;
+  if (direction < 0 && target <= 4) target = 0;
+  if (direction < 0 && track.scrollLeft <= 4) target = maxScroll;
+
+  track.scrollTo({
+    left: target,
     behavior: "smooth"
   });
 }
@@ -721,14 +713,7 @@ function scrollShowcaseToIndex(index) {
 }
 
 function syncShowcaseDots() {
-  const track = document.getElementById("showcaseTrack");
-  const dots = document.querySelectorAll(".showcase-dot");
-  if (!track || !dots.length) return;
-
-  const activeIndex = Math.round(track.scrollLeft / getShowcaseStep());
-  dots.forEach((dot, index) => {
-    dot.classList.toggle("active", index === activeIndex);
-  });
+  return;
 }
 
 function formatCurrency(value) {
