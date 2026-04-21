@@ -493,6 +493,189 @@ html[data-theme="dark"] .announcement-popup-card{
   box-shadow:0 22px 60px rgba(0,0,0,.48) !important;
 }
 
+/* Dark mode: fix unreadable white blocks from legacy CSS */
+html[data-theme="dark"] #marketSection,
+html[data-theme="dark"] .market-section,
+html[data-theme="dark"] .showcase-panel,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] #postSection,
+html[data-theme="dark"] #packagesSection,
+html[data-theme="dark"] .payment-panel,
+html[data-theme="dark"] .contact-section,
+html[data-theme="dark"] .contact-copy,
+html[data-theme="dark"] .contact-form,
+html[data-theme="dark"] .site-footer,
+html[data-theme="dark"] .pricing-wrap-pro,
+html[data-theme="dark"] .pricing-hero,
+html[data-theme="dark"] .pricing-copy,
+html[data-theme="dark"] .pricing-group,
+html[data-theme="dark"] .pricing-notice,
+html[data-theme="dark"] .notice-box,
+html[data-theme="dark"] .payment-box-pro,
+html[data-theme="dark"] .payment-info,
+html[data-theme="dark"] .payment-qr-wrap,
+html[data-theme="dark"] .ai-support-panel,
+html[data-theme="dark"] .quick-stats,
+html[data-theme="dark"] .stat-box,
+html[data-theme="dark"] .faq-item,
+html[data-theme="dark"] .chat-panel{
+  background:#111a2e !important;
+  background-image:none !important;
+  border-color:#31425f !important;
+  color:#eef4ff !important;
+  box-shadow:0 18px 44px rgba(0,0,0,.28) !important;
+}
+
+html[data-theme="dark"] .plan-card,
+html[data-theme="dark"] .price-card,
+html[data-theme="dark"] .package-card,
+html[data-theme="dark"] .listing-card,
+html[data-theme="dark"] .payment-card,
+html[data-theme="dark"] .wallet-card,
+html[data-theme="dark"] .helper-box,
+html[data-theme="dark"] .wallet-note,
+html[data-theme="dark"] .conversation-box,
+html[data-theme="dark"] .mini-list > *,
+html[data-theme="dark"] .my-list > *,
+html[data-theme="dark"] .info-list > *{
+  background:#16223a !important;
+  background-image:none !important;
+  border:1px solid #344763 !important;
+  color:#eef4ff !important;
+  box-shadow:0 12px 28px rgba(0,0,0,.22) !important;
+}
+
+html[data-theme="dark"] :is(
+  #marketSection,
+  .market-section,
+  .showcase-panel,
+  .panel,
+  #postSection,
+  #packagesSection,
+  .payment-panel,
+  .contact-section,
+  .contact-copy,
+  .contact-form,
+  .site-footer,
+  .pricing-group,
+  .plan-card,
+  .price-card,
+  .payment-info,
+  .payment-qr-wrap,
+  .ai-support-panel,
+  .stat-box,
+  .faq-item
+) :where(h1,h2,h3,h4,h5,h6,strong,b,label,div,p,span,small,li){
+  color:#eaf1ff !important;
+  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+}
+
+html[data-theme="dark"] :is(
+  #marketSection,
+  .market-section,
+  .showcase-panel,
+  .panel,
+  #postSection,
+  #packagesSection,
+  .payment-panel,
+  .contact-section,
+  .contact-copy,
+  .contact-form,
+  .site-footer,
+  .pricing-group,
+  .plan-card,
+  .price-card,
+  .payment-info,
+  .payment-qr-wrap,
+  .ai-support-panel,
+  .stat-box,
+  .faq-item
+) :where(p,small,.muted,.muted-text,.field-hint,.section-header p,.contact-copy p,.footer-brand p,.footer-cols a,.footer-cols span,.ai-support-copy,.pricing-copy p,.notice-box span){
+  color:#cbd8ec !important;
+  font-weight:600 !important;
+}
+
+html[data-theme="dark"] .plan-price,
+html[data-theme="dark"] .pricing-price,
+html[data-theme="dark"] .post-price,
+html[data-theme="dark"] .showcase-price,
+html[data-theme="dark"] .price-card strong{
+  color:#fbbf24 !important;
+  font-weight:900 !important;
+}
+
+html[data-theme="dark"] .plan-badge,
+html[data-theme="dark"] .tiny-title,
+html[data-theme="dark"] .mini-badge,
+html[data-theme="dark"] .soft-badge,
+html[data-theme="dark"] .panel-badge,
+html[data-theme="dark"] .section-chip{
+  background:#253554 !important;
+  border:1px solid #4b6388 !important;
+  color:#ffe08a !important;
+  font-weight:900 !important;
+}
+
+html[data-theme="dark"] .filter-pill,
+html[data-theme="dark"] .quick-locations button,
+html[data-theme="dark"] .contact-points span{
+  background:#17243d !important;
+  border:1px solid #344763 !important;
+  color:#eaf1ff !important;
+}
+
+html[data-theme="dark"] .filter-pill.active,
+html[data-theme="dark"] .quick-locations button.active{
+  background:#f4b400 !important;
+  border-color:#f4b400 !important;
+  color:#111827 !important;
+}
+
+html[data-theme="dark"] .contact-form input,
+html[data-theme="dark"] .contact-form select,
+html[data-theme="dark"] .contact-form textarea,
+html[data-theme="dark"] #postSection input,
+html[data-theme="dark"] #postSection select,
+html[data-theme="dark"] #postSection textarea,
+html[data-theme="dark"] .panel input,
+html[data-theme="dark"] .panel select,
+html[data-theme="dark"] .panel textarea{
+  background:#0b1324 !important;
+  border:1px solid #40536f !important;
+  color:#f8fbff !important;
+}
+
+html[data-theme="dark"] .contact-form input::placeholder,
+html[data-theme="dark"] .contact-form textarea::placeholder,
+html[data-theme="dark"] #postSection input::placeholder,
+html[data-theme="dark"] #postSection textarea::placeholder,
+html[data-theme="dark"] .panel input::placeholder,
+html[data-theme="dark"] .panel textarea::placeholder{
+  color:#aebbd0 !important;
+}
+
+html[data-theme="dark"] .btn-primary,
+html[data-theme="dark"] .contact-actions .btn-primary,
+html[data-theme="dark"] .form-actions .btn-primary,
+html[data-theme="dark"] .plan-card .btn,
+html[data-theme="dark"] .price-card .btn{
+  background:#2f7df6 !important;
+  border-color:#2f7df6 !important;
+  color:#ffffff !important;
+}
+
+html[data-theme="dark"] .btn-light,
+html[data-theme="dark"] .form-actions .btn-light{
+  background:#22314d !important;
+  border-color:#40536f !important;
+  color:#ffffff !important;
+}
+
+html[data-theme="dark"] .site-footer .footer-logo{
+  background:#ffffff !important;
+  border-color:#dbe5f2 !important;
+}
+
 @media (max-width:1100px){
   .site-shell > .topbar,
   header.topbar{
