@@ -563,8 +563,13 @@ function requireAdmin(req, res, next) {
   if (!req.session.user || req.session.user.role !== "admin") return res.status(403).json({ message: "Báº¡n khÃ´ng cÃ³ quyá»n truy cáº­p." });
   next();
 }
-function dateStr(d = new Date()) { return new Date(d).toISOString().slice(0, 10); }
-function addDays(date, days) { const d = new Date(date); d.setDate(d.getDate() + days); return dateStr(d); }
+function vnDate(d = new Date()) {
+  const date = new Date(d);
+  return new Date(date.getTime() + 7 * 60 * 60 * 1000);
+}
+function dateStr(d = new Date()) { return vnDate(d).toISOString().slice(0, 10); }
+function dateTimeStr(d = new Date()) { return vnDate(d).toISOString().slice(0, 19).replace("T", " "); }
+function addDays(date, days) { const d = new Date(`${date}T00:00:00+07:00`); d.setDate(d.getDate() + days); return dateStr(d); }
 
 async function getActiveSubscription(userId) {
   const today = dateStr();
@@ -621,7 +626,7 @@ async function bootstrap() {
     avatar TEXT DEFAULT '',
     wallet_balance INTEGER NOT NULL DEFAULT 0,
     is_active INTEGER NOT NULL DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT (datetime('now','+7 hours'))
   )`);
 
   await run(`CREATE TABLE IF NOT EXISTS packages (
@@ -646,7 +651,7 @@ async function bootstrap() {
     status TEXT NOT NULL DEFAULT 'pending',
     payment_note TEXT DEFAULT '',
     proof_image TEXT DEFAULT '',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT (datetime('now','+7 hours'))
   )`);
 
   await run(`CREATE TABLE IF NOT EXISTS posts (
@@ -665,7 +670,7 @@ async function bootstrap() {
     status TEXT NOT NULL DEFAULT 'approved',
     is_featured INTEGER NOT NULL DEFAULT 0,
     views INTEGER NOT NULL DEFAULT 0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT (datetime('now','+7 hours'))
   )`);
 
   await run(`CREATE TABLE IF NOT EXISTS ai_reports (
@@ -673,7 +678,7 @@ async function bootstrap() {
     report_type TEXT NOT NULL,
     title TEXT NOT NULL,
     body TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT (datetime('now','+7 hours'))
   )`);
 
   await run(`CREATE TABLE IF NOT EXISTS ai_actions (
@@ -683,7 +688,7 @@ async function bootstrap() {
     action_type TEXT NOT NULL,
     action_status TEXT NOT NULL DEFAULT 'pending',
     note TEXT DEFAULT '',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT (datetime('now','+7 hours'))
   )`);
 
   await run(`CREATE TABLE IF NOT EXISTS pricing_plans (
@@ -703,7 +708,7 @@ async function bootstrap() {
     payment_note TEXT DEFAULT '',
     proof_image TEXT DEFAULT '',
     status TEXT NOT NULL DEFAULT 'pending',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT (datetime('now','+7 hours'))
   )`);
 
   await run(`CREATE TABLE IF NOT EXISTS wallet_transactions (
@@ -712,14 +717,14 @@ async function bootstrap() {
     type TEXT NOT NULL,
     amount INTEGER NOT NULL,
     note TEXT DEFAULT '',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT (datetime('now','+7 hours'))
   )`);
 
   await run(`CREATE TABLE IF NOT EXISTS favorites (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     post_id INTEGER NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT (datetime('now','+7 hours')),
     UNIQUE(user_id, post_id)
   )`);
 
@@ -728,7 +733,7 @@ async function bootstrap() {
     post_id INTEGER NOT NULL,
     buyer_id INTEGER NOT NULL,
     seller_id INTEGER NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT (datetime('now','+7 hours')),
     UNIQUE(post_id, buyer_id, seller_id)
   )`);
 
@@ -737,7 +742,7 @@ async function bootstrap() {
     conversation_id INTEGER NOT NULL,
     sender_id INTEGER NOT NULL,
     body TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT (datetime('now','+7 hours'))
   )`);
 
   const settings = await get(`SELECT * FROM settings WHERE id = 1`);
@@ -1092,9 +1097,9 @@ app.post("/api/posts", requireLogin, async (req, res) => {
       featureFlag = Number(is_featured) === 1 ? 1 : 0;
     }
 
-    await run(`INSERT INTO posts (title, category, price, location, description, image, area, bedrooms, house_direction, legal_status, user_id, status, is_featured)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved', ?)`,
-      [title, category, Number(price), location, description, image || "", Number(area || 0), Number(bedrooms || 0), house_direction || "", legal_status || "", req.session.user.id, featureFlag]);
+    await run(`INSERT INTO posts (title, category, price, location, description, image, area, bedrooms, house_direction, legal_status, user_id, status, is_featured, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved', ?, ?)`,
+      [title, category, Number(price), location, description, image || "", Number(area || 0), Number(bedrooms || 0), house_direction || "", legal_status || "", req.session.user.id, featureFlag, dateTimeStr()]);
     res.json({ message: "ÄÄƒng tin thÃ nh cÃ´ng." });
   } catch {
     res.status(500).json({ message: "ÄÄƒng tin tháº¥t báº¡i." });
@@ -1341,7 +1346,7 @@ app.post("/api/posts/:id/monetize", requireLogin, async (req, res) => {
     if (plan.feature_type === 'featured' || plan.feature_type === 'vip') {
       await run(`UPDATE posts SET is_featured = 1 WHERE id = ?`, [post.id]);
     } else if (plan.feature_type === 'push') {
-      await run(`UPDATE posts SET created_at = CURRENT_TIMESTAMP WHERE id = ?`, [post.id]);
+      await run(`UPDATE posts SET created_at = ? WHERE id = ?`, [dateTimeStr(), post.id]);
     }
     res.json({ message: "ÄÃ£ Ã¡p dá»¥ng gÃ³i kiáº¿m tiá»n cho tin Ä‘Äƒng." });
   } catch {

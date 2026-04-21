@@ -257,10 +257,7 @@ function formatAdminDateTime(value) {
   if (!value) return "";
   const text = String(value).trim();
   const normalized = text.replace(" ", "T");
-  const utcLike = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(normalized)
-    ? `${normalized}Z`
-    : normalized;
-  const date = new Date(utcLike);
+  const date = new Date(normalized);
 
   if (!Number.isNaN(date.getTime())) {
     const parts = new Intl.DateTimeFormat("vi-VN", {
