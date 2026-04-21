@@ -406,6 +406,40 @@
     hero.insertAdjacentElement("afterend", section);
   };
 
+  const injectRegionSection = () => {
+    if ($(".pro-region-section")) return;
+    const categorySection = $(".pro-category-section");
+    if (!categorySection) return;
+    const section = document.createElement("section");
+    section.className = "pro-section pro-region-section";
+    section.innerHTML = `
+      <div class="pro-section-head">
+        <div>
+          <span class="section-pill">Khu vực đang được quan tâm</span>
+          <h2>Lọc nhanh theo nơi có nhu cầu thật</h2>
+          <p>Ưu tiên các khu vực người mua, người thuê và chủ tin đang tìm nhiều để tiết kiệm thời gian lọc.</p>
+        </div>
+      </div>
+      <div class="pro-category-rail">
+        <article class="pro-region-card" data-pro-quick="Gò Vấp">
+          <strong>Gò Vấp</strong>
+          <span>Nhà ở · phòng thuê · mặt bằng</span>
+          <p>Khu dân cư đông, nhu cầu thuê và mua bán nhà phố ổn định.</p>
+        </article>
+        <article class="pro-region-card" data-pro-quick="Quận 12">
+          <strong>Quận 12</strong>
+          <span>Đất nền · nhà bán · thuê ở</span>
+          <p>Phù hợp người tìm diện tích rộng hơn, giá mềm hơn trung tâm.</p>
+        </article>
+        <article class="pro-region-card" data-pro-quick="TP.HCM">
+          <strong>TP.HCM</strong>
+          <span>BĐS · việc làm · dịch vụ</span>
+          <p>Mở rộng tìm kiếm theo nhiều nhóm tin đang có nhu cầu thực tế.</p>
+        </article>
+      </div>`;
+    categorySection.insertAdjacentElement("afterend", section);
+  };
+
   const injectTrustSection = () => {
     if ($(".pro-trust-section")) return;
     const packages = $("#packagesSection");
@@ -504,6 +538,14 @@
       window.proLoadPosts?.();
       $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+
+    window.setCategory = (category) => {
+      const input = $("#filterCategory");
+      if (input) input.value = category || "";
+      window.currentCategory = category || "";
+      window.proLoadPosts?.();
+      $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
   };
 
   const enhancePackages = () => {
@@ -578,6 +620,11 @@
   };
 
   const enhanceCopy = () => {
+    const brandTitle = $(".brand-title h1, .brand-title .brand-name");
+    const brandSub = $(".brand-title p");
+    if (brandTitle) brandTitle.textContent = "Việc Làm Nhà Đất";
+    if (brandSub) brandSub.textContent = "Đăng tin và tìm bất động sản, việc làm quanh Gò Vấp, Quận 12, TP.HCM.";
+
     const contactTitle = $(".contact-copy h2");
     const contactText = $(".contact-copy p");
     if (contactTitle) contactTitle.textContent = "Cần tư vấn mua bán hoặc đăng tin hiệu quả?";
@@ -585,6 +632,11 @@
       contactText.textContent =
         "Để lại thông tin, đội ngũ hỗ trợ sẽ gợi ý cách chọn khu vực, định giá, tối ưu nội dung và gói hiển thị phù hợp.";
     }
+
+    const packageTitle = $("#packagesSection h2");
+    const packageIntro = $("#packagesSection .section-header p, #packagesSection .section-intro p");
+    if (packageTitle) packageTitle.textContent = "Chọn gói hiển thị phù hợp mục tiêu đăng tin";
+    if (packageIntro) packageIntro.textContent = "Gói cơ bản để bắt đầu, gói nổi bật để tăng khả năng được nhìn thấy, gói VIP/PRO cho tin cần ra khách nhanh hơn.";
   };
 
   const setupShare = () => {
@@ -604,16 +656,33 @@
     };
   };
 
+  const setupFloatingActions = () => {
+    const chat = $(".floating-messenger");
+    if (chat) {
+      chat.setAttribute("href", "#");
+      chat.setAttribute("aria-label", "Mở chat hỗ trợ");
+      chat.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (typeof window.openChatPopup === "function") window.openChatPopup();
+        else $("#chatPopup")?.classList.add("open");
+      });
+    }
+    $(".floating-zalo")?.setAttribute("aria-label", "Nhắn Zalo");
+    $(".floating-call")?.setAttribute("aria-label", "Gọi tư vấn");
+  };
+
   const initProUi = () => {
     document.body.classList.add("pro-ui");
     injectHero();
     injectCategorySection();
+    injectRegionSection();
     injectTrustSection();
     enhanceCopy();
     setupFilters();
     enhancePackages();
     enhancePostForm();
     setupShare();
+    setupFloatingActions();
     window.proLoadPosts = proLoadPosts;
     window.loadPosts = proLoadPosts;
     window.viewDetail = proViewDetail;
