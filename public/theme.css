@@ -676,6 +676,63 @@ html[data-theme="dark"] .site-footer .footer-logo{
   border-color:#dbe5f2 !important;
 }
 
+/* Dark mode popup readability */
+html[data-theme="dark"] .announcement-popup{
+  background:rgba(2,6,23,.68) !important;
+  backdrop-filter:blur(8px) !important;
+}
+
+html[data-theme="dark"] .announcement-popup-card,
+html[data-theme="dark"] .modal-box,
+html[data-theme="dark"] .custom-alert{
+  background:#101a2e !important;
+  border:1px solid #3a4d6c !important;
+  color:#f8fbff !important;
+  box-shadow:0 28px 80px rgba(0,0,0,.58) !important;
+}
+
+html[data-theme="dark"] .announcement-popup-card *,
+html[data-theme="dark"] .custom-alert *,
+html[data-theme="dark"] .modal-box *{
+  color:#f8fbff !important;
+  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+}
+
+html[data-theme="dark"] .announcement-popup-message,
+html[data-theme="dark"] #announcementPopupText,
+html[data-theme="dark"] .custom-alert-message,
+html[data-theme="dark"] .modal-box p{
+  color:#e8f0ff !important;
+  font-size:clamp(18px,2vw,24px) !important;
+  font-weight:800 !important;
+  line-height:1.35 !important;
+  text-shadow:none !important;
+  opacity:1 !important;
+}
+
+html[data-theme="dark"] .announcement-popup-badge{
+  background:#fff2c2 !important;
+  border:1px solid #f5c84b !important;
+  color:#8a5a00 !important;
+  font-weight:900 !important;
+}
+
+html[data-theme="dark"] .announcement-popup-close{
+  color:#ffffff !important;
+  background:transparent !important;
+  border:0 !important;
+  opacity:1 !important;
+}
+
+html[data-theme="dark"] .announcement-popup-action,
+html[data-theme="dark"] .custom-alert button,
+html[data-theme="dark"] .modal-box button[type="submit"]{
+  background:#fbbf24 !important;
+  border-color:#fbbf24 !important;
+  color:#111827 !important;
+  font-weight:900 !important;
+}
+
 @media (max-width:1100px){
   .site-shell > .topbar,
   header.topbar{
