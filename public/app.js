@@ -11,6 +11,33 @@ let lastAnnouncementPopupText = "";
 let announcementPopupBooted = false;
 let currentAnnouncementMessage = "";
 
+function setSiteTheme(theme){
+  const mode = theme === "dark" ? "dark" : "light";
+  document.documentElement.dataset.theme = mode;
+  document.body?.classList.toggle("dark-mode", mode === "dark");
+  document.body?.classList.toggle("light-mode", mode !== "dark");
+  localStorage.setItem("siteTheme", mode);
+
+  document.querySelectorAll(".theme-toggle").forEach((button) => {
+    button.textContent = mode === "dark" ? "☀️" : "🌙";
+    button.setAttribute("aria-label", mode === "dark" ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối");
+    button.setAttribute("title", mode === "dark" ? "Chế độ sáng" : "Chế độ tối");
+  });
+}
+
+function initThemeToggle(){
+  const savedTheme = localStorage.getItem("siteTheme");
+  const preferredTheme = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
+  setSiteTheme(savedTheme || preferredTheme);
+
+  document.querySelectorAll(".theme-toggle").forEach((button) => {
+    button.addEventListener("click", () => {
+      const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      setSiteTheme(nextTheme);
+    });
+  });
+}
+
 function showAnnouncementPopup(message){
   const popup = document.getElementById("announcementPopup");
   const popupText = document.getElementById("announcementPopupText");
@@ -968,6 +995,7 @@ function sendQuickChat(){
 
 document.addEventListener("DOMContentLoaded", () => {
   loadSettingsAndPayment();
+  initThemeToggle();
   initHeroSlider();
   initVietnameseTextRepair();
 });
