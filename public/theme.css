@@ -307,6 +307,192 @@ html[data-theme="dark"] .empty-state{
   color:#aebbd0 !important;
 }
 
+/* Dark mode readability pass */
+html[data-theme="dark"],
+html[data-theme="dark"] body{
+  color:#eef4ff !important;
+  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+}
+
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] h5,
+html[data-theme="dark"] h6,
+html[data-theme="dark"] .section-header h2,
+html[data-theme="dark"] .panel h2,
+html[data-theme="dark"] .panel h3,
+html[data-theme="dark"] .post-title,
+html[data-theme="dark"] .showcase-title,
+html[data-theme="dark"] .pricing-title,
+html[data-theme="dark"] .modal-content h2,
+html[data-theme="dark"] .modal-content h3{
+  color:#f8fbff !important;
+  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-weight:850 !important;
+  letter-spacing:-.018em !important;
+}
+
+html[data-theme="dark"] p,
+html[data-theme="dark"] li,
+html[data-theme="dark"] span,
+html[data-theme="dark"] label,
+html[data-theme="dark"] small,
+html[data-theme="dark"] td,
+html[data-theme="dark"] th,
+html[data-theme="dark"] .post-desc,
+html[data-theme="dark"] .post-location,
+html[data-theme="dark"] .post-meta,
+html[data-theme="dark"] .section-header p,
+html[data-theme="dark"] .empty-state,
+html[data-theme="dark"] .field-hint,
+html[data-theme="dark"] .ai-tip-copy,
+html[data-theme="dark"] .contact-copy{
+  color:#d7e2f2 !important;
+  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-weight:550 !important;
+}
+
+html[data-theme="dark"] strong,
+html[data-theme="dark"] b,
+html[data-theme="dark"] .tiny-title,
+html[data-theme="dark"] .mini-badge,
+html[data-theme="dark"] .soft-badge,
+html[data-theme="dark"] .filter-pill,
+html[data-theme="dark"] .main-nav a,
+html[data-theme="dark"] .btn,
+html[data-theme="dark"] button{
+  color:#f4f8ff !important;
+  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-weight:800 !important;
+}
+
+html[data-theme="dark"] a{
+  color:#93c5fd !important;
+}
+
+html[data-theme="dark"] a:hover{
+  color:#bfdbfe !important;
+}
+
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .main-nav,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .summary-card,
+html[data-theme="dark"] .market-card,
+html[data-theme="dark"] .showcase-panel,
+html[data-theme="dark"] .pricing-group,
+html[data-theme="dark"] .post-card,
+html[data-theme="dark"] .info-card,
+html[data-theme="dark"] .table-card,
+html[data-theme="dark"] .modal-content,
+html[data-theme="dark"] .admin-card,
+html[data-theme="dark"] .account-card{
+  background:#111a2e !important;
+  border-color:#30405e !important;
+  color:#eef4ff !important;
+}
+
+html[data-theme="dark"] .main-nav a,
+html[data-theme="dark"] .main-nav a.nav-cta{
+  color:#e7eefb !important;
+}
+
+html[data-theme="dark"] .main-nav a:hover,
+html[data-theme="dark"] .main-nav a.nav-cta:hover{
+  color:#93c5fd !important;
+}
+
+html[data-theme="dark"] .post-price,
+html[data-theme="dark"] .showcase-price,
+html[data-theme="dark"] .price,
+html[data-theme="dark"] .price-value,
+html[data-theme="dark"] .money{
+  color:#ff6b88 !important;
+  font-weight:900 !important;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea{
+  background:#0b1324 !important;
+  border-color:#33445f !important;
+  color:#f6f9ff !important;
+  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-weight:650 !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder{
+  color:#9fb0c9 !important;
+  opacity:1 !important;
+}
+
+html[data-theme="dark"] table,
+html[data-theme="dark"] .admin-table,
+html[data-theme="dark"] .data-table{
+  background:#111a2e !important;
+  color:#eef4ff !important;
+}
+
+html[data-theme="dark"] th{
+  background:#17223a !important;
+  color:#dbeafe !important;
+  border-color:#30405e !important;
+}
+
+html[data-theme="dark"] td{
+  background:#111a2e !important;
+  border-color:#263751 !important;
+}
+
+html[data-theme="dark"] tr:hover td{
+  background:#16223a !important;
+}
+
+html[data-theme="dark"] .btn-primary,
+html[data-theme="dark"] button.btn-primary{
+  background:#3b82f6 !important;
+  border-color:#3b82f6 !important;
+  color:#ffffff !important;
+}
+
+html[data-theme="dark"] .btn-light,
+html[data-theme="dark"] button.btn-light{
+  background:#1c2940 !important;
+  border-color:#354864 !important;
+  color:#f4f8ff !important;
+}
+
+html[data-theme="dark"] .btn-danger,
+html[data-theme="dark"] button.btn-danger{
+  background:#ef4444 !important;
+  border-color:#ef4444 !important;
+  color:#ffffff !important;
+}
+
+html[data-theme="dark"] .filter-pill,
+html[data-theme="dark"] .soft-badge,
+html[data-theme="dark"] .mini-badge,
+html[data-theme="dark"] .tiny-title{
+  background:#1b2942 !important;
+  border-color:#3a4f72 !important;
+  color:#f6d78a !important;
+}
+
+html[data-theme="dark"] .toast,
+html[data-theme="dark"] .custom-alert,
+html[data-theme="dark"] .notification,
+html[data-theme="dark"] .announcement-popup-card{
+  background:#111a2e !important;
+  border:1px solid #30405e !important;
+  color:#eef4ff !important;
+  box-shadow:0 22px 60px rgba(0,0,0,.48) !important;
+}
+
 @media (max-width:1100px){
   .site-shell > .topbar,
   header.topbar{
