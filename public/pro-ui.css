@@ -2530,3 +2530,87 @@ body.dark-mode.pro-ui .wallet-card .empty-state {
   color: #eaf1ff !important;
   border: 1px solid #314764 !important;
 }
+
+/* Hard override for the two dark-mode hot spots reported by users. */
+html[data-theme="dark"] body.pro-ui #postForm input,
+html[data-theme="dark"] body.pro-ui #postForm select,
+html[data-theme="dark"] body.pro-ui #postForm textarea,
+body.dark-mode.pro-ui #postForm input,
+body.dark-mode.pro-ui #postForm select,
+body.dark-mode.pro-ui #postForm textarea {
+  background: #1b2942 !important;
+  background-color: #1b2942 !important;
+  background-image: linear-gradient(180deg, #1f2f4b, #17243b) !important;
+  border: 1px solid #526987 !important;
+  color: #f8fbff !important;
+  -webkit-text-fill-color: #f8fbff !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 10px 22px rgba(0,0,0,.18) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="dark"] body.pro-ui #postForm input::placeholder,
+html[data-theme="dark"] body.pro-ui #postForm textarea::placeholder,
+body.dark-mode.pro-ui #postForm input::placeholder,
+body.dark-mode.pro-ui #postForm textarea::placeholder {
+  color: #b6c4d8 !important;
+  -webkit-text-fill-color: #b6c4d8 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="dark"] body.pro-ui #postForm input:-webkit-autofill,
+html[data-theme="dark"] body.pro-ui #postForm textarea:-webkit-autofill,
+html[data-theme="dark"] body.pro-ui #postForm select:-webkit-autofill,
+body.dark-mode.pro-ui #postForm input:-webkit-autofill,
+body.dark-mode.pro-ui #postForm textarea:-webkit-autofill,
+body.dark-mode.pro-ui #postForm select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #1b2942 inset !important;
+  -webkit-text-fill-color: #f8fbff !important;
+  caret-color: #fbbf24 !important;
+}
+
+html[data-theme="dark"] body.pro-ui #postForm select option,
+body.dark-mode.pro-ui #postForm select option {
+  background: #101a2e !important;
+  color: #f8fbff !important;
+}
+
+html[data-theme="dark"] body.pro-ui #postForm label,
+html[data-theme="dark"] body.pro-ui #postForm .field-hint,
+html[data-theme="dark"] body.pro-ui #postForm .ai-compose-sub,
+body.dark-mode.pro-ui #postForm label,
+body.dark-mode.pro-ui #postForm .field-hint,
+body.dark-mode.pro-ui #postForm .ai-compose-sub {
+  color: #d7e2f2 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="dark"] body.pro-ui .showcase-panel :is(.filter-pill, .tab-btn, .category-tab, .showcase-tab, .quick-locations button),
+body.dark-mode.pro-ui .showcase-panel :is(.filter-pill, .tab-btn, .category-tab, .showcase-tab, .quick-locations button),
+html[data-theme="dark"] body.pro-ui .filter-pill-row .filter-pill,
+body.dark-mode.pro-ui .filter-pill-row .filter-pill {
+  background: #1c2940 !important;
+  background-image: none !important;
+  border: 1px solid #415674 !important;
+  color: #eaf1ff !important;
+  -webkit-text-fill-color: #eaf1ff !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] body.pro-ui .showcase-panel :is(.filter-pill.active, .tab-btn.active, .category-tab.active, .showcase-tab.active, .quick-locations button.active),
+body.dark-mode.pro-ui .showcase-panel :is(.filter-pill.active, .tab-btn.active, .category-tab.active, .showcase-tab.active, .quick-locations button.active),
+html[data-theme="dark"] body.pro-ui .filter-pill-row .filter-pill.active,
+body.dark-mode.pro-ui .filter-pill-row .filter-pill.active {
+  background: #fbbf24 !important;
+  border-color: #fbbf24 !important;
+  color: #172033 !important;
+  -webkit-text-fill-color: #172033 !important;
+}
+
+html[data-theme="dark"] body.pro-ui .showcase-panel .tiny-title,
+html[data-theme="dark"] body.pro-ui .showcase-panel .soft-badge,
+body.dark-mode.pro-ui .showcase-panel .tiny-title,
+body.dark-mode.pro-ui .showcase-panel .soft-badge {
+  background: #223554 !important;
+  border-color: #536b8d !important;
+  color: #ffe49b !important;
+}
