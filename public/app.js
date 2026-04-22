@@ -417,6 +417,8 @@ function maybeFixVietnameseMojibake(value){
     .replace(/\bđ\?y\b/gi, "đây")
     .replace(/\bđ\?ã\b/gi, "đã")
     .replace(/\bđãã\b/gi, "đã")
+    .replace(/thuêê+/gi, "thuê")
+    .replace(/cưư+/gi, "cư")
     .replace(/\bLđ\b/gi, "Lô")
     .replace(/\bLô t đt ở đp vương vức\b/gi, "Lô đất ở đẹp vuông vức")
     .replace(/\bLô t đất ở đẹp vuông vức\b/gi, "Lô đất ở đẹp vuông vức")
@@ -427,6 +429,9 @@ function maybeFixVietnameseMojibake(value){
     .replace(/\bc ng ty\b/gi, "Công ty")
     .replace(/\bc n tuyển\b/gi, "cần tuyển")
     .replace(/\bđp\b/gi, "đẹp")
+    .replace(/\bL t p vung vc, ng t, khu dn c hi\.?u ph hp u t hoc xy x\.?/gi, "Lô đất đẹp vuông vức, ngang tốt, khu dân cư hiện hữu, phù hợp đầu tư hoặc xây ở.")
+    .replace(/\bNh 1 tr.t 2 l.u, hm xe hi, gn ch Hnh Thng Ty, s hng ring, khu dn c an ninh\.?/gi, "Nhà 1 trệt 2 lầu, hẻm xe hơi, gần chợ Hạnh Thông Tây, sổ hồng riêng, khu dân cư an ninh.")
+    .replace(/\bCng ty cn tuyn nhn vin kinh doanh bt ng sn\. Khng yu cu kinh nghim, c o to t u, c lng cng v hoa hng\.?/gi, "Công ty cần tuyển nhân viên kinh doanh bất động sản. Không yêu cầu kinh nghiệm, được đào tạo từ đầu, có lương cứng và hoa hồng.")
     .replace(/\s{2,}/g, " ");
 
   const candidates = [phraseCleanup(value)];

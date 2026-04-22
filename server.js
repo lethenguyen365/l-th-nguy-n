@@ -69,6 +69,8 @@ function cleanupVietnameseText(value = "") {
     .replace(/B\.n d\.t th\. c\. g\.n Metro Hi\.p Th\.nh, Qu\.n 12/gi, "Bán đất thổ cư gần Metro Hiệp Thành, Quận 12")
     .replace(/Qu\.n ?12 ?- ?Hi\.p Th\.nh/gi, "Quận 12 - Hiệp Thành")
     .replace(/G\. V\.p ?- ?Ph\.\.ng ?17/gi, "Gò Vấp - Phường 17")
+    .replace(/thuêê+/gi, "thuê")
+    .replace(/cưư+/gi, "cư")
     .replace(/\bLđ\b/gi, "Lô")
     .replace(/\bLô t đt ở đẹp vuông vức\b/gi, "Lô đất ở đẹp vuông vức")
     .replace(/\bLô t đất ở đẹp vuông vức\b/gi, "Lô đất ở đẹp vuông vức")
@@ -79,6 +81,9 @@ function cleanupVietnameseText(value = "") {
     .replace(/\bc ng ty\b/gi, "Công ty")
     .replace(/\bc n tuyển\b/gi, "cần tuyển")
     .replace(/\bđp\b/gi, "đẹp")
+    .replace(/\bL t p vung vc, ng t, khu dn c hi\.?u ph hp u t hoc xy x\.?/gi, "Lô đất đẹp vuông vức, ngang tốt, khu dân cư hiện hữu, phù hợp đầu tư hoặc xây ở.")
+    .replace(/\bNh 1 tr.t 2 l.u, hm xe hi, gn ch Hnh Thng Ty, s hng ring, khu dn c an ninh\.?/gi, "Nhà 1 trệt 2 lầu, hẻm xe hơi, gần chợ Hạnh Thông Tây, sổ hồng riêng, khu dân cư an ninh.")
+    .replace(/\bCng ty cn tuyn nhn vin kinh doanh bt ng sn\. Khng yu cu kinh nghim, c o to t u, c lng cng v hoa hng\.?/gi, "Công ty cần tuyển nhân viên kinh doanh bất động sản. Không yêu cầu kinh nghiệm, được đào tạo từ đầu, có lương cứng và hoa hồng.")
     .replace(/Bđn/gi, "Bán")
     .replace(/nhđ/gi, "nhà")
     .replace(/hdm/gi, "hẻm")
@@ -169,59 +174,92 @@ function normalizePostText(value = "") {
   return cleanupVietnameseText(cleaned);
 }
 
+const FALLBACK_DESCRIPTIONS = {
+  sale_home: "Nhà 1 trệt 2 lầu, hẻm xe hơi, gần chợ Hạnh Thông Tây, sổ hồng riêng, khu dân cư an ninh.",
+  land: "Lô đất đẹp vuông vức, ngang tốt, khu dân cư hiện hữu, phù hợp đầu tư hoặc xây ở.",
+  rent_room: "Căn hộ mini full nội thất, khu dân cư an ninh, phù hợp khách thuê cần vào ở ngay.",
+  frontage: "Nhà mặt tiền rộng, vị trí dễ nhận diện, phù hợp vừa ở vừa kinh doanh hoặc giữ tài sản dài hạn.",
+  shop: "Mặt bằng kinh doanh sáng, khu dân cư đông, thuận tiện mở shop, văn phòng hoặc dịch vụ.",
+  job: "Công ty cần tuyển nhân viên kinh doanh bất động sản. Không yêu cầu kinh nghiệm, được đào tạo từ đầu, có lương cứng và hoa hồng."
+};
+
 const DEMO_POST_FALLBACKS = {
   1: {
     title: "Bán nhà hẻm 6m đường Quang Trung, Phường 10, Gò Vấp",
-    location: "Gò Vấp - Phường 10"
+    category: "Nhà bán",
+    location: "Gò Vấp - Phường 10",
+    description: FALLBACK_DESCRIPTIONS.sale_home
   },
   2: {
     title: "Bán đất thổ cư gần Metro Hiệp Thành, Quận 12",
-    location: "Quận 12 - Hiệp Thành"
+    category: "Đất nền",
+    location: "Quận 12 - Hiệp Thành",
+    description: FALLBACK_DESCRIPTIONS.land
   },
   3: {
     title: "Cho thuê căn hộ mini full nội thất Nguyễn Oanh, Gò Vấp",
-    location: "Gò Vấp - Phường 17"
+    category: "Cho thuê",
+    location: "Gò Vấp - Phường 17",
+    description: FALLBACK_DESCRIPTIONS.rent_room
   },
   4: {
     title: "Bán nhà mặt tiền Hà Huy Giáp, Thạnh Lộc, Quận 12",
-    location: "Quận 12 - Thạnh Lộc"
+    category: "Nhà bán",
+    location: "Quận 12 - Thạnh Lộc",
+    description: FALLBACK_DESCRIPTIONS.frontage
   },
   5: {
     title: "Cho thuê mặt bằng kinh doanh gần chợ An Phú Đông, Quận 12",
-    location: "Quận 12 - An Phú Đông"
+    category: "Mặt bằng",
+    location: "Quận 12 - An Phú Đông",
+    description: FALLBACK_DESCRIPTIONS.shop
   },
   6: {
     title: "Tuyển nhân viên kinh doanh bất động sản khu vực Gò Vấp",
-    location: "Gò Vấp - Văn phòng"
+    category: "Việc làm",
+    location: "Gò Vấp - Văn phòng",
+    description: FALLBACK_DESCRIPTIONS.job
   },
   7: {
     title: "Bán nhà hẻm 6m đường Quang Trung, Phường 10, Gò Vấp",
-    location: "Gò Vấp - Phường 10"
+    category: "Nhà bán",
+    location: "Gò Vấp - Phường 10",
+    description: FALLBACK_DESCRIPTIONS.sale_home
   },
   8: {
     title: "Bán đất thổ cư gần Metro Hiệp Thành, Quận 12",
-    location: "Quận 12 - Hiệp Thành"
+    category: "Đất nền",
+    location: "Quận 12 - Hiệp Thành",
+    description: FALLBACK_DESCRIPTIONS.land
   },
   9: {
     title: "Cho thuê căn hộ mini full nội thất Nguyễn Oanh, Gò Vấp",
-    location: "Gò Vấp - Phường 17"
+    category: "Cho thuê",
+    location: "Gò Vấp - Phường 17",
+    description: FALLBACK_DESCRIPTIONS.rent_room
   },
   10: {
     title: "Bán nhà mặt tiền Hà Huy Giáp, Thạnh Lộc, Quận 12",
-    location: "Quận 12 - Thạnh Lộc"
+    category: "Nhà bán",
+    location: "Quận 12 - Thạnh Lộc",
+    description: FALLBACK_DESCRIPTIONS.frontage
   },
   11: {
     title: "Cho thuê mặt bằng kinh doanh gần chợ An Phú Đông, Quận 12",
-    location: "Quận 12 - An Phú Đông"
+    category: "Mặt bằng",
+    location: "Quận 12 - An Phú Đông",
+    description: FALLBACK_DESCRIPTIONS.shop
   },
   12: {
     title: "Tuyển nhân viên kinh doanh bất động sản khu vực Gò Vấp",
-    location: "Gò Vấp - Văn phòng"
+    category: "Việc làm",
+    location: "Gò Vấp - Văn phòng",
+    description: FALLBACK_DESCRIPTIONS.job
   }
 };
 
 function hasBrokenPostText(value = "") {
-  return /�|Ã|Â|Ä|Æ|áº|á»|đn|đt|đng|thồn|thồnh|Lđ|Nhđ|trđt|đp|vương vức|c ng|c n tuyển|Nguyđ|Hid|Hid?p|hđ|cđ|thuc|c\.n|n\.i|th\.t/i.test(String(value || ""));
+  return /�|Ã|Â|Ä|Æ|áº|á»|đn|đt|đng|thồn|thồnh|Lđ|Nhđ|trđt|đp|vương vức|L t p|vung vc|ng t,|khu dn|c hi|ph hp|hoc xy|Nh 1 tr|hm xe hi|gn ch|Hnh Thng|s hng|Cng ty|cn tuyn|bt ng sn|Khng yu cu|kinh nghim|c o to|lng cng|c ng|c n tuyển|Nguyđ|Hid|Hid?p|hđ|cđ|thuc|c\.n|n\.i|th\.t/i.test(String(value || ""));
 }
 
 function normalizePostRow(row) {
@@ -229,12 +267,14 @@ function normalizePostRow(row) {
   const fallback = DEMO_POST_FALLBACKS[Number(row.id)] || null;
   const normalizedTitle = normalizePostText(row.title || "");
   const normalizedLocation = normalizePostText(row.location || "");
+  const normalizedCategory = normalizePostText(row.category || "");
+  const normalizedDescription = normalizePostText(row.description || "");
   return {
     ...row,
     title: fallback && hasBrokenPostText(normalizedTitle) ? fallback.title : normalizedTitle,
-    category: normalizePostText(row.category || ""),
+    category: fallback && hasBrokenPostText(normalizedCategory) ? fallback.category : normalizedCategory,
     location: fallback && hasBrokenPostText(normalizedLocation) ? fallback.location : normalizedLocation,
-    description: normalizePostText(row.description || ""),
+    description: fallback && hasBrokenPostText(normalizedDescription) ? fallback.description : normalizedDescription,
     house_direction: normalizePostText(row.house_direction || ""),
     legal_status: normalizePostText(row.legal_status || ""),
     full_name: normalizePostText(row.full_name || ""),

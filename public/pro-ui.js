@@ -26,6 +26,28 @@
       ? window.maybeFixVietnameseMojibake(String(value ?? ""))
       : String(value ?? "");
 
+  const fallbackDescriptions = {
+    saleHome: "Nhà 1 trệt 2 lầu, hẻm xe hơi, gần chợ Hạnh Thông Tây, sổ hồng riêng, khu dân cư an ninh.",
+    land: "Lô đất đẹp vuông vức, ngang tốt, khu dân cư hiện hữu, phù hợp đầu tư hoặc xây ở.",
+    rent: "Căn hộ mini full nội thất, khu dân cư an ninh, phù hợp khách thuê cần vào ở ngay.",
+    shop: "Mặt bằng kinh doanh sáng, khu dân cư đông, thuận tiện mở shop, văn phòng hoặc dịch vụ.",
+    job: "Công ty cần tuyển nhân viên kinh doanh bất động sản. Không yêu cầu kinh nghiệm, được đào tạo từ đầu, có lương cứng và hoa hồng."
+  };
+
+  const hasBrokenVietnamese = (value) =>
+    /�|Ã|Â|Ä|Æ|áº|á»|Lđ|Nhđ|trđt|đp|vương vức|L t p|vung vc|ng t,|khu dn|c hi|ph hp|hoc xy|Nh 1 tr|hm xe hi|gn ch|Hnh Thng|s hng|Cng ty|cn tuyn|bt ng sn|Khng yu cu|kinh nghim|c o to|lng cng|c ng|c n tuyển|thuc|c\.n|n\.i|th\.t/i.test(String(value || ""));
+
+  const getPostFallback = (post) => {
+    const title = normalize(fixText(post.title || ""));
+    const category = normalize(fixText(post.category || ""));
+    if (title.includes("metro") || category.includes("dat nen")) return { category: "Đất nền", description: fallbackDescriptions.land };
+    if (title.includes("tuyen") || category.includes("viec lam")) return { category: "Việc làm", description: fallbackDescriptions.job };
+    if (title.includes("mat bang") || category.includes("mat bang")) return { category: "Mặt bằng", description: fallbackDescriptions.shop };
+    if (title.includes("cho thue") || category.includes("cho thue")) return { category: "Cho thuê", description: fallbackDescriptions.rent };
+    if (title.includes("ban nha") || category.includes("nha ban")) return { category: "Nhà bán", description: fallbackDescriptions.saleHome };
+    return null;
+  };
+
   const fetchJSONPro = async (url, options) => {
     if (typeof window.fetchJSON === "function") return window.fetchJSON(url, options);
     const response = await fetch(url, options);
@@ -199,9 +221,12 @@
   const renderCard = (post) => {
     const title = escapeHtml(fixText(post.title || "Tin bất động sản đang cập nhật"));
     const location = escapeHtml(fixText(post.location || "TP.HCM"));
-    const category = escapeHtml(fixText(post.category || "Tin đăng"));
+    const fallback = getPostFallback(post);
+    const fixedCategory = fixText(post.category || "Tin đăng");
+    const fixedDescription = fixText(post.description || "Tin đăng đang được người bán cập nhật thêm thông tin chi tiết.");
+    const category = escapeHtml(fallback && hasBrokenVietnamese(fixedCategory) ? fallback.category : fixedCategory);
     const seller = escapeHtml(fixText(post.seller_name || post.user_name || post.full_name || "Người đăng tin"));
-    const description = escapeHtml(fixText(post.description || "Tin đăng đang được người bán cập nhật thêm thông tin chi tiết."));
+    const description = escapeHtml(fallback && hasBrokenVietnamese(fixedDescription) ? fallback.description : fixedDescription);
     const isFeatured = Number(post.featured || post.is_featured || 0) > 0;
     const views = Number(post.views || 0);
     const phone = post.phone || post.seller_phone || "";
