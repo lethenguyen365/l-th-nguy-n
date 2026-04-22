@@ -2450,3 +2450,83 @@ body.pro-ui .card-price {
   font-family: var(--pro-font) !important;
   font-weight: 700 !important;
 }
+
+/* Dark mode final pass: keep forms readable without bright white blocks. */
+html[data-theme="dark"] body.pro-ui :is(#postSection, .panel, .contact-form) :is(input, select, textarea),
+body.dark-mode.pro-ui :is(#postSection, .panel, .contact-form) :is(input, select, textarea) {
+  background: #16243d !important;
+  background-image: none !important;
+  border: 1px solid #435a78 !important;
+  color: #f4f8ff !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 8px 20px rgba(0,0,0,.16) !important;
+  caret-color: #fbbf24 !important;
+}
+
+html[data-theme="dark"] body.pro-ui :is(#postSection, .panel, .contact-form) :is(input, textarea)::placeholder,
+body.dark-mode.pro-ui :is(#postSection, .panel, .contact-form) :is(input, textarea)::placeholder {
+  color: #8ea1bc !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="dark"] body.pro-ui select option,
+body.dark-mode.pro-ui select option {
+  background: #111a2e !important;
+  color: #eef4ff !important;
+}
+
+html[data-theme="dark"] body.pro-ui #postSection :is(label, .field-hint, .ai-compose-sub, .ai-support-copy),
+body.dark-mode.pro-ui #postSection :is(label, .field-hint, .ai-compose-sub, .ai-support-copy) {
+  color: #c9d6ea !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="dark"] body.pro-ui #postSection .ai-compose-trigger,
+body.dark-mode.pro-ui #postSection .ai-compose-trigger,
+html[data-theme="dark"] body.pro-ui #postSection .ai-support-panel,
+body.dark-mode.pro-ui #postSection .ai-support-panel,
+html[data-theme="dark"] body.pro-ui #postSection .ai-tip-card,
+body.dark-mode.pro-ui #postSection .ai-tip-card {
+  background: #14213a !important;
+  background-image: none !important;
+  border-color: #314764 !important;
+  color: #eaf1ff !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,.24) !important;
+}
+
+html[data-theme="dark"] body.pro-ui .pro-preview-card,
+body.dark-mode.pro-ui .pro-preview-card {
+  background: #101a2e !important;
+  border: 1px solid #314764 !important;
+}
+
+html[data-theme="dark"] body.pro-ui .pro-preview-listing,
+body.dark-mode.pro-ui .pro-preview-listing {
+  background: #16243d !important;
+  border-color: #314764 !important;
+}
+
+html[data-theme="dark"] body.pro-ui .pro-preview-image.is-empty span,
+body.dark-mode.pro-ui .pro-preview-image.is-empty span {
+  background: #223554 !important;
+  color: #f8fbff !important;
+  border: 1px solid #4b6388 !important;
+}
+
+html[data-theme="dark"] body.pro-ui .pro-preview-title,
+body.dark-mode.pro-ui .pro-preview-title {
+  color: #f8fbff !important;
+}
+
+html[data-theme="dark"] body.pro-ui .pro-preview-content p,
+html[data-theme="dark"] body.pro-ui .pro-preview-meta span,
+body.dark-mode.pro-ui .pro-preview-content p,
+body.dark-mode.pro-ui .pro-preview-meta span {
+  color: #d7e2f2 !important;
+}
+
+html[data-theme="dark"] body.pro-ui .wallet-card .empty-state,
+body.dark-mode.pro-ui .wallet-card .empty-state {
+  background: #16243d !important;
+  color: #eaf1ff !important;
+  border: 1px solid #314764 !important;
+}

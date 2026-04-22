@@ -12,6 +12,127 @@
   --ui-shadow:0 18px 44px rgba(15,23,42,.08);
 }
 
+/* Final dark-mode contrast fix: prevent late legacy CSS from forcing bright white fields. */
+html[data-theme="dark"] :is(
+  input,
+  select,
+  textarea,
+  .ai-support-panel,
+  .ai-tip-card,
+  .ai-compose-trigger,
+  .pro-preview-card,
+  .pro-preview-listing,
+  .pro-preview-content,
+  .wallet-card,
+  .wallet-note,
+  .info-card,
+  .helper-box,
+  .chat-panel,
+  .conversation-box,
+  .empty-state
+){
+  background-color:#142039 !important;
+  background-image:none !important;
+  border-color:#314764 !important;
+  color:#eaf1ff !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.24) !important;
+}
+
+html[data-theme="dark"] :is(#postSection, .panel, .contact-form) :is(input, select, textarea),
+body.dark-mode :is(#postSection, .panel, .contact-form) :is(input, select, textarea){
+  background:#16243d !important;
+  border:1px solid #435a78 !important;
+  color:#f4f8ff !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 8px 20px rgba(0,0,0,.16) !important;
+  caret-color:#fbbf24 !important;
+}
+
+html[data-theme="dark"] :is(#postSection, .panel, .contact-form) :is(input, textarea)::placeholder,
+body.dark-mode :is(#postSection, .panel, .contact-form) :is(input, textarea)::placeholder{
+  color:#8ea1bc !important;
+  opacity:1 !important;
+}
+
+html[data-theme="dark"] select option,
+body.dark-mode select option{
+  background:#111a2e !important;
+  color:#eef4ff !important;
+}
+
+html[data-theme="dark"] #postSection :is(label, .field-hint, .ai-compose-sub, .ai-support-copy),
+body.dark-mode #postSection :is(label, .field-hint, .ai-compose-sub, .ai-support-copy){
+  color:#c9d6ea !important;
+  opacity:1 !important;
+}
+
+html[data-theme="dark"] #postSection :is(h2,h3,strong,b),
+body.dark-mode #postSection :is(h2,h3,strong,b){
+  color:#f8fbff !important;
+}
+
+html[data-theme="dark"] #postSection .ai-compose-trigger,
+body.dark-mode #postSection .ai-compose-trigger{
+  background:#1d2f52 !important;
+  border-color:#4b6388 !important;
+  color:#f8fbff !important;
+}
+
+html[data-theme="dark"] #postSection .ai-trigger-badge,
+body.dark-mode #postSection .ai-trigger-badge{
+  background:#6d5dfc !important;
+  color:#ffffff !important;
+}
+
+html[data-theme="dark"] #postSection .ai-support-panel,
+body.dark-mode #postSection .ai-support-panel{
+  background:#14213a !important;
+  border:1px solid #314764 !important;
+}
+
+html[data-theme="dark"] #postSection .ai-tip-card,
+body.dark-mode #postSection .ai-tip-card{
+  background:#101b30 !important;
+  border-color:#2f4566 !important;
+}
+
+html[data-theme="dark"] .pro-preview-card,
+body.dark-mode .pro-preview-card{
+  background:#101a2e !important;
+  border:1px solid #314764 !important;
+}
+
+html[data-theme="dark"] .pro-preview-listing,
+body.dark-mode .pro-preview-listing{
+  background:#16243d !important;
+  border-color:#314764 !important;
+}
+
+html[data-theme="dark"] .pro-preview-image.is-empty span,
+body.dark-mode .pro-preview-image.is-empty span{
+  background:#223554 !important;
+  color:#f8fbff !important;
+  border:1px solid #4b6388 !important;
+}
+
+html[data-theme="dark"] .pro-preview-title,
+body.dark-mode .pro-preview-title{
+  color:#f8fbff !important;
+}
+
+html[data-theme="dark"] .pro-preview-content p,
+html[data-theme="dark"] .pro-preview-meta span,
+body.dark-mode .pro-preview-content p,
+body.dark-mode .pro-preview-meta span{
+  color:#d7e2f2 !important;
+}
+
+html[data-theme="dark"] .wallet-card .empty-state,
+body.dark-mode .wallet-card .empty-state{
+  background:#16243d !important;
+  color:#eaf1ff !important;
+  border:1px solid #314764 !important;
+}
+
 html[data-theme="dark"]{
   --ui-bg:#0b1020;
   --ui-surface:#121a2b;
