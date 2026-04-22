@@ -8259,6 +8259,22 @@ body{
   box-shadow:none !important;
 }
 
+html[data-theme="dark"] .showcase-heart,
+body.dark-mode .showcase-heart{
+  background:rgba(15,23,42,.72) !important;
+  color:#f8fafc !important;
+  border:1px solid rgba(255,255,255,.24) !important;
+  box-shadow:0 10px 22px rgba(0,0,0,.28) !important;
+  backdrop-filter:blur(10px);
+}
+
+html[data-theme="dark"] .showcase-heart:hover,
+body.dark-mode .showcase-heart:hover{
+  background:rgba(255,184,0,.94) !important;
+  color:#111827 !important;
+  border-color:rgba(255,184,0,.95) !important;
+}
+
 .showcase-badge{
   left:10px !important;
   bottom:10px !important;

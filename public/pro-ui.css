@@ -699,6 +699,22 @@ body.pro-ui textarea {
   cursor: pointer;
 }
 
+html[data-theme="dark"] .pro-card-actions button,
+body.dark-mode .pro-card-actions button {
+  background: rgba(15, 23, 42, 0.74);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+html[data-theme="dark"] .pro-card-actions button:hover,
+body.dark-mode .pro-card-actions button:hover {
+  background: rgba(255, 184, 0, 0.92);
+  color: #111827;
+  border-color: rgba(255, 184, 0, 0.96);
+}
+
 .pro-listing-body {
   display: flex;
   flex-direction: column;
