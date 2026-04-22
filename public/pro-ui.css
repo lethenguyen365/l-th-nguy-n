@@ -3431,3 +3431,408 @@ body.dark-mode.pro-ui .showcase-panel .soft-badge {
     min-height: 190px !important;
   }
 }
+
+/* Premium visual polish pass: more refined marketplace surfaces and stronger readability. */
+body.pro-ui {
+  --pro-card-shadow: 0 18px 44px rgba(15, 23, 42, 0.1);
+  --pro-card-shadow-hover: 0 24px 58px rgba(15, 23, 42, 0.16);
+  --pro-ring: rgba(37, 99, 235, 0.16);
+  background-attachment: fixed;
+}
+
+body.pro-ui .page-noise {
+  opacity: 0.34;
+  pointer-events: none;
+}
+
+body.pro-ui .top-strip {
+  background: linear-gradient(90deg, #0b1f46 0%, #123a8c 54%, #b98200 100%) !important;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.14);
+}
+
+body.pro-ui .topbar,
+body.pro-ui .brand-bar {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.9)),
+    var(--pro-surface) !important;
+}
+
+body.pro-ui .topbar::before,
+body.pro-ui .brand-bar::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(248, 184, 0, 0.18), transparent 30%),
+    radial-gradient(circle at 88% 0%, rgba(37, 99, 235, 0.12), transparent 34%);
+  opacity: 0.95;
+}
+
+body.dark-mode.pro-ui .topbar,
+body.dark-mode.pro-ui .brand-bar {
+  background:
+    linear-gradient(135deg, rgba(15, 27, 47, 0.96), rgba(9, 20, 38, 0.92)),
+    #0f1b2f !important;
+}
+
+body.pro-ui .site-logo,
+body.pro-ui .brand-logo {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+body.pro-ui .site-logo:hover,
+body.pro-ui .brand-logo:hover {
+  transform: translateY(-1px) scale(1.015);
+}
+
+body.pro-ui .brand,
+body.pro-ui #siteName,
+body.pro-ui .brand-name,
+body.pro-ui .brand-title h1 {
+  text-wrap: balance;
+}
+
+body.pro-ui .search-large,
+body.pro-ui .search-box {
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+body.pro-ui .search-large:focus-within,
+body.pro-ui .search-box:focus-within {
+  border-color: rgba(37, 99, 235, 0.38) !important;
+  box-shadow: 0 0 0 5px var(--pro-ring), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+body.dark-mode.pro-ui .search-large:focus-within,
+body.dark-mode.pro-ui .search-box:focus-within {
+  border-color: rgba(110, 168, 255, 0.48) !important;
+  box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+body.pro-ui :is(.btn, button, .primary-btn, .secondary-btn, .ghost-btn, .outline-btn, .pro-card-cta) {
+  cursor: pointer;
+}
+
+body.pro-ui :is(.btn, .primary-btn, .secondary-btn, .ghost-btn, .outline-btn, .pro-card-cta):active {
+  transform: translateY(0) scale(0.99) !important;
+}
+
+body.pro-ui .main-nav,
+body.pro-ui .category-nav {
+  backdrop-filter: blur(18px);
+}
+
+body.pro-ui .main-nav a,
+body.pro-ui .category-nav :is(a, button),
+body.pro-ui :is(.filter-pill, .tab-btn, .category-tab, .showcase-tab, .quick-locations button) {
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+body.pro-ui .main-nav a:hover,
+body.pro-ui .category-nav :is(a, button):hover,
+body.pro-ui :is(.filter-pill, .tab-btn, .category-tab, .showcase-tab, .quick-locations button):hover {
+  transform: translateY(-1px);
+  border-color: rgba(248, 184, 0, 0.5) !important;
+}
+
+body.pro-ui .commercial-hero,
+body.pro-ui .hero-slider,
+body.pro-ui .hero-slide {
+  box-shadow: 0 22px 56px rgba(15, 23, 42, 0.18);
+}
+
+body.pro-ui .hero-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(15, 23, 42, 0.72), rgba(15, 23, 42, 0.16) 50%, rgba(15, 23, 42, 0.4)),
+    radial-gradient(circle at 18% 22%, rgba(248, 184, 0, 0.2), transparent 26%);
+}
+
+body.pro-ui .hero-slide-content {
+  position: relative;
+  z-index: 2;
+}
+
+body.pro-ui .hero-badge,
+body.pro-ui .mini-badge,
+body.pro-ui .tiny-title,
+body.pro-ui .section-pill,
+body.pro-ui .panel-label {
+  width: fit-content;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+body.pro-ui .hero-slider-dots button {
+  transition: width 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+body.pro-ui .hero-slider-dots button.active {
+  width: 34px !important;
+  border-radius: 999px !important;
+}
+
+body.pro-ui :is(.panel, .market-section, .showcase-panel, .post-section, .packages-section, .contact-section, .site-footer, .summary-card, .market-card, .stat-box, .plan-card, .pro-listing-card, .showcase-card) {
+  border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+body.pro-ui :is(.summary-card, .market-card, .stat-box, .plan-card, .pro-listing-card, .showcase-card) {
+  box-shadow: var(--pro-card-shadow) !important;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+body.pro-ui :is(.summary-card, .market-card, .stat-box, .plan-card, .pro-listing-card, .showcase-card):hover {
+  transform: translateY(-3px);
+  box-shadow: var(--pro-card-shadow-hover) !important;
+  border-color: rgba(37, 99, 235, 0.22) !important;
+}
+
+body.dark-mode.pro-ui :is(.summary-card, .market-card, .stat-box, .plan-card, .pro-listing-card, .showcase-card):hover {
+  border-color: rgba(110, 168, 255, 0.32) !important;
+}
+
+body.pro-ui .showcase-card,
+body.pro-ui .pro-listing-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.98)),
+    var(--pro-surface) !important;
+}
+
+body.dark-mode.pro-ui .showcase-card,
+body.dark-mode.pro-ui .pro-listing-card {
+  background:
+    linear-gradient(180deg, rgba(16, 28, 48, 0.98), rgba(12, 23, 41, 0.98)),
+    #101c30 !important;
+}
+
+body.pro-ui :is(.showcase-card, .pro-listing-card) :is(.post-image, .card-media, .showcase-image, .pro-listing-media) {
+  position: relative;
+  background: #dbe4ef;
+}
+
+body.pro-ui :is(.showcase-card, .pro-listing-card) img {
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+body.pro-ui :is(.showcase-card, .pro-listing-card):hover img {
+  transform: scale(1.035);
+  filter: saturate(1.05) contrast(1.02);
+}
+
+body.pro-ui .pro-card-actions button,
+body.pro-ui .showcase-heart,
+body.pro-ui .favorite-btn,
+body.pro-ui .share-btn {
+  backdrop-filter: blur(12px);
+}
+
+body.pro-ui .pro-card-actions button:hover,
+body.pro-ui .showcase-heart:hover,
+body.pro-ui .favorite-btn:hover,
+body.pro-ui .share-btn:hover {
+  background: #fff7db !important;
+  color: #9a6700 !important;
+  border-color: rgba(248, 184, 0, 0.55) !important;
+}
+
+body.pro-ui .pro-listing-meta span,
+body.pro-ui .pro-preview-meta span,
+body.pro-ui .showcase-card :is(.meta-pill, .card-meta span, .post-location) {
+  background: rgba(241, 245, 249, 0.92);
+  border: 1px solid rgba(226, 232, 240, 0.86);
+  color: #475569;
+}
+
+body.dark-mode.pro-ui .pro-listing-meta span,
+body.dark-mode.pro-ui .pro-preview-meta span,
+body.dark-mode.pro-ui .showcase-card :is(.meta-pill, .card-meta span, .post-location) {
+  background: rgba(30, 41, 59, 0.78) !important;
+  border-color: rgba(71, 85, 105, 0.8) !important;
+  color: #dbeafe !important;
+}
+
+body.pro-ui .post-price,
+body.pro-ui .card-price,
+body.pro-ui .pro-price,
+body.pro-ui .plan-price {
+  letter-spacing: -0.025em !important;
+}
+
+body.pro-ui .plan-card {
+  position: relative;
+  overflow: hidden;
+}
+
+body.pro-ui .plan-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--pro-gold), var(--pro-primary-2));
+  opacity: 0.72;
+}
+
+body.pro-ui .plan-card.active,
+body.pro-ui .plan-card.is-featured,
+body.pro-ui .plan-card.recommended {
+  border-color: rgba(248, 184, 0, 0.62) !important;
+  box-shadow: 0 22px 58px rgba(248, 184, 0, 0.16), var(--pro-card-shadow) !important;
+}
+
+body.pro-ui #postForm,
+body.pro-ui .contact-form,
+body.pro-ui .payment-box-pro {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(248, 250, 252, 0.92)),
+    var(--pro-surface) !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  border-radius: 24px !important;
+  padding: 18px !important;
+  box-shadow: 0 16px 42px rgba(15, 23, 42, 0.08) !important;
+}
+
+body.dark-mode.pro-ui #postForm,
+body.dark-mode.pro-ui .contact-form,
+body.dark-mode.pro-ui .payment-box-pro {
+  background:
+    linear-gradient(180deg, rgba(16, 28, 48, 0.96), rgba(12, 23, 41, 0.96)),
+    #101c30 !important;
+  border-color: rgba(71, 85, 105, 0.58) !important;
+}
+
+body.pro-ui #postForm :is(input, select, textarea),
+body.pro-ui .contact-form :is(input, select, textarea),
+body.pro-ui .panel :is(input, select, textarea) {
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+body.pro-ui #postForm :is(input, select, textarea):focus,
+body.pro-ui .contact-form :is(input, select, textarea):focus,
+body.pro-ui .panel :is(input, select, textarea):focus {
+  border-color: rgba(37, 99, 235, 0.46) !important;
+  box-shadow: 0 0 0 5px var(--pro-ring) !important;
+  outline: 0 !important;
+}
+
+body.dark-mode.pro-ui #postForm :is(input, select, textarea):focus,
+body.dark-mode.pro-ui .contact-form :is(input, select, textarea):focus,
+body.dark-mode.pro-ui .panel :is(input, select, textarea):focus {
+  border-color: rgba(110, 168, 255, 0.58) !important;
+  box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.16) !important;
+}
+
+body.pro-ui .ai-compose-trigger,
+body.pro-ui .ai-support-panel,
+body.pro-ui .ai-tip-card {
+  background:
+    linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(245, 243, 255, 0.95)) !important;
+  border-color: rgba(147, 197, 253, 0.4) !important;
+}
+
+body.dark-mode.pro-ui .ai-compose-trigger,
+body.dark-mode.pro-ui .ai-support-panel,
+body.dark-mode.pro-ui .ai-tip-card {
+  background:
+    linear-gradient(135deg, rgba(20, 33, 58, 0.98), rgba(25, 35, 65, 0.98)) !important;
+}
+
+body.pro-ui .contact-section {
+  position: relative;
+  overflow: hidden;
+}
+
+body.pro-ui .contact-section::before {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  right: -90px;
+  top: -90px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(248, 184, 0, 0.18), transparent 68%);
+  pointer-events: none;
+}
+
+body.pro-ui .site-footer {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.92)),
+    var(--pro-surface) !important;
+}
+
+body.dark-mode.pro-ui .site-footer {
+  background:
+    linear-gradient(135deg, rgba(15, 27, 47, 0.96), rgba(9, 20, 38, 0.92)),
+    #0f1b2f !important;
+}
+
+body.pro-ui .floating-btn {
+  backdrop-filter: blur(12px);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+body.pro-ui .floating-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  filter: saturate(1.08);
+}
+
+@media (max-width: 768px) {
+  body.pro-ui .top-strip {
+    display: none !important;
+  }
+
+  body.pro-ui .topbar,
+  body.pro-ui header.topbar,
+  body.pro-ui .brand-bar {
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.1) !important;
+  }
+
+  body.pro-ui .hero-slide::after {
+    background:
+      linear-gradient(180deg, rgba(15, 23, 42, 0.18) 0%, rgba(15, 23, 42, 0.72) 48%, rgba(15, 23, 42, 0.94) 100%),
+      radial-gradient(circle at 20% 30%, rgba(248, 184, 0, 0.18), transparent 34%);
+  }
+
+  body.pro-ui .hero-badge {
+    font-size: 11px !important;
+    padding: 7px 10px !important;
+  }
+
+  body.pro-ui .showcase-card,
+  body.pro-ui .showcase-card.is-primary,
+  body.pro-ui #showcaseTrack > .showcase-card {
+    max-width: 330px !important;
+  }
+
+  body.pro-ui #postForm,
+  body.pro-ui .contact-form,
+  body.pro-ui .payment-box-pro {
+    padding: 14px !important;
+    border-radius: 20px !important;
+  }
+
+  body.pro-ui .pro-card-actions button,
+  body.pro-ui .showcase-heart,
+  body.pro-ui .favorite-btn,
+  body.pro-ui .share-btn {
+    background: rgba(255, 255, 255, 0.84) !important;
+  }
+
+  body.dark-mode.pro-ui .pro-card-actions button,
+  body.dark-mode.pro-ui .showcase-heart,
+  body.dark-mode.pro-ui .favorite-btn,
+  body.dark-mode.pro-ui .share-btn {
+    background: rgba(15, 27, 47, 0.86) !important;
+    color: #f8fbff !important;
+    border-color: rgba(148, 163, 184, 0.34) !important;
+  }
+
+  body.pro-ui :is(.summary-card, .market-card, .stat-box, .plan-card, .pro-listing-card, .showcase-card):hover {
+    transform: none;
+  }
+}
