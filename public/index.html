@@ -8,9 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap&subset=vietnamese" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=detail-polish-20260423" />
-  <link rel="stylesheet" href="theme.css?v=detail-polish-20260423" />
-  <link rel="stylesheet" href="pro-ui.css?v=detail-polish-20260423" />
+  <link rel="stylesheet" href="style.css?v=auto-image-upload-20260423" />
+  <link rel="stylesheet" href="theme.css?v=auto-image-upload-20260423" />
+  <link rel="stylesheet" href="pro-ui.css?v=auto-image-upload-20260423" />
   <style>
     html[data-theme="dark"] #postForm input,
     html[data-theme="dark"] #postForm select,
@@ -585,11 +585,11 @@
               </div>
             </div>
             <input id="postImage" type="hidden" />
-            <div class="full-col">
-              <label>Hoặc chọn ảnh từ máy</label>
-              <div class="upload-row">
+            <div class="full-col auto-upload-field">
+              <label>Chọn ảnh tin đăng</label>
+              <div class="upload-row auto-upload-row">
                 <input id="postImageFile" type="file" accept="image/*" />
-                <button type="button" class="btn btn-light" onclick="uploadPostImage()">Upload ảnh</button>
+                <span class="auto-upload-copy">Chọn ảnh là hệ thống tự tải lên và cập nhật xem trước.</span>
               </div>
               <small id="uploadStatus" class="muted-text"></small>
             </div>

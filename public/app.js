@@ -976,9 +976,9 @@ function forceVietnameseUiLabels(root = document){
   setText("#walletSection h2", "Nạp tiền và giao dịch ví");
   setText("#postSection .tiny-title", "Đăng bài");
   setText("#postSection h2", "Tạo hoặc cập nhật tin bất động sản");
-  setText("#postSection .soft-badge", "Có upload ảnh từ máy");
+  setText("#postSection .soft-badge", "Chọn ảnh là tải lên tự động");
 
-  const postLabels = ["Tiêu đề", "Loại hình", "Giá / mức lương", "Diện tích (m²)", "Số phòng ngủ / kinh nghiệm", "Hướng nhà", "Pháp lý", "Khu vực", "Mô tả", "Hoặc chọn ảnh từ máy", "Ghim tin nổi bật"];
+  const postLabels = ["Tiêu đề", "Loại hình", "Giá / mức lương", "Diện tích (m²)", "Số phòng ngủ / kinh nghiệm", "Hướng nhà", "Pháp lý", "Khu vực", "Mô tả", "Chọn ảnh tin đăng", "Ghim tin nổi bật"];
   scope.querySelectorAll("#postForm label").forEach((node, index) => {
     if (postLabels[index]) node.textContent = postLabels[index];
   });
@@ -991,7 +991,7 @@ function forceVietnameseUiLabels(root = document){
   setText(".ai-support-copy", "Nhập vài ý chính rồi bấm “AI hỗ trợ viết tin”. AI sẽ giúp tin rõ hơn, dễ đọc hơn và hợp với nhà đất hoặc việc làm.");
   setText(".form-actions .btn.btn-primary", "Đăng tin ngay");
   setText(".form-actions .btn.btn-light", "Làm mới");
-  setText(".btn.btn-light[onclick='uploadPostImage()']", "Upload ảnh");
+  setText(".auto-upload-copy", "Chọn ảnh là hệ thống tự tải lên và cập nhật xem trước.");
 
   setText("#contactSection .tiny-title", "Liên hệ tư vấn mua bán");
   setText("#contactSection .contact-copy h2", "Tư vấn mua đất, chọn nhà rõ ràng hơn để xuống tiền đúng khu vực và đúng nhu cầu.");
@@ -1719,15 +1719,28 @@ async function uploadPostImage(){
     if (!postImageFile.files[0]) return showToast("Chọn ảnh trước đã.");
     const fd = new FormData();
     fd.append("image", postImageFile.files[0]);
-    uploadStatus.textContent = "Đang upload...";
+    uploadStatus.textContent = "Đang tải ảnh lên...";
     const res = await fetch("/api/upload", { method:"POST", body: fd });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || "Upload thất bại.");
     postImage.value = data.url;
-    uploadStatus.textContent = "Upload thành công: " + data.url;
+    uploadStatus.textContent = "Đã tải ảnh lên và cập nhật xem trước.";
     window.updatePostPreview?.();
   }catch(err){ uploadStatus.textContent = err.message; }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const imageFileInput = document.getElementById("postImageFile");
+  if (!imageFileInput || imageFileInput.dataset.autoUploadBound === "1") return;
+  imageFileInput.dataset.autoUploadBound = "1";
+  imageFileInput.addEventListener("change", () => {
+    if (!imageFileInput.files || !imageFileInput.files[0]) {
+      if (typeof uploadStatus !== "undefined" && uploadStatus) uploadStatus.textContent = "";
+      return;
+    }
+    uploadPostImage();
+  });
+});
 
 async function deletePost(id){
   if (!confirm("Bạn chắc chắn muốn xóa bài này?")) return;
