@@ -21,6 +21,10 @@
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .trim();
+  const fixText = (value) =>
+    typeof window.maybeFixVietnameseMojibake === "function"
+      ? window.maybeFixVietnameseMojibake(String(value ?? ""))
+      : String(value ?? "");
 
   const fetchJSONPro = async (url, options) => {
     if (typeof window.fetchJSON === "function") return window.fetchJSON(url, options);
@@ -193,11 +197,11 @@
   };
 
   const renderCard = (post) => {
-    const title = escapeHtml(post.title || "Tin bất động sản đang cập nhật");
-    const location = escapeHtml(post.location || "TP.HCM");
-    const category = escapeHtml(post.category || "Tin đăng");
-    const seller = escapeHtml(post.seller_name || post.user_name || "Người đăng tin");
-    const description = escapeHtml(post.description || "Tin đăng đang được người bán cập nhật thêm thông tin chi tiết.");
+    const title = escapeHtml(fixText(post.title || "Tin bất động sản đang cập nhật"));
+    const location = escapeHtml(fixText(post.location || "TP.HCM"));
+    const category = escapeHtml(fixText(post.category || "Tin đăng"));
+    const seller = escapeHtml(fixText(post.seller_name || post.user_name || post.full_name || "Người đăng tin"));
+    const description = escapeHtml(fixText(post.description || "Tin đăng đang được người bán cập nhật thêm thông tin chi tiết."));
     const isFeatured = Number(post.featured || post.is_featured || 0) > 0;
     const views = Number(post.views || 0);
     const phone = post.phone || post.seller_phone || "";
@@ -221,8 +225,8 @@
           <div class="pro-meta-grid">
             <span class="pro-meta">📍 ${location}</span>
             <span class="pro-meta">🏷 ${category}</span>
-            ${post.area ? `<span class="pro-meta">📐 ${escapeHtml(post.area)} m²</span>` : ""}
-            ${post.bedrooms ? `<span class="pro-meta">🛏 ${escapeHtml(post.bedrooms)} PN</span>` : ""}
+            ${post.area ? `<span class="pro-meta">📐 ${escapeHtml(fixText(post.area))} m²</span>` : ""}
+            ${post.bedrooms ? `<span class="pro-meta">🛏 ${escapeHtml(fixText(post.bedrooms))} PN</span>` : ""}
             ${views ? `<span class="pro-meta">👁 ${views} lượt xem</span>` : ""}
           </div>
           <p class="pro-desc">${description}</p>
@@ -284,9 +288,9 @@
     window.openModal?.("detailModal");
     try {
       const post = await fetchJSONPro(`/api/posts/${id}`);
-      const title = escapeHtml(post.title || "Tin đăng bất động sản");
-      const location = escapeHtml(post.location || "TP.HCM");
-      const seller = escapeHtml(post.seller_name || post.user_name || "Người đăng tin");
+      const title = escapeHtml(fixText(post.title || "Tin đăng bất động sản"));
+      const location = escapeHtml(fixText(post.location || "TP.HCM"));
+      const seller = escapeHtml(fixText(post.seller_name || post.user_name || post.full_name || "Người đăng tin"));
       const phone = escapeHtml(post.phone || post.seller_phone || "0908 777 102");
       const related = (window.__lastProPosts || [])
         .filter((item) => Number(item.id) !== Number(id))
@@ -299,7 +303,7 @@
             </div>
             <section class="pro-detail-main">
               <div class="pro-badge-row" style="position:static;margin-bottom:10px">
-                <span class="pro-badge gold">${escapeHtml(post.category || "Tin đăng")}</span>
+                <span class="pro-badge gold">${escapeHtml(fixText(post.category || "Tin đăng"))}</span>
                 <span class="pro-badge">Mã tin #${Number(post.id)}</span>
                 <span class="pro-badge">Đã xác minh khu vực</span>
               </div>
@@ -307,15 +311,15 @@
               <div class="pro-detail-price">${money(post.price)}</div>
               <div class="pro-detail-info">
                 <div class="pro-info-item"><span>Khu vực</span><b>${location}</b></div>
-                <div class="pro-info-item"><span>Diện tích</span><b>${escapeHtml(post.area || "Đang cập nhật")} m²</b></div>
-                <div class="pro-info-item"><span>Phòng ngủ</span><b>${escapeHtml(post.bedrooms || "Đang cập nhật")}</b></div>
-                <div class="pro-info-item"><span>Pháp lý</span><b>${escapeHtml(post.legal || "Trao đổi khi liên hệ")}</b></div>
-                <div class="pro-info-item"><span>Hướng</span><b>${escapeHtml(post.direction || "Không yêu cầu")}</b></div>
+                <div class="pro-info-item"><span>Diện tích</span><b>${escapeHtml(fixText(post.area || "Đang cập nhật"))} m²</b></div>
+                <div class="pro-info-item"><span>Phòng ngủ</span><b>${escapeHtml(fixText(post.bedrooms || "Đang cập nhật"))}</b></div>
+                <div class="pro-info-item"><span>Pháp lý</span><b>${escapeHtml(fixText(post.legal || post.legal_status || "Trao đổi khi liên hệ"))}</b></div>
+                <div class="pro-info-item"><span>Hướng</span><b>${escapeHtml(fixText(post.direction || post.house_direction || "Không yêu cầu"))}</b></div>
                 <div class="pro-info-item"><span>Ngày đăng</span><b>${formatTime(post.created_at)}</b></div>
               </div>
               <h3>Mô tả chi tiết</h3>
               <p style="white-space:pre-line;line-height:1.8;color:var(--pro-muted);font-weight:650">${escapeHtml(
-                post.description || "Người đăng đang cập nhật mô tả. Bấm liên hệ để nhận thông tin nhanh hơn.",
+                fixText(post.description || "Người đăng đang cập nhật mô tả. Bấm liên hệ để nhận thông tin nhanh hơn."),
               )}</p>
             </section>
             ${
@@ -323,7 +327,7 @@
                 ? `<section class="pro-detail-main"><h3>Tin tương tự trong khu vực</h3><div class="pro-meta-grid">${related
                     .map(
                       (item) =>
-                        `<button class="pro-meta" type="button" onclick="viewDetail(${Number(item.id)})">${escapeHtml(item.title || "Tin đăng")} · ${money(item.price)}</button>`,
+                        `<button class="pro-meta" type="button" onclick="viewDetail(${Number(item.id)})">${escapeHtml(fixText(item.title || "Tin đăng"))} · ${money(item.price)}</button>`,
                     )
                     .join("")}</div></section>`
                 : ""

@@ -54,17 +54,75 @@ app.use(session({
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(uploadDir));
 
+function vietnameseDamageScore(value = "") {
+  const text = String(value || "");
+  let score = 0;
+  score += (text.match(/Ã|Â|Ä|Å|Æ|áº|á»|â€|â€“|â€”|â€¦|ðŸ|�/g) || []).length * 5;
+  score += (text.match(/\b(?:Lđ|Nhđ|trđt|đp|đng|đt|c ng|c n|Hid|Nguyđ|thuc|c\.n|n\.i|th\.t)\b/gi) || []).length * 4;
+  score += (text.match(/\b(?:vương vức|thồn|thồnh|pht hin|gợi . VIP|gia h.n)\b/gi) || []).length * 4;
+  return score;
+}
+
+function cleanupVietnameseText(value = "") {
+  return String(value || "")
+    .replace(/Cho thuc c\.n h\. mini full n\.i th\.t Nguy\.n Oanh, G\. V\.p/gi, "Cho thuê căn hộ mini full nội thất Nguyễn Oanh, Gò Vấp")
+    .replace(/B\.n d\.t th\. c\. g\.n Metro Hi\.p Th\.nh, Qu\.n 12/gi, "Bán đất thổ cư gần Metro Hiệp Thành, Quận 12")
+    .replace(/Qu\.n ?12 ?- ?Hi\.p Th\.nh/gi, "Quận 12 - Hiệp Thành")
+    .replace(/G\. V\.p ?- ?Ph\.\.ng ?17/gi, "Gò Vấp - Phường 17")
+    .replace(/\bLđ\b/gi, "Lô")
+    .replace(/\bLô t đt ở đẹp vuông vức\b/gi, "Lô đất ở đẹp vuông vức")
+    .replace(/\bLô t đất ở đẹp vuông vức\b/gi, "Lô đất ở đẹp vuông vức")
+    .replace(/\bNhđ\b/gi, "Nhà")
+    .replace(/trđt/gi, "trệt")
+    .replace(/vương vức/gi, "vuông vức")
+    .replace(/\bc ng ty c n tuyển\b/gi, "Công ty cần tuyển")
+    .replace(/\bc ng ty\b/gi, "Công ty")
+    .replace(/\bc n tuyển\b/gi, "cần tuyển")
+    .replace(/\bđp\b/gi, "đẹp")
+    .replace(/Bđn/gi, "Bán")
+    .replace(/nhđ/gi, "nhà")
+    .replace(/hdm/gi, "hẻm")
+    .replace(/dđng/gi, "đường")
+    .replace(/dđt/gi, "đất")
+    .replace(/thđ/gi, "thổ")
+    .replace(/cđ/gi, "cư")
+    .replace(/mđt/gi, "mặt")
+    .replace(/tiđn/gi, "tiền")
+    .replace(/gđn/gi, "gần")
+    .replace(/Phđng/gi, "Phường")
+    .replace(/Quđn/gi, "Quận")
+    .replace(/Thđnh/gi, "Thạnh")
+    .replace(/Hiđp/gi, "Hiệp")
+    .replace(/Gđ Vđp/gi, "Gò Vấp")
+    .replace(/thuc/gi, "thuê")
+    .replace(/c\.n/gi, "căn")
+    .replace(/hđ/gi, "hộ")
+    .replace(/n\.i/gi, "nội")
+    .replace(/th\.t/gi, "thất")
+    .replace(/Nguy\.n/gi, "Nguyễn")
+    .replace(/V\.p/gi, "Vấp")
+    .replace(/Lđ c/gi, "Lộc")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function maybeRepairMojibake(value) {
   if (typeof value !== "string" || !value) return value;
-  const suspicious = /Ã|Ä|Â|Æ|á»|áº|â†|ðŸ|�/.test(value);
+  const suspicious = /Ã|Â|Ä|Å|Æ|áº|á»|â€|â€“|â€”|â€¦|ðŸ|�|\bLđ\b|\bNhđ\b|trđt|\bc ng\b|\bc n\b|vương vức|Hid|Nguyđ|thuc|c\.n|n\.i|th\.t/i.test(value);
   if (!suspicious) return value;
+
+  const candidates = [cleanupVietnameseText(value)];
   try {
     const repaired = Buffer.from(value, "latin1").toString("utf8");
-    if (!repaired || repaired.includes("\u0000")) return value;
-    return repaired;
-  } catch {
-    return value;
-  }
+    if (repaired && !repaired.includes("\u0000")) candidates.push(cleanupVietnameseText(repaired));
+  } catch {}
+
+  const originalScore = vietnameseDamageScore(value);
+  const best = candidates.reduce((winner, current) => (
+    vietnameseDamageScore(current) < vietnameseDamageScore(winner) ? current : winner
+  ), candidates[0]);
+
+  return vietnameseDamageScore(best) <= originalScore ? best : value;
 }
 
 function sanitizeJsonPayload(value) {
@@ -79,7 +137,7 @@ function sanitizeJsonPayload(value) {
 }
 
 function hasBrokenVietnamese(value = "") {
-  return typeof value === "string" && /[�ÃÂÄ\?]/.test(value);
+  return typeof value === "string" && vietnameseDamageScore(value) > 0;
 }
 
 function normalizeSettingText(key, value) {
@@ -108,36 +166,7 @@ function normalizeSettingsRow(row) {
 
 function normalizePostText(value = "") {
   const cleaned = maybeRepairMojibake(value || "");
-  return String(cleaned)
-    .replace(/Cho thuc c.n h. mini full n.i th.t Nguy.n Oanh, G. V.p/gi, "Cho thuê căn hộ mini full nội thất Nguyễn Oanh, Gò Vấp")
-    .replace(/B.n d.t th. c. g.n Metro Hi.p Th.nh, Qu.n 12/gi, "Bán đất thổ cư gần Metro Hiệp Thành, Quận 12")
-    .replace(/Qu.n ?12 ?- ?Hi.p Th.nh/gi, "Quận 12 - Hiệp Thành")
-    .replace(/G. V.p ?- ?Ph..ng ?17/gi, "Gò Vấp - Phường 17")
-    .replace(/Bđn/gi, "Bán")
-    .replace(/nhđ/gi, "nhà")
-    .replace(/hdm/gi, "hẻm")
-    .replace(/dđng/gi, "đường")
-    .replace(/dđt/gi, "đất")
-    .replace(/thđ/gi, "thổ")
-    .replace(/cđ/gi, "cư")
-    .replace(/mđt/gi, "mặt")
-    .replace(/tiđn/gi, "tiền")
-    .replace(/gđn/gi, "gần")
-    .replace(/Phđng/gi, "Phường")
-    .replace(/Quđn/gi, "Quận")
-    .replace(/Thđnh/gi, "Thạnh")
-    .replace(/Hiđp/gi, "Hiệp")
-    .replace(/Gđ Vđp/gi, "Gò Vấp")
-    .replace(/thuc/gi, "thuê")
-    .replace(/c.n/gi, "căn")
-    .replace(/hđ/gi, "hộ")
-    .replace(/n.i/gi, "nội")
-    .replace(/th.t/gi, "thất")
-    .replace(/Nguy.n/gi, "Nguyễn")
-    .replace(/V.p/gi, "Vấp")
-    .replace(/Lđ c/gi, "Lộc")
-    .replace(/\s+/g, " ")
-    .trim();
+  return cleanupVietnameseText(cleaned);
 }
 
 const DEMO_POST_FALLBACKS = {
@@ -192,7 +221,7 @@ const DEMO_POST_FALLBACKS = {
 };
 
 function hasBrokenPostText(value = "") {
-  return /�|đn|đt|đng|thồn|thồnh|Lđ|Nguyđ|Hid|Hid?p|hđ|cđ|thuc|c.n|n.i|th.t/i.test(String(value || ""));
+  return /�|Ã|Â|Ä|Æ|áº|á»|đn|đt|đng|thồn|thồnh|Lđ|Nhđ|trđt|đp|vương vức|c ng|c n tuyển|Nguyđ|Hid|Hid?p|hđ|cđ|thuc|c\.n|n\.i|th\.t/i.test(String(value || ""));
 }
 
 function normalizePostRow(row) {
@@ -274,7 +303,7 @@ app.use((req, res, next) => {
   next();
 });
 
-async function repairTableText(tableName, idColumn, textColumns) {
+async function repairTableText(tableName, idColumn, textColumns, normalizer = maybeRepairMojibake) {
   const rows = await all(
     `SELECT ${[idColumn, ...textColumns].join(", ")} FROM ${tableName}`
   );
@@ -285,7 +314,7 @@ async function repairTableText(tableName, idColumn, textColumns) {
 
     for (const col of textColumns) {
       const current = row[col];
-      const repaired = maybeRepairMojibake(current);
+      const repaired = typeof current === "string" ? normalizer(current) : current;
       if (typeof current === "string" && repaired !== current) {
         updates.push(`${col} = ?`);
         params.push(repaired);
@@ -309,8 +338,8 @@ async function repairDatabaseText() {
     "announcement"
   ]);
 
-  await repairTableText("packages", "id", ["name", "featured_badge", "description"]);
-  await repairTableText("pricing_plans", "id", ["category", "name", "feature_type"]);
+  await repairTableText("packages", "id", ["name", "featured_badge", "description"], normalizePostText);
+  await repairTableText("pricing_plans", "id", ["category", "name", "feature_type"], normalizePostText);
   await repairTableText("posts", "id", [
     "title",
     "category",
@@ -319,9 +348,9 @@ async function repairDatabaseText() {
     "house_direction",
     "legal_status",
     "status"
-  ]);
-  await repairTableText("ai_reports", "id", ["report_type", "title", "body"]);
-  await repairTableText("ai_actions", "id", ["action_type", "action_status", "note"]);
+  ], normalizePostText);
+  await repairTableText("ai_reports", "id", ["report_type", "title", "body"], normalizeAdminAiText);
+  await repairTableText("ai_actions", "id", ["action_type", "action_status", "note"], normalizeAdminAiText);
 }
 
 function run(sql, params = []) {
@@ -992,7 +1021,7 @@ app.put("/api/profile", requireLogin, async (req, res) => {
 });
 
 app.get("/api/packages", async (req, res) => {
-  res.json(await all(`SELECT * FROM packages WHERE is_active = 1 ORDER BY price ASC`));
+  res.json(sanitizeJsonPayload(await all(`SELECT * FROM packages WHERE is_active = 1 ORDER BY price ASC`)));
 });
 
 app.get("/api/posts", async (req, res) => {
@@ -1295,7 +1324,7 @@ app.post("/api/chat/:conversationId/messages", requireLogin, async (req, res) =>
 
 app.get("/api/pricing-plans", async (req, res) => {
   const rows = await all(`SELECT * FROM pricing_plans WHERE is_active = 1 ORDER BY category, price ASC`);
-  res.json(rows);
+  res.json(sanitizeJsonPayload(rows));
 });
 
 app.post("/api/wallet/topup", requireLogin, async (req, res) => {

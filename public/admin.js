@@ -16,13 +16,15 @@ const ADMIN_TEXT_FIXUPS = [
 
 function decodeMojibake(value) {
   if (typeof value !== "string") return value;
-  let text = value;
-  try {
-    if (/[ÃÂÄ]/.test(text)) {
-      text = decodeURIComponent(escape(text));
-    }
-  } catch {}
-  return text
+  const score = (text) => {
+    const source = String(text || "");
+    let total = 0;
+    total += (source.match(/(�|Ã|Â|Ä|Æ|áº|á»|â€|â€“|â€”|â€¦)/g) || []).length * 5;
+    total += (source.match(/\b(Lđ|Nhđ|trđt|đp|c ng|c n|thuc|c\.n|n\.i|th\.t|gia h\.n)\b/gi) || []).length * 4;
+    return total;
+  };
+  if (!/(Ã|Â|Ä|Æ|áº|á»|â€|â€“|â€”|â€¦|�|\bLđ\b|\bNhđ\b|trđt|\bc ng\b|\bc n\b|thuc|c\.n|n\.i|th\.t|gia h\.n)/i.test(value)) return value.trim();
+  const clean = (text) => text
     .replace(/Ä‘/g, "đ")
     .replace(/Ä/g, "Đ")
     .replace(/Ã¡/g, "á")
@@ -34,6 +36,13 @@ function decodeMojibake(value) {
     .replace(/Æ°/g, "ư")
     .replace(/â†’/g, "→")
     .trim();
+  const candidates = [clean(value)];
+  try {
+    const bytes = Uint8Array.from(Array.from(value).map((char) => char.charCodeAt(0) & 255));
+    candidates.push(clean(new TextDecoder("utf-8").decode(bytes)));
+  } catch {}
+  const best = candidates.reduce((winner, item) => (score(item) < score(winner) ? item : winner), candidates[0]);
+  return score(best) <= score(value) ? best : value.trim();
 }
 
 function normalizeAdminText(value) {
@@ -84,6 +93,15 @@ function normalizeAdminText(value) {
     .replace(/Th.nh L.c/gi, "Thạnh Lộc")
     .replace(/Hi.p Th.nh/gi, "Hiệp Thành")
     .replace(/Ph..ng/gi, "Phường")
+    .replace(/\bLđ\b/gi, "Lô")
+    .replace(/\bLô t đt ở đp vương vức\b/gi, "Lô đất ở đẹp vuông vức")
+    .replace(/\bNhđ\b/gi, "Nhà")
+    .replace(/trđt/gi, "trệt")
+    .replace(/vương vức/gi, "vuông vức")
+    .replace(/\bc ng ty c n tuyển\b/gi, "Công ty cần tuyển")
+    .replace(/\bc ng ty\b/gi, "Công ty")
+    .replace(/\bc n tuyển\b/gi, "cần tuyển")
+    .replace(/\bđp\b/gi, "đẹp")
     .replace(/N.i dung/gi, "Nội dung")
     .replace(/Th.i gian/gi, "Thời gian")
     .replace(/Tr.ng th.i/gi, "Trạng thái")

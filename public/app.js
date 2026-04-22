@@ -284,7 +284,15 @@ function showToast(msg, type="success"){
 
 function maybeFixVietnameseMojibake(value){
   if (typeof value !== "string") return value;
-  if (!/[ÃÂÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßá»��?]/.test(value)) return value;
+  const damageScore = (text) => {
+    const source = String(text || "");
+    let score = 0;
+    score += (source.match(/(�|Ã|Â|Ä|Å|Æ|áº|á»|â€|â€“|â€”|â€¦|ðŸ)/g) || []).length * 5;
+    score += (source.match(/\b(Lđ|Nhđ|trđt|đp|đng|đt|c ng|c n|Hid|Nguyđ|thuc|c\.n|n\.i|th\.t)\b/gi) || []).length * 4;
+    score += (source.match(/\b(vương vức|thồn|thồnh|pht hin|gia h\.n)\b/gi) || []).length * 4;
+    return score;
+  };
+  if (!/(Ã|Â|Ä|Å|Æ|Ç|È|É|Ê|Ë|Ì|Í|Î|Ï|Ð|Ñ|Ò|Ó|Ô|Õ|Ö|Ø|Ù|Ú|Û|Ü|Ý|Þ|ß|áº|á»|â€|â€“|â€”|â€¦|ðŸ|�|\bLđ\b|\bNhđ\b|trđt|\bc ng\b|\bc n\b|vương vức|Hid|Nguyđ|thuc|c\.n|n\.i|th\.t)/i.test(value)) return value;
   const directReplace = (input) => input
     .replace(/Ä‘/g, "đ")
     .replace(/Ä/g, "Đ")
@@ -388,24 +396,54 @@ function maybeFixVietnameseMojibake(value){
     .replace(/â€œ/g, '"')
     .replace(/â€�/g, '"')
     .replace(/â€/g, '"')
-    .replace(/�/g, "đ");
+    .replace(/�/g, "");
 
-  const candidates = [directReplace(value)];
+  const phraseCleanup = (input) => directReplace(input)
+    .replace(/\bB\?n nh\b/gi, "Bán nhà")
+    .replace(/\bB\?n đ\?t\b/gi, "Bán đất")
+    .replace(/\bNh\? b\?n\b/gi, "Nhà bán")
+    .replace(/\bĐ\?t n\?n\b/gi, "Đất nền")
+    .replace(/\bCho thu\b/gi, "Cho thuê")
+    .replace(/\bM\?t b\?ng\b/gi, "Mặt bằng")
+    .replace(/\bG\.?\s*V\.?p\b/gi, "Gò Vấp")
+    .replace(/\bQu\.?n\s*12\b/gi, "Quận 12")
+    .replace(/\bPh\?ng\b/gi, "Phường")
+    .replace(/\bT\?y\b/g, "Tây")
+    .replace(/\bT\?y Nam\b/g, "Tây Nam")
+    .replace(/\bT\?y Bắc\b/g, "Tây Bắc")
+    .replace(/\bng\?n s\?ch\b/gi, "ngân sách")
+    .replace(/\bthao t\?c\b/gi, "thao tác")
+    .replace(/\bs\?u\b/gi, "sâu")
+    .replace(/\bđ\?y\b/gi, "đây")
+    .replace(/\bđ\?ã\b/gi, "đã")
+    .replace(/\bđãã\b/gi, "đã")
+    .replace(/\bLđ\b/gi, "Lô")
+    .replace(/\bLô t đt ở đp vương vức\b/gi, "Lô đất ở đẹp vuông vức")
+    .replace(/\bLô t đất ở đẹp vuông vức\b/gi, "Lô đất ở đẹp vuông vức")
+    .replace(/\bNhđ\b/gi, "Nhà")
+    .replace(/trđt/gi, "trệt")
+    .replace(/vương vức/gi, "vuông vức")
+    .replace(/\bc ng ty c n tuyển\b/gi, "Công ty cần tuyển")
+    .replace(/\bc ng ty\b/gi, "Công ty")
+    .replace(/\bc n tuyển\b/gi, "cần tuyển")
+    .replace(/\bđp\b/gi, "đẹp")
+    .replace(/\s{2,}/g, " ");
 
-  try {
-    candidates.push(directReplace(decodeURIComponent(escape(value))));
-  } catch {}
+  const candidates = [phraseCleanup(value)];
 
   try {
     const bytes = Uint8Array.from(Array.from(value).map((char) => char.charCodeAt(0) & 255));
-    candidates.push(directReplace(new TextDecoder("utf-8").decode(bytes)));
+    candidates.push(phraseCleanup(new TextDecoder("utf-8").decode(bytes)));
   } catch {}
 
-  return candidates.reduce((best, current) => {
-    const score = (text) => (text.match(/[�?ÃÂÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß]/g) || []).length;
-    return score(current) < score(best) ? current : best;
-  }, candidates[0]);
+  const best = candidates.reduce((winner, current) => (
+    damageScore(current) < damageScore(winner) ? current : winner
+  ), candidates[0]);
+
+  return damageScore(best) <= damageScore(value) ? best : value;
 }
+
+window.maybeFixVietnameseMojibake = maybeFixVietnameseMojibake;
 
 const FRONTEND_TEXT_FALLBACKS = {
   site_name: "Việc Làm Nhà Đất",
@@ -528,7 +566,38 @@ function repairMojibakeInDom(root = document){
   });
 }
 
+function repairVietnameseLocalStorage(){
+  if (!window.localStorage) return;
+
+  const normalizeStoredValue = (value) => {
+    if (typeof value === "string") return maybeFixVietnameseMojibake(value);
+    if (Array.isArray(value)) return value.map(normalizeStoredValue);
+    if (value && typeof value === "object") {
+      return Object.fromEntries(
+        Object.entries(value).map(([key, item]) => [key, normalizeStoredValue(item)])
+      );
+    }
+    return value;
+  };
+
+  Object.keys(localStorage).forEach((key) => {
+    const raw = localStorage.getItem(key);
+    if (!raw || !/(Ã|Â|Ä|Å|Æ|áº|á»|â€|ðŸ|�|\bLđ\b|\bNhđ\b|trđt|\bc ng\b|\bc n\b|vương vức)/i.test(raw)) return;
+
+    try {
+      const parsed = JSON.parse(raw);
+      const fixed = JSON.stringify(normalizeStoredValue(parsed));
+      if (fixed !== raw) localStorage.setItem(key, fixed);
+      return;
+    } catch {}
+
+    const fixed = maybeFixVietnameseMojibake(raw);
+    if (fixed !== raw) localStorage.setItem(key, fixed);
+  });
+}
+
 function initVietnameseTextRepair(){
+  repairVietnameseLocalStorage();
   repairMojibakeInDom(document);
   forceVietnameseUiLabels(document);
 
@@ -714,6 +783,10 @@ function forceVietnameseUiLabels(root = document){
   setText(".content .section-header-block .tiny-title", "Tin bất động sản");
   setText(".content .section-header-block h2", "Tin đăng mới nhất khu vực TP.HCM");
   setText(".content .section-header-block .soft-badge", "Ưu tiên hiển thị tin nổi bật");
+  const featuredChips = ["NHÀ BÁN", "ĐẤT NỀN", "CHO THUÊ", "MẶT BẰNG"];
+  scope.querySelectorAll(".featured-chip").forEach((node, index) => {
+    if (featuredChips[index]) node.textContent = featuredChips[index];
+  });
 
   setText("#packagesSection .tiny-title", "Bảng giá đăng tin");
   setText("#packagesSection h2", "Gói hiển thị dành cho môi giới, chủ tin và đội bán hàng nhà đất");
