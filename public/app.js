@@ -11,7 +11,66 @@ let lastAnnouncementPopupText = "";
 let announcementPopupBooted = false;
 let currentAnnouncementMessage = "";
 
+function installDarkModeContrastPatch(){
+  if (document.getElementById("runtimeDarkModeContrastPatch")) return;
+  const style = document.createElement("style");
+  style.id = "runtimeDarkModeContrastPatch";
+  style.textContent = `
+    html[data-theme="dark"] #postForm input,
+    html[data-theme="dark"] #postForm select,
+    html[data-theme="dark"] #postForm textarea,
+    body.dark-mode #postForm input,
+    body.dark-mode #postForm select,
+    body.dark-mode #postForm textarea{
+      background:#1b2942!important;
+      background-color:#1b2942!important;
+      background-image:linear-gradient(180deg,#1f2f4b,#17243b)!important;
+      border:1px solid #526987!important;
+      color:#f8fbff!important;
+      -webkit-text-fill-color:#f8fbff!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 10px 22px rgba(0,0,0,.18)!important;
+      opacity:1!important;
+    }
+    html[data-theme="dark"] #postForm input::placeholder,
+    html[data-theme="dark"] #postForm textarea::placeholder,
+    body.dark-mode #postForm input::placeholder,
+    body.dark-mode #postForm textarea::placeholder{
+      color:#b6c4d8!important;
+      -webkit-text-fill-color:#b6c4d8!important;
+      opacity:1!important;
+    }
+    html[data-theme="dark"] #postForm input:-webkit-autofill,
+    html[data-theme="dark"] #postForm textarea:-webkit-autofill,
+    html[data-theme="dark"] #postForm select:-webkit-autofill,
+    body.dark-mode #postForm input:-webkit-autofill,
+    body.dark-mode #postForm textarea:-webkit-autofill,
+    body.dark-mode #postForm select:-webkit-autofill{
+      -webkit-box-shadow:0 0 0 1000px #1b2942 inset!important;
+      -webkit-text-fill-color:#f8fbff!important;
+      caret-color:#fbbf24!important;
+    }
+    html[data-theme="dark"] :is(.showcase-panel,#marketSection) :is(.filter-pill,.tab-btn,.category-tab,.showcase-tab,.quick-locations button),
+    body.dark-mode :is(.showcase-panel,#marketSection) :is(.filter-pill,.tab-btn,.category-tab,.showcase-tab,.quick-locations button){
+      background:#1c2940!important;
+      background-image:none!important;
+      border:1px solid #415674!important;
+      color:#eaf1ff!important;
+      -webkit-text-fill-color:#eaf1ff!important;
+      box-shadow:none!important;
+    }
+    html[data-theme="dark"] :is(.showcase-panel,#marketSection) :is(.filter-pill.active,.tab-btn.active,.category-tab.active,.showcase-tab.active,.quick-locations button.active),
+    body.dark-mode :is(.showcase-panel,#marketSection) :is(.filter-pill.active,.tab-btn.active,.category-tab.active,.showcase-tab.active,.quick-locations button.active){
+      background:#fbbf24!important;
+      border-color:#fbbf24!important;
+      color:#172033!important;
+      -webkit-text-fill-color:#172033!important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function setSiteTheme(theme){
+  installDarkModeContrastPatch();
   const mode = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = mode;
   document.body?.classList.toggle("dark-mode", mode === "dark");
