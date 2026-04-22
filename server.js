@@ -33,10 +33,10 @@ const upload = multer({
 });
 
 const ADMIN_DEFAULTS = {
-  full_name: "Tuan Po",
-  username: "tuanpo",
-  password: "tuanbo222@",
-  email: "tuanpo@gmail.com",
+  full_name: "Admin",
+  username: "admin",
+  password: "321123",
+  email: "admin@gmail.com",
   phone: "0900000000",
   address: "TP.HCM",
   bio: "Tài khoản quản trị hệ thống.",

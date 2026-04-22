@@ -850,7 +850,7 @@ function forceVietnameseUiLabels(root = document){
   setText("#postSection h2", "Tạo hoặc cập nhật tin bất động sản");
   setText("#postSection .soft-badge", "Có upload ảnh từ máy");
 
-  const postLabels = ["Tiêu đề", "Loại hình", "Giá / mức lương", "Diện tích (m²)", "Số phòng ngủ / kinh nghiệm", "Hướng nhà", "Pháp lý", "Khu vực", "Mô tả", "Link ảnh hoặc ảnh đã upload", "Hoặc chọn ảnh từ máy", "Ghim tin nổi bật"];
+  const postLabels = ["Tiêu đề", "Loại hình", "Giá / mức lương", "Diện tích (m²)", "Số phòng ngủ / kinh nghiệm", "Hướng nhà", "Pháp lý", "Khu vực", "Mô tả", "Hoặc chọn ảnh từ máy", "Ghim tin nổi bật"];
   scope.querySelectorAll("#postForm label").forEach((node, index) => {
     if (postLabels[index]) node.textContent = postLabels[index];
   });
