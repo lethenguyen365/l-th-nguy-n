@@ -1922,3 +1922,86 @@ body.pro-ui:not(.dark-mode) {
     width: auto !important;
   }
 }
+
+/* Featured listings spacing fix: keep cards compact like a marketplace rail. */
+.pro-ui .showcase-carousel-shell {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.pro-ui .showcase-viewport {
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.pro-ui .showcase-track,
+body.pro-ui .showcase-track,
+html body.pro-ui .showcase-track#showcaseTrack {
+  display: flex !important;
+  grid-auto-flow: unset !important;
+  grid-auto-columns: unset !important;
+  grid-template-columns: none !important;
+  justify-content: flex-start !important;
+  justify-items: stretch !important;
+  align-items: stretch !important;
+  gap: 20px !important;
+  column-gap: 20px !important;
+  row-gap: 20px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 2px 8px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-snap-type: x mandatory;
+}
+
+.pro-ui .showcase-card,
+.pro-ui .showcase-card.is-primary,
+body.pro-ui .showcase-track .showcase-card,
+html body.pro-ui .showcase-track#showcaseTrack > .showcase-card {
+  flex: 0 0 calc((100% - 40px) / 3) !important;
+  width: calc((100% - 40px) / 3) !important;
+  min-width: 300px !important;
+  max-width: 380px !important;
+  margin: 0 !important;
+  scroll-snap-align: start !important;
+}
+
+@media (max-width: 980px) {
+  .pro-ui .showcase-track,
+  body.pro-ui .showcase-track,
+  html body.pro-ui .showcase-track#showcaseTrack {
+    gap: 18px !important;
+    column-gap: 18px !important;
+  }
+
+  .pro-ui .showcase-card,
+  .pro-ui .showcase-card.is-primary,
+  body.pro-ui .showcase-track .showcase-card,
+  html body.pro-ui .showcase-track#showcaseTrack > .showcase-card {
+    flex-basis: min(360px, 76vw) !important;
+    width: min(360px, 76vw) !important;
+    min-width: min(300px, 76vw) !important;
+    max-width: min(360px, 76vw) !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .pro-ui .showcase-track,
+  body.pro-ui .showcase-track,
+  html body.pro-ui .showcase-track#showcaseTrack {
+    gap: 16px !important;
+    column-gap: 16px !important;
+  }
+
+  .pro-ui .showcase-card,
+  .pro-ui .showcase-card.is-primary,
+  body.pro-ui .showcase-track .showcase-card,
+  html body.pro-ui .showcase-track#showcaseTrack > .showcase-card {
+    flex-basis: 82vw !important;
+    width: 82vw !important;
+    min-width: 82vw !important;
+    max-width: 82vw !important;
+  }
+}
