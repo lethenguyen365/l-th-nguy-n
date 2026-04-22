@@ -21,10 +21,18 @@
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .trim();
-  const fixText = (value) =>
-    typeof window.maybeFixVietnameseMojibake === "function"
+  const fixText = (value) => {
+    const text = typeof window.maybeFixVietnameseMojibake === "function"
       ? window.maybeFixVietnameseMojibake(String(value ?? ""))
       : String(value ?? "");
+    return text
+      .replace(/\bVic lm\b/gi, "Việc làm")
+      .replace(/\bViec lm\b/gi, "Việc làm")
+      .replace(/\bViệc lm\b/gi, "Việc làm")
+      .replace(/\bpháp lý pháp lý\b/gi, "pháp lý")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+  };
 
   const fallbackDescriptions = {
     saleHome: "Nhà 1 trệt 2 lầu, hẻm xe hơi, gần chợ Hạnh Thông Tây, sổ hồng riêng, khu dân cư an ninh.",

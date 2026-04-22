@@ -288,11 +288,11 @@ function maybeFixVietnameseMojibake(value){
     const source = String(text || "");
     let score = 0;
     score += (source.match(/(�|Ã|Â|Ä|Å|Æ|áº|á»|â€|â€“|â€”|â€¦|ðŸ)/g) || []).length * 5;
-    score += (source.match(/\b(Lđ|Nhđ|trđt|đp|đng|đt|c ng|c n|Hid|Nguyđ|thuc|c\.n|n\.i|th\.t)\b/gi) || []).length * 4;
+    score += (source.match(/\b(Lđ|Nhđ|trđt|đp|đng|đt|c ng|c n|Vic lm|Viec lm|Hid|Nguyđ|thuc|c\.n|n\.i|th\.t)\b/gi) || []).length * 4;
     score += (source.match(/\b(vương vức|thồn|thồnh|pht hin|gia h\.n)\b/gi) || []).length * 4;
     return score;
   };
-  if (!/(Ã|Â|Ä|Å|Æ|Ç|È|É|Ê|Ë|Ì|Í|Î|Ï|Ð|Ñ|Ò|Ó|Ô|Õ|Ö|Ø|Ù|Ú|Û|Ü|Ý|Þ|ß|áº|á»|â€|â€“|â€”|â€¦|ðŸ|�|\bLđ\b|\bNhđ\b|trđt|\bc ng\b|\bc n\b|vương vức|Hid|Nguyđ|thuc|c\.n|n\.i|th\.t)/i.test(value)) return value;
+  if (!/(Ã|Â|Ä|Å|Æ|Ç|È|É|Ê|Ë|Ì|Í|Î|Ï|Ð|Ñ|Ò|Ó|Ô|Õ|Ö|Ø|Ù|Ú|Û|Ü|Ý|Þ|ß|áº|á»|â€|â€“|â€”|â€¦|ðŸ|�|\bLđ\b|\bNhđ\b|trđt|\bc ng\b|\bc n\b|Vic lm|Viec lm|vương vức|Hid|Nguyđ|thuc|c\.n|n\.i|th\.t)/i.test(value)) return value;
   const directReplace = (input) => input
     .replace(/Ä‘/g, "đ")
     .replace(/Ä/g, "Đ")
@@ -428,6 +428,10 @@ function maybeFixVietnameseMojibake(value){
     .replace(/\bc ng ty c n tuyển\b/gi, "Công ty cần tuyển")
     .replace(/\bc ng ty\b/gi, "Công ty")
     .replace(/\bc n tuyển\b/gi, "cần tuyển")
+    .replace(/\bVic lm\b/gi, "Việc làm")
+    .replace(/\bViec lm\b/gi, "Việc làm")
+    .replace(/\bViệc lm\b/gi, "Việc làm")
+    .replace(/\bpháp lý pháp lý\b/gi, "pháp lý")
     .replace(/\bđp\b/gi, "đẹp")
     .replace(/\bL t p vung vc, ng t, khu dn c hi\.?u ph hp u t hoc xy x\.?/gi, "Lô đất đẹp vuông vức, ngang tốt, khu dân cư hiện hữu, phù hợp đầu tư hoặc xây ở.")
     .replace(/\bNh 1 tr.t 2 l.u, hm xe hi, gn ch Hnh Thng Ty, s hng ring, khu dn c an ninh\.?/gi, "Nhà 1 trệt 2 lầu, hẻm xe hơi, gần chợ Hạnh Thông Tây, sổ hồng riêng, khu dân cư an ninh.")
@@ -449,6 +453,25 @@ function maybeFixVietnameseMojibake(value){
 }
 
 window.maybeFixVietnameseMojibake = maybeFixVietnameseMojibake;
+
+function escapeHTML(value = ""){
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function normalizeUiText(value = ""){
+  return maybeFixVietnameseMojibake(String(value ?? ""))
+    .replace(/\bVic lm\b/gi, "Việc làm")
+    .replace(/\bViec lm\b/gi, "Việc làm")
+    .replace(/\bViệc lm\b/gi, "Việc làm")
+    .replace(/\bpháp lý pháp lý\b/gi, "pháp lý")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
 
 const FRONTEND_TEXT_FALLBACKS = {
   site_name: "Việc Làm Nhà Đất",
@@ -1181,17 +1204,25 @@ async function runAiSupport(){
       })
     });
 
-    if (!postTitle.value) postTitle.value = data.result.title || "";
-    if (!postPrice.value && data.result.suggested_price) postPrice.value = data.result.suggested_price;
+    const result = normalizeVietnamesePayload(data.result || {});
+    const cleanResultText = (value) => normalizeUiText(value);
+
+    if (!postTitle.value) postTitle.value = cleanResultText(result.title || "");
+    if (!postPrice.value && result.suggested_price) postPrice.value = result.suggested_price;
     if (!postDescription.value || postDescription.value.length < 20) {
-      postDescription.value = data.result.broker_description || data.result.normal_description || "";
+      postDescription.value = cleanResultText(result.broker_description || result.normal_description || "");
     }
     window.updatePostPreview?.();
 
     if (tipsBox) {
       tipsBox.classList.remove("is-loading");
-      const tags = data.result.seo_tags || [];
-      const tips = data.result.tips || [];
+      const tags = (result.seo_tags || []).map(cleanResultText).filter(Boolean);
+      const tips = (result.tips || []).map(cleanResultText).filter(Boolean);
+      const proTitle = cleanResultText(result.pro_title || result.title || "");
+      const conciseTitle = cleanResultText(result.concise_title || "");
+      const priceText = cleanResultText(result.suggested_price_text || "Theo giá bạn nhập");
+      const brokerDescription = cleanResultText(result.broker_description || result.normal_description || "");
+      const salesDescription = cleanResultText(result.sales_description || "");
       tipsBox.innerHTML = `
         <div class="ai-result-head">
           <span class="ai-trigger-badge">AI</span>
@@ -1201,13 +1232,13 @@ async function runAiSupport(){
           </div>
         </div>
         <div class="ai-tip-list">
-          <div class="ai-tip-card primary"><span>Tiêu đề nên dùng</span><strong>${data.result.pro_title || data.result.title || ""}</strong></div>
-          <div class="ai-tip-card"><span>Tiêu đề ngắn</span><strong>${data.result.concise_title || ""}</strong></div>
-          <div class="ai-tip-card"><span>Giá đề xuất</span><strong>${data.result.suggested_price_text || "Theo giá bạn nhập"}</strong></div>
-          <div class="ai-tip-card wide"><span>Mô tả chuẩn môi giới</span><p>${data.result.broker_description || data.result.normal_description || ""}</p></div>
-          <div class="ai-tip-card wide"><span>Mô tả bán hàng</span><p>${data.result.sales_description || ""}</p></div>
-          ${tags.length ? `<div class="ai-tip-card wide"><span>Từ khóa gợi ý</span><div class="ai-tag-row">${tags.map((tag) => `<b>${tag}</b>`).join("")}</div></div>` : ""}
-          ${tips.length ? `<div class="ai-tip-card wide"><span>Lưu ý để tin hiệu quả hơn</span><ul>${tips.map((tip) => `<li>${tip}</li>`).join("")}</ul></div>` : ""}
+          <div class="ai-tip-card primary"><span>Tiêu đề nên dùng</span><strong>${escapeHTML(proTitle)}</strong></div>
+          <div class="ai-tip-card"><span>Tiêu đề ngắn</span><strong>${escapeHTML(conciseTitle)}</strong></div>
+          <div class="ai-tip-card"><span>Giá đề xuất</span><strong>${escapeHTML(priceText)}</strong></div>
+          <div class="ai-tip-card wide"><span>Mô tả chuẩn môi giới</span><p>${escapeHTML(brokerDescription)}</p></div>
+          <div class="ai-tip-card wide"><span>Mô tả bán hàng</span><p>${escapeHTML(salesDescription)}</p></div>
+          ${tags.length ? `<div class="ai-tip-card wide"><span>Từ khóa gợi ý</span><div class="ai-tag-row">${tags.map((tag) => `<b>${escapeHTML(tag)}</b>`).join("")}</div></div>` : ""}
+          ${tips.length ? `<div class="ai-tip-card wide"><span>Lưu ý để tin hiệu quả hơn</span><ul>${tips.map((tip) => `<li>${escapeHTML(tip)}</li>`).join("")}</ul></div>` : ""}
         </div>
         <div class="ai-support-actions">
           <span>Đã cập nhật mô tả</span>
@@ -1223,7 +1254,7 @@ async function runAiSupport(){
           <span class="ai-trigger-badge">AI</span>
           <div>
             <strong>Chưa tạo được gợi ý</strong>
-            <small>${err.message}</small>
+            <small>${escapeHTML(normalizeUiText(err.message))}</small>
           </div>
         </div>`;
     }

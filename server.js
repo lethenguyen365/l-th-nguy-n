@@ -1462,6 +1462,191 @@ app.post("/api/ai/support", requireLogin, async (req, res) => {
       legal_status = ""
     } = req.body;
 
+    const cleanTitle = normalizePostText(title);
+    const cleanCategory = normalizePostText(category);
+    const cleanLocation = normalizePostText(location);
+    const cleanDirection = normalizePostText(house_direction);
+    const cleanLegal = normalizePostText(legal_status);
+    const categoryKey = cleanCategory
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+    const isJobPost = categoryKey.includes("viec lam");
+
+    if (isJobPost) {
+      const salaryNum = Number(price || 0);
+      const salaryText = salaryNum > 0 ? `${salaryNum.toLocaleString("vi-VN")}đ/tháng` : "Thỏa thuận";
+      const workLocation = cleanLocation || "TP.HCM";
+      const smartTitle = cleanTitle || `Tuyển nhân sự tại ${workLocation} - thu nhập ${salaryText}`;
+      const conciseTitle = `Tuyển dụng tại ${workLocation}`;
+      const salesTitle = `Tuyển việc làm ${workLocation} | Thu nhập ${salaryText}`;
+      const proTitle = `Tuyển nhân sự ${workLocation} - Lương ${salaryText}`;
+
+      const normalDescription = [
+        `Doanh nghiệp đang tuyển dụng vị trí việc làm tại ${workLocation}.`,
+        `Mức lương: ${salaryText}.`,
+        "Môi trường làm việc ổn định, ưu tiên ứng viên nghiêm túc và có tinh thần học hỏi.",
+        "Liên hệ ngay để nhận mô tả công việc và lịch phỏng vấn."
+      ].join(" ");
+
+      const salesDescription = [
+        `Cơ hội việc làm phù hợp tại ${workLocation}.`,
+        `Thu nhập ${salaryText}, công việc rõ ràng, có cơ hội phát triển lâu dài.`,
+        "Ứng tuyển sớm để được tư vấn nhanh và sắp lịch trao đổi."
+      ].join(" ");
+
+      const brokerDescription = [
+        `Cần tuyển nhân sự làm việc tại ${workLocation}, mức lương ${salaryText}.`,
+        "Ưu tiên ứng viên giao tiếp tốt, chủ động trong công việc và mong muốn gắn bó lâu dài.",
+        "Liên hệ trực tiếp để nhận thông tin chi tiết về vị trí, thời gian làm việc và quyền lợi."
+      ].join(" ");
+
+      const seoTags = [...new Set([
+        "việc làm",
+        "tuyển dụng",
+        workLocation,
+        "việc làm Gò Vấp",
+        "việc làm Quận 12",
+        salaryText
+      ].filter(Boolean))];
+
+      const tips = [
+        "Nên ghi rõ vị trí tuyển dụng, ca làm, yêu cầu kinh nghiệm và quyền lợi chính.",
+        "Nên nhập mức lương cụ thể để tăng tỷ lệ ứng tuyển.",
+        "Có thể dùng gói nổi bật hoặc VIP để tiếp cận nhiều ứng viên hơn."
+      ];
+
+      return res.json({
+        message: "AI đã tạo nội dung việc làm.",
+        result: {
+          title: smartTitle,
+          concise_title: conciseTitle,
+          sales_title: salesTitle,
+          pro_title: proTitle,
+          normal_description: normalDescription,
+          sales_description: salesDescription,
+          broker_description: brokerDescription,
+          suggested_price: salaryNum || 12000000,
+          suggested_price_text: salaryText,
+          seo_tags: seoTags,
+          tips
+        }
+      });
+    }
+
+    const areaNum = Number(area || 0);
+    const bedNum = Number(bedrooms || 0);
+    const priceNum = Number(price || 0);
+    const categoryText = cleanCategory || "Bất động sản";
+    const placeText = cleanLocation || "TP.HCM";
+    const areaText = areaNum > 0 ? `${areaNum}m²` : "";
+    const bedText = bedNum > 0 ? `${bedNum}PN` : "";
+    const directionText = cleanDirection ? `hướng ${cleanDirection}` : "";
+    const legalText = cleanLegal || "pháp lý rõ ràng";
+    const pricePerM2 = areaNum > 0 && priceNum > 0 ? Math.round(priceNum / areaNum) : 0;
+    const suggestedPrice =
+      priceNum > 0 ? priceNum :
+      categoryText.includes("Nhà") ? Math.max(areaNum * 85000000, 2500000000) :
+      categoryText.includes("Đất") ? Math.max(areaNum * 42000000, 1800000000) :
+      categoryText.includes("Cho thuê") ? Math.max(areaNum * 160000, 3500000) :
+      Math.max(areaNum * 30000000, 1000000000);
+
+    const priceText = priceNum > 0 ? `${priceNum.toLocaleString("vi-VN")}đ` : "";
+    const suggestedPriceText = `${Math.round(suggestedPrice).toLocaleString("vi-VN")}đ`;
+    const smartTitle = cleanTitle || [categoryText, placeText, areaText, bedText].filter(Boolean).join(" - ");
+    const conciseTitle = [categoryText, placeText, areaText, bedText].filter(Boolean).join(" - ");
+    const salesTitle = [categoryText, areaText, bedText, placeText, directionText, priceText || `giá tốt ${suggestedPriceText}`]
+      .filter(Boolean)
+      .join(" | ");
+    const proTitle = [categoryText, placeText, areaText, bedText, legalText].filter(Boolean).join(" - ");
+
+    const normalDescription = [
+      `${categoryText} tại ${placeText}${areaText ? `, diện tích ${areaText}` : ""}${bedText ? `, gồm ${bedText}` : ""}.`,
+      directionText ? `Nhà ${directionText}.` : "",
+      `Pháp lý: ${legalText}.`,
+      priceText ? `Giá tham khảo: ${priceText}.` : `AI đề xuất giá tham khảo: ${suggestedPriceText}.`,
+      "Liên hệ để xem thực tế và làm việc nhanh."
+    ].filter(Boolean).join(" ");
+
+    const salesDescription = [
+      `Sản phẩm ${categoryText.toLowerCase()} tại ${placeText},`,
+      areaText ? `${areaText},` : "",
+      bedText ? `${bedText},` : "",
+      directionText ? `${directionText},` : "",
+      `pháp lý ${legalText}.`,
+      priceText ? `Mức giá ${priceText} còn thương lượng.` : `AI gợi ý mức giá ${suggestedPriceText}.`,
+      "Phù hợp khách mua ở thực, đầu tư giữ tài sản hoặc khai thác dòng tiền."
+    ].filter(Boolean).join(" ");
+
+    const brokerDescription = [
+      `Cần bán/cho thuê ${categoryText.toLowerCase()} vị trí ${placeText},`,
+      areaText ? `diện tích ${areaText},` : "",
+      bedText ? `${bedText},` : "",
+      directionText ? `${directionText},` : "",
+      `pháp lý ${legalText}.`,
+      priceText ? `Giá chào ${priceText}.` : `Mức giá AI đề xuất ${suggestedPriceText}.`,
+      pricePerM2 > 0 ? `Đơn giá khoảng ${pricePerM2.toLocaleString("vi-VN")}đ/m².` : "",
+      "Khu dân cư hiện hữu, kết nối giao thông thuận tiện, phù hợp ở thực hoặc đầu tư dài hạn.",
+      "Khách thiện chí liên hệ để xem thực tế và thương lượng trực tiếp."
+    ].filter(Boolean).join(" ");
+
+    const seoTags = [
+      categoryText,
+      placeText,
+      areaText,
+      bedText,
+      cleanDirection,
+      cleanLegal,
+      categoryText.includes("Nhà") ? "nhà đẹp" : "",
+      categoryText.includes("Đất") ? "đất nền" : "",
+      categoryText.includes("Cho thuê") ? "cho thuê nhanh" : "",
+      "bất động sản TP.HCM",
+      "rao vặt nhà đất"
+    ].filter(Boolean);
+
+    const tips = [];
+    if (!cleanLocation) tips.push("Nên chọn khu vực cụ thể như Gò Vấp - Phường 10 để khách tìm chính xác hơn.");
+    if (areaNum <= 0) tips.push("Nên thêm diện tích để AI đề xuất giá chính xác hơn.");
+    if (categoryText.includes("Nhà") && bedNum <= 0) tips.push("Nhà bán hoặc cho thuê nên thêm số phòng ngủ.");
+    if (!cleanDirection) tips.push("Nên thêm hướng nhà nếu khách của bạn quan tâm phong thủy.");
+    if (!cleanLegal) tips.push("Nên ghi rõ pháp lý như sổ hồng riêng, hợp đồng hoặc giấy tờ rõ ràng.");
+    if (priceNum <= 0) tips.push(`AI đang đề xuất mức giá khoảng ${suggestedPriceText}. Bạn có thể lấy làm mốc đăng ban đầu.`);
+    if (!tips.length) tips.push("Tin đã khá đầy đủ. Có thể dùng gói nổi bật hoặc VIP để tăng hiển thị.");
+
+    return res.json({
+      message: "AI đã tạo nội dung nâng cao.",
+      result: {
+        title: smartTitle,
+        concise_title: conciseTitle,
+        sales_title: salesTitle,
+        pro_title: proTitle,
+        normal_description: normalDescription,
+        sales_description: salesDescription,
+        broker_description: brokerDescription,
+        suggested_price: Math.round(suggestedPrice),
+        suggested_price_text: suggestedPriceText,
+        seo_tags: [...new Set(seoTags.map((tag) => String(tag).trim()).filter(Boolean))],
+        tips
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "AI support lỗi." });
+  }
+});
+
+app.post("/api/ai/support-legacy", requireLogin, async (req, res) => {
+  try {
+    const {
+      title = "",
+      category = "",
+      location = "",
+      price = 0,
+      area = 0,
+      bedrooms = 0,
+      house_direction = "",
+      legal_status = ""
+    } = req.body;
+
     if ((category || "").includes("Viá»‡c lÃ m")) {
       const salaryNum = Number(price || 0);
       const salaryText = salaryNum > 0 ? `${salaryNum.toLocaleString("vi-VN")}Ä‘/thÃ¡ng` : "thá»a thuáº­n";
