@@ -857,9 +857,10 @@ function forceVietnameseUiLabels(root = document){
   setPlaceholder("#postBedrooms", "Ví dụ: 3");
   setPlaceholder("#postDescription", "Mô tả vị trí, diện tích, ưu điểm, pháp lý, nội thất hoặc nhu cầu tuyển dụng...");
   setText(".ai-trigger-copy strong", "AI hỗ trợ viết tin");
-  setText(".ai-trigger-copy p", "Tạo mô tả chuyên nghiệp");
-  setText(".ai-support-panel .ai-tip-title", "Gợi ý nhanh");
-  setText(".ai-support-panel .ai-tip-copy", "AI sẽ gợi ý cách viết nội dung rõ hơn cho nhà bán, cho thuê, mặt bằng và các tin việc làm.");
+  setText(".ai-trigger-copy small", "Tạo mô tả chuyên nghiệp");
+  setText(".ai-support-header strong", "Trợ lý viết tin");
+  setText(".ai-support-header small", "Tối ưu tiêu đề, mô tả và điểm mạnh của tin đăng");
+  setText(".ai-support-copy", "Nhập vài ý chính rồi bấm “AI hỗ trợ viết tin”. AI sẽ giúp tin rõ hơn, dễ đọc hơn và hợp với nhà đất hoặc việc làm.");
   setText(".form-actions .btn.btn-primary", "Đăng tin ngay");
   setText(".form-actions .btn.btn-light", "Làm mới");
   setText(".btn.btn-light[onclick='uploadPostImage()']", "Upload ảnh");
@@ -1150,6 +1151,21 @@ async function runAiReplySuggest(){
 
 async function runAiSupport(){
   try{
+    const tipsBox = document.getElementById("aiSupportTips");
+    if (tipsBox) {
+      tipsBox.classList.add("is-loading");
+      tipsBox.innerHTML = `
+        <div class="ai-support-header">
+          <span class="ai-trigger-badge">AI</span>
+          <div>
+            <strong>Đang phân tích tin đăng...</strong>
+            <small>AI đang đọc tiêu đề, khu vực, giá và mô tả bạn đã nhập.</small>
+          </div>
+        </div>
+        <div class="ai-skeleton-line"></div>
+        <div class="ai-skeleton-line short"></div>`;
+    }
+
     const data = await fetchJSON("/api/ai/support", {
       method:"POST",
       headers:{ "Content-Type":"application/json" },
@@ -1170,24 +1186,49 @@ async function runAiSupport(){
     if (!postDescription.value || postDescription.value.length < 20) {
       postDescription.value = data.result.broker_description || data.result.normal_description || "";
     }
+    window.updatePostPreview?.();
 
-    const tipsBox = document.getElementById("aiSupportTips");
     if (tipsBox) {
+      tipsBox.classList.remove("is-loading");
+      const tags = data.result.seo_tags || [];
+      const tips = data.result.tips || [];
       tipsBox.innerHTML = `
+        <div class="ai-result-head">
+          <span class="ai-trigger-badge">AI</span>
+          <div>
+            <strong>Gợi ý đã sẵn sàng</strong>
+            <small>Chọn phần phù hợp để chỉnh lại tin đăng trước khi đăng.</small>
+          </div>
+        </div>
         <div class="ai-tip-list">
-          <div><strong>Tiêu đề chuẩn:</strong><br>${data.result.title || ""}</div>
-          <div><strong>Tiêu đề ngắn:</strong><br>${data.result.concise_title || ""}</div>
-          <div><strong>Tiêu đề bán hàng:</strong><br>${data.result.sales_title || ""}</div>
-          <div><strong>Tiêu đề chuẩn môi giới:</strong><br>${data.result.pro_title || ""}</div>
-          <div><strong>Mô tả thường:</strong><br>${data.result.normal_description || ""}</div>
-          <div><strong>Mô tả bán hàng:</strong><br>${data.result.sales_description || ""}</div>
-          <div><strong>Mô tả chuẩn môi giới:</strong><br>${data.result.broker_description || ""}</div>
-          <div><strong>Giá AI đề xuất:</strong><br>${data.result.suggested_price_text || ""}</div>
-          <div><strong>Tag / từ khóa SEO:</strong><br>${(data.result.seo_tags || []).join(", ")}</div>
-          ${(data.result.tips || []).map(t => `<div>${t}</div>`).join("")}
+          <div class="ai-tip-card primary"><span>Tiêu đề nên dùng</span><strong>${data.result.pro_title || data.result.title || ""}</strong></div>
+          <div class="ai-tip-card"><span>Tiêu đề ngắn</span><strong>${data.result.concise_title || ""}</strong></div>
+          <div class="ai-tip-card"><span>Giá đề xuất</span><strong>${data.result.suggested_price_text || "Theo giá bạn nhập"}</strong></div>
+          <div class="ai-tip-card wide"><span>Mô tả chuẩn môi giới</span><p>${data.result.broker_description || data.result.normal_description || ""}</p></div>
+          <div class="ai-tip-card wide"><span>Mô tả bán hàng</span><p>${data.result.sales_description || ""}</p></div>
+          ${tags.length ? `<div class="ai-tip-card wide"><span>Từ khóa gợi ý</span><div class="ai-tag-row">${tags.map((tag) => `<b>${tag}</b>`).join("")}</div></div>` : ""}
+          ${tips.length ? `<div class="ai-tip-card wide"><span>Lưu ý để tin hiệu quả hơn</span><ul>${tips.map((tip) => `<li>${tip}</li>`).join("")}</ul></div>` : ""}
+        </div>
+        <div class="ai-support-actions">
+          <span>Đã cập nhật mô tả</span>
+          <span>Có thể sửa lại trước khi đăng</span>
         </div>`;
     }
-  }catch(err){ showToast(err.message); }
+  }catch(err){
+    const tipsBox = document.getElementById("aiSupportTips");
+    if (tipsBox) {
+      tipsBox.classList.remove("is-loading");
+      tipsBox.innerHTML = `
+        <div class="ai-support-header">
+          <span class="ai-trigger-badge">AI</span>
+          <div>
+            <strong>Chưa tạo được gợi ý</strong>
+            <small>${err.message}</small>
+          </div>
+        </div>`;
+    }
+    showToast(err.message);
+  }
 }
 
 let currentCategory = "";
