@@ -18,7 +18,7 @@
   --pro-radius-lg: 28px;
   --pro-shadow: 0 18px 50px rgba(15, 23, 42, 0.1);
   --pro-shadow-soft: 0 10px 28px rgba(15, 23, 42, 0.08);
-  --pro-font: "Be Vietnam Pro", "SVN-Gilroy", "Segoe UI", sans-serif;
+  --pro-font: "Be Vietnam Pro", "Inter", Arial, sans-serif;
 }
 
 body.dark-mode,
@@ -2004,4 +2004,117 @@ html body.pro-ui .showcase-track#showcaseTrack > .showcase-card {
     min-width: 82vw !important;
     max-width: 82vw !important;
   }
+}
+
+/* Global typography system: one Vietnamese-safe commercial font stack everywhere. */
+:root {
+  --font-body: "Be Vietnam Pro", "Inter", Arial, sans-serif !important;
+  --font-display: "Be Vietnam Pro", "Inter", Arial, sans-serif !important;
+  --pro-font: "Be Vietnam Pro", "Inter", Arial, sans-serif !important;
+}
+
+html,
+body,
+body.pro-ui,
+body.pro-ui *,
+body.pro-ui *::before,
+body.pro-ui *::after {
+  font-family: var(--pro-font) !important;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.pro-ui {
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.006em;
+}
+
+body.pro-ui h1,
+body.pro-ui h2,
+body.pro-ui h3,
+body.pro-ui h4,
+body.pro-ui h5,
+body.pro-ui h6,
+body.pro-ui .brand,
+body.pro-ui #siteName,
+body.pro-ui .brand-name,
+body.pro-ui .section-title,
+body.pro-ui .pricing-title,
+body.pro-ui .post-title,
+body.pro-ui .card-title,
+body.pro-ui .pro-listing-title,
+body.pro-ui .pro-detail-title,
+body.pro-ui .footer-brand strong {
+  font-family: var(--pro-font) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.028em !important;
+  line-height: 1.16 !important;
+}
+
+body.pro-ui h1,
+body.pro-ui .hero-left h1,
+body.pro-ui .hero-left h2 {
+  font-weight: 700 !important;
+  letter-spacing: -0.038em !important;
+}
+
+body.pro-ui p,
+body.pro-ui li,
+body.pro-ui td,
+body.pro-ui th,
+body.pro-ui label,
+body.pro-ui small,
+body.pro-ui span,
+body.pro-ui a,
+body.pro-ui input,
+body.pro-ui select,
+body.pro-ui textarea {
+  font-family: var(--pro-font) !important;
+  line-height: 1.55;
+}
+
+body.pro-ui p,
+body.pro-ui li,
+body.pro-ui td,
+body.pro-ui input,
+body.pro-ui select,
+body.pro-ui textarea {
+  font-weight: 400;
+}
+
+body.pro-ui label,
+body.pro-ui th,
+body.pro-ui .pro-meta,
+body.pro-ui .pro-badge,
+body.pro-ui .section-pill,
+body.pro-ui .panel-label,
+body.pro-ui .tiny-title,
+body.pro-ui .soft-badge {
+  font-weight: 600 !important;
+  letter-spacing: -0.004em !important;
+}
+
+body.pro-ui button,
+body.pro-ui .btn,
+body.pro-ui .primary-btn,
+body.pro-ui .secondary-btn,
+body.pro-ui .ghost-btn,
+body.pro-ui .outline-btn,
+body.pro-ui .pro-card-cta,
+body.pro-ui .floating-btn {
+  font-family: var(--pro-font) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.006em !important;
+}
+
+body.pro-ui strong,
+body.pro-ui b,
+body.pro-ui .pro-price,
+body.pro-ui .plan-price,
+body.pro-ui .post-price,
+body.pro-ui .card-price {
+  font-family: var(--pro-font) !important;
+  font-weight: 700 !important;
 }

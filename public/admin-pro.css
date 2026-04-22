@@ -12,7 +12,7 @@
   --admin-red: #dc2626;
   --admin-radius: 22px;
   --admin-shadow: 0 16px 42px rgba(15, 23, 42, 0.1);
-  --admin-font: "Be Vietnam Pro", "Segoe UI", sans-serif;
+  --admin-font: "Be Vietnam Pro", "Inter", Arial, sans-serif;
 }
 
 body.admin-body {
@@ -516,4 +516,69 @@ tbody tr:last-child td {
     padding: 12px;
     font-size: 13px;
   }
+}
+
+/* Admin typography normalization: keep dashboard consistent with public site. */
+:root {
+  --admin-font: "Be Vietnam Pro", "Inter", Arial, sans-serif !important;
+}
+
+body.admin-body,
+body.admin-body *,
+body.admin-body *::before,
+body.admin-body *::after {
+  font-family: var(--admin-font) !important;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.admin-body {
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.006em;
+}
+
+body.admin-body h1,
+body.admin-body h2,
+body.admin-body h3,
+body.admin-body h4,
+body.admin-body .admin-logo,
+body.admin-body .admin-brand h1,
+body.admin-body .stat-card b,
+body.admin-body .stat-card strong,
+body.admin-body .admin-stat-card b,
+body.admin-body .admin-stat-card strong {
+  font-weight: 700 !important;
+  letter-spacing: -0.028em !important;
+  line-height: 1.16 !important;
+}
+
+body.admin-body p,
+body.admin-body li,
+body.admin-body td,
+body.admin-body input,
+body.admin-body select,
+body.admin-body textarea {
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
+}
+
+body.admin-body label,
+body.admin-body th,
+body.admin-body .badge,
+body.admin-body .pill,
+body.admin-body .status-badge,
+body.admin-body .admin-sublogo,
+body.admin-body .admin-badge-row span {
+  font-weight: 600 !important;
+  letter-spacing: -0.004em !important;
+}
+
+body.admin-body button,
+body.admin-body .btn,
+body.admin-body .admin-btn,
+body.admin-body a {
+  font-weight: 600 !important;
+  letter-spacing: -0.006em !important;
 }
