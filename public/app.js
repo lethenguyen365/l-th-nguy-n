@@ -69,6 +69,47 @@ function installDarkModeContrastPatch(){
   document.head.appendChild(style);
 }
 
+function applyDarkModeInlineFormFix(){
+  const isDark = document.documentElement.dataset.theme === "dark" || document.body?.classList.contains("dark-mode");
+  const controls = document.querySelectorAll("#postForm input, #postForm select, #postForm textarea");
+  const pills = document.querySelectorAll(".showcase-panel .filter-pill, #marketSection .filter-pill, .showcase-panel .quick-locations button, #marketSection .quick-locations button");
+
+  controls.forEach((el) => {
+    if (el.type === "checkbox" || el.type === "radio" || el.type === "file" || el.type === "hidden") return;
+    if (!isDark) {
+      ["background", "backgroundColor", "backgroundImage", "border", "color", "-webkit-text-fill-color", "boxShadow", "caretColor"].forEach((prop) => {
+        el.style.removeProperty(prop);
+      });
+      return;
+    }
+    el.style.setProperty("background", "linear-gradient(180deg, #1f2f4b, #17243b)", "important");
+    el.style.setProperty("background-color", "#1b2942", "important");
+    el.style.setProperty("background-image", "linear-gradient(180deg, #1f2f4b, #17243b)", "important");
+    el.style.setProperty("border", "1px solid #526987", "important");
+    el.style.setProperty("color", "#f8fbff", "important");
+    el.style.setProperty("-webkit-text-fill-color", "#f8fbff", "important");
+    el.style.setProperty("box-shadow", "inset 0 1px 0 rgba(255,255,255,.06), 0 10px 22px rgba(0,0,0,.18)", "important");
+    el.style.setProperty("caret-color", "#fbbf24", "important");
+  });
+
+  pills.forEach((el) => {
+    if (!isDark) {
+      ["background", "backgroundColor", "backgroundImage", "border", "color", "-webkit-text-fill-color", "boxShadow"].forEach((prop) => {
+        el.style.removeProperty(prop);
+      });
+      return;
+    }
+    const active = el.classList.contains("active");
+    el.style.setProperty("background", active ? "#fbbf24" : "#1c2940", "important");
+    el.style.setProperty("background-color", active ? "#fbbf24" : "#1c2940", "important");
+    el.style.setProperty("background-image", "none", "important");
+    el.style.setProperty("border", `1px solid ${active ? "#fbbf24" : "#415674"}`, "important");
+    el.style.setProperty("color", active ? "#172033" : "#eaf1ff", "important");
+    el.style.setProperty("-webkit-text-fill-color", active ? "#172033" : "#eaf1ff", "important");
+    el.style.setProperty("box-shadow", "none", "important");
+  });
+}
+
 function setSiteTheme(theme){
   installDarkModeContrastPatch();
   const mode = theme === "dark" ? "dark" : "light";
@@ -76,6 +117,8 @@ function setSiteTheme(theme){
   document.body?.classList.toggle("dark-mode", mode === "dark");
   document.body?.classList.toggle("light-mode", mode !== "dark");
   localStorage.setItem("siteTheme", mode);
+  requestAnimationFrame(applyDarkModeInlineFormFix);
+  setTimeout(applyDarkModeInlineFormFix, 120);
 
   document.querySelectorAll(".theme-toggle").forEach((button) => {
     button.textContent = mode === "dark" ? "☀️" : "🌙";
@@ -88,6 +131,9 @@ function initThemeToggle(){
   const savedTheme = localStorage.getItem("siteTheme");
   const preferredTheme = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
   setSiteTheme(savedTheme || preferredTheme);
+  applyDarkModeInlineFormFix();
+  setTimeout(applyDarkModeInlineFormFix, 500);
+  setTimeout(applyDarkModeInlineFormFix, 1500);
 
   document.querySelectorAll(".theme-toggle").forEach((button) => {
     button.addEventListener("click", () => {
@@ -1014,6 +1060,8 @@ function initStickyPills(){
     btn.addEventListener("click", () => {
       document.querySelectorAll(".filter-pill").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
+      applyDarkModeInlineFormFix();
+      setTimeout(applyDarkModeInlineFormFix, 80);
     });
   });
 }
@@ -1062,6 +1110,8 @@ document.addEventListener("DOMContentLoaded", () => {
     postCategory.addEventListener("change", updatePostFieldHints);
     updatePostFieldHints();
   }
+  applyDarkModeInlineFormFix();
+  setTimeout(applyDarkModeInlineFormFix, 250);
 });
 
 
@@ -1159,6 +1209,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initThemeToggle();
   initHeroSlider();
   initVietnameseTextRepair();
+  applyDarkModeInlineFormFix();
+  setTimeout(applyDarkModeInlineFormFix, 1000);
 });
 
 
