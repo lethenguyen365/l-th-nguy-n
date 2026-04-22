@@ -617,18 +617,60 @@
       const preview = document.createElement("aside");
       preview.className = "pro-preview-card";
       preview.innerHTML = `
-        <h3>Xem trước tin đăng</h3>
-        <p>Nhập đủ tiêu đề, giá, khu vực và mô tả để tin rõ ràng hơn. Tin có ảnh thật thường nhận liên hệ tốt hơn.</p>
-        <div class="pro-meta-grid">
-          <span class="pro-meta">Tiêu đề rõ</span>
-          <span class="pro-meta">Giá minh bạch</span>
-          <span class="pro-meta">Khu vực cụ thể</span>
-        </div>`;
+        <div class="pro-preview-head">
+          <span class="pro-badge gold">Xem trước</span>
+          <h3>Tin sẽ hiển thị như thế nào?</h3>
+          <p>Nội dung bên dưới cập nhật theo thông tin bạn đang nhập.</p>
+        </div>
+        <article class="pro-preview-listing" id="postLivePreview"></article>`;
       shell.appendChild(preview);
     }
 
     const draftKey = "proPostDraft";
     const fields = $$("input, select, textarea", form).filter((el) => el.id);
+    const renderPreview = () => {
+      const previewCard = $("#postLivePreview");
+      if (!previewCard) return;
+
+      const data = {
+        title: fixText($("#postTitle")?.value || ""),
+        category: fixText($("#postCategory")?.value || ""),
+        price: $("#postPrice")?.value || "",
+        location: fixText($("#postLocation")?.value || ""),
+        description: fixText($("#postDescription")?.value || ""),
+        image: $("#postImage")?.value || "",
+        area: $("#postArea")?.value || "",
+        bedrooms: $("#postBedrooms")?.value || "",
+        featured: $("#postFeatured")?.checked || false
+      };
+
+      const title = data.title || "Tiêu đề tin đăng của bạn";
+      const category = data.category || "Loại tin";
+      const location = data.location || "Khu vực";
+      const description = data.description || "Mô tả ngắn về vị trí, ưu điểm, pháp lý, nội thất hoặc nhu cầu tuyển dụng sẽ hiển thị tại đây.";
+      const imageBlock = data.image
+        ? `<img src="${escapeHtml(data.image)}" alt="${escapeHtml(title)}" onerror="this.closest('.pro-preview-image').classList.add('is-empty');this.remove();">`
+        : "";
+
+      previewCard.innerHTML = `
+        <div class="pro-preview-image ${data.image ? "" : "is-empty"}">
+          ${imageBlock}
+          <span>${data.featured ? "Tin nổi bật" : "Ảnh tin đăng"}</span>
+        </div>
+        <div class="pro-preview-content">
+          <div class="pro-preview-title">${escapeHtml(title)}</div>
+          <div class="pro-preview-price">${escapeHtml(money(data.price))}</div>
+          <div class="pro-preview-meta">
+            <span>📍 ${escapeHtml(location)}</span>
+            <span>🏷 ${escapeHtml(category)}</span>
+            ${data.area ? `<span>📐 ${escapeHtml(data.area)} m²</span>` : ""}
+            ${data.bedrooms ? `<span>${category === "Việc làm" ? "💼" : "🛏"} ${escapeHtml(data.bedrooms)} ${category === "Việc làm" ? "năm KN" : "PN"}</span>` : ""}
+          </div>
+          <p>${escapeHtml(description)}</p>
+        </div>`;
+    };
+
+    window.updatePostPreview = renderPreview;
     try {
       const saved = JSON.parse(localStorage.getItem(draftKey) || "{}");
       fields.forEach((el) => {
@@ -644,8 +686,11 @@
           if (field.type !== "file") data[field.id] = field.value;
         });
         localStorage.setItem(draftKey, JSON.stringify(data));
+        renderPreview();
       });
+      el.addEventListener("change", renderPreview);
     });
+    renderPreview();
   };
 
   const enhanceCopy = () => {

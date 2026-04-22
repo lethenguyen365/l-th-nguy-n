@@ -1518,6 +1518,7 @@ function editPost(post){
   postFeatured.checked = Number(post.is_featured) === 1;
   postSubmitBtn.textContent = "Cập nhật bài đăng";
   updatePostFieldHints();
+  window.updatePostPreview?.();
   scrollToPost();
 }
 
@@ -1527,6 +1528,7 @@ function resetPostForm(){
   postSubmitBtn.textContent = "Đăng tin ngay";
   uploadStatus.textContent = "";
   updatePostFieldHints();
+  window.updatePostPreview?.();
 }
 
 async function uploadPostImage(){
@@ -1540,6 +1542,7 @@ async function uploadPostImage(){
     if (!res.ok) throw new Error(data.message || "Upload thất bại.");
     postImage.value = data.url;
     uploadStatus.textContent = "Upload thành công: " + data.url;
+    window.updatePostPreview?.();
   }catch(err){ uploadStatus.textContent = err.message; }
 }
 

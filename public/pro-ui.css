@@ -1039,6 +1039,119 @@ body.pro-ui textarea {
   font-weight: 650;
 }
 
+.pro-preview-head {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.pro-preview-head h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.pro-preview-head p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.pro-preview-listing {
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: var(--pro-surface);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.1);
+}
+
+.pro-preview-image {
+  position: relative;
+  min-height: 150px;
+  background:
+    linear-gradient(135deg, rgba(15, 33, 61, 0.72), rgba(29, 78, 216, 0.36)),
+    radial-gradient(circle at 20% 20%, rgba(248, 184, 0, 0.28), transparent 34%),
+    #dbe4ef;
+}
+
+.pro-preview-image img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.pro-preview-image span {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.82);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.pro-preview-image.is-empty {
+  display: grid;
+  place-items: center;
+}
+
+.pro-preview-image.is-empty span {
+  position: static;
+  background: rgba(255, 255, 255, 0.86);
+  color: #10213d;
+}
+
+.pro-preview-content {
+  padding: 15px;
+}
+
+.pro-preview-title {
+  color: var(--pro-ink);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.32;
+  margin-bottom: 8px;
+}
+
+.pro-preview-price {
+  color: #f43f5e;
+  font-size: 18px;
+  font-weight: 850;
+  margin-bottom: 10px;
+}
+
+.pro-preview-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.pro-preview-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--pro-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pro-preview-content p {
+  margin: 0;
+  color: var(--pro-muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
 .pro-ui .package-groups,
 .pro-ui .plan-grid {
   gap: 16px;
