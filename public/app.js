@@ -1755,11 +1755,42 @@ profileForm.addEventListener("submit", async (e) => {
 
 postForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+  const field = (id) => document.getElementById(id);
+  const value = (id) => field(id)?.value?.trim() || "";
+  const requiredFields = [
+    ["postTitle", "Nhập tiêu đề tin đăng."],
+    ["postCategory", "Chọn loại hình tin đăng."],
+    ["postPrice", "Nhập giá hoặc mức lương."],
+    ["postLocation", "Chọn khu vực."],
+    ["postDescription", "Nhập mô tả tin đăng."]
+  ];
+  const missing = requiredFields.find(([id]) => !value(id));
+  if (missing) {
+    showToast(missing[1]);
+    field(missing[0])?.focus();
+    return;
+  }
+
   const payload = {
-    title: postTitle.value, category: postCategory.value, price: postPrice.value, location: postLocation.value,
-    description: postDescription.value, image: postImage.value, is_featured: postFeatured.checked ? 1 : 0
+    title: normalizeUiText(value("postTitle")),
+    category: normalizeUiText(value("postCategory")),
+    price: value("postPrice"),
+    location: normalizeUiText(value("postLocation")),
+    description: normalizeUiText(value("postDescription")),
+    image: value("postImage"),
+    area: value("postArea"),
+    bedrooms: value("postBedrooms"),
+    house_direction: normalizeUiText(value("postDirection")),
+    legal_status: normalizeUiText(value("postLegal")),
+    is_featured: field("postFeatured")?.checked ? 1 : 0
   };
+  const submitBtn = field("postSubmitBtn");
+  const originalText = submitBtn?.textContent || "Đăng tin ngay";
   try{
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = editingPostId.value ? "Đang cập nhật..." : "Đang đăng tin...";
+    }
     let data;
     if (editingPostId.value) {
       data = await fetchJSON(`/api/posts/${editingPostId.value}`, { method:"PUT", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(payload) });
@@ -1769,7 +1800,14 @@ postForm.addEventListener("submit", async (e) => {
     showToast(data.message);
     resetPostForm();
     await loadPosts(); await loadMyPosts();
-  }catch(err){ showToast(err.message); }
+  }catch(err){
+    showToast(normalizeUiText(err.message));
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = editingPostId.value ? "Cập nhật bài đăng" : originalText;
+    }
+  }
 });
 
 chatForm.addEventListener("submit", async (e) => {

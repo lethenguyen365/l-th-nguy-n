@@ -456,7 +456,7 @@
             </div>
             <div class="soft-badge">Có upload ảnh từ máy</div>
           </div>
-          <form id="postForm" class="form-grid">
+          <form id="postForm" class="form-grid" novalidate>
             <input id="editingPostId" type="hidden" />
             <div><label>Tiêu đề</label><input id="postTitle" type="text" required /></div>
             <div><label>Loại hình</label>
@@ -470,7 +470,7 @@
               </select>
             </div>
             <div><label>Giá / mức lương</label><input id="postPrice" type="number" required /></div>
-            <div><label>Diện tích (m²)</label><input id="postArea" type="number" required /></div>
+            <div><label>Diện tích (m²)</label><input id="postArea" type="number" /></div>
             <div><label>Số phòng ngủ / kinh nghiệm</label><input id="postBedrooms" type="number" min="0" /></div>
             <div><label>Hướng nhà</label>
               <select id="postDirection">
