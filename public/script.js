@@ -39,7 +39,7 @@ function initPremiumCopy() {
   if (topStrip[1]) topStrip[1].textContent = "Chuy?n ??ng tin nh? ??t TP.HCM";
   if (topStrip[2]) topStrip[2].textContent = "Tr?ng ?i?m: G? V?p, Qu?n 12, TP.HCM";
 
-  const navText = ["Nh? b?n", "??t n?n", "Cho thu?", "M?t b?ng", "Vi?c l?m", "Khu v?c", "G?i ??ng tin", "T? v?n B?S"];
+  const navText = ["Nhà bán", "Đất nền", "Cho thuê", "Mặt bằng", "Việc làm", "Gò Vấp", "Quận 12", "Gói dịch vụ", "Đăng bài", "Bản đồ"];
   navLinks.forEach((link, index) => {
     if (navText[index]) link.textContent = navText[index];
   });
