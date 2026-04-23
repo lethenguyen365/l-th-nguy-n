@@ -3550,6 +3550,19 @@ body.pro-ui {
   background-attachment: fixed;
 }
 
+/* Final Vietnamese typography guard: keep all commercial copy on a font with full Vietnamese glyphs. */
+html,
+body,
+body.pro-ui,
+body.pro-ui :where(button, input, select, textarea, table, nav, section, article, aside, header, footer, div, span, p, a, label, small, strong, b, h1, h2, h3, h4, h5, h6) {
+  font-family: "Be Vietnam Pro", "Inter", Arial, sans-serif !important;
+  font-synthesis: none;
+}
+
+body.pro-ui :where(p, li, span, small, label, input, select, textarea, td, th) {
+  letter-spacing: -0.004em !important;
+}
+
 body.pro-ui .page-noise {
   opacity: 0.34;
   pointer-events: none;

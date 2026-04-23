@@ -630,6 +630,8 @@ function maybeFixVietnameseMojibake(value){
     .replace(/�/g, "");
 
   const phraseCleanup = (input) => directReplace(input)
+    .replace(/\bu tin cc khu vc ngi mua, ngi thu v ch tin ang tm nhiu tit kim thi gian lc\.?/gi, "Ưu tiên các khu vực người mua, người thuê và chủ tin đang tìm nhiều để tiết kiệm thời gian lọc.")
+    .replace(/\bu tin cc khu vc ngi mua, ngi thu v ch tin/gi, "Ưu tiên các khu vực người mua, người thuê và chủ tin")
     .replace(/\bB\?n nh\b/gi, "Bán nhà")
     .replace(/\bB\?n đ\?t\b/gi, "Bán đất")
     .replace(/\bNh\? b\?n\b/gi, "Nhà bán")

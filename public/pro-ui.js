@@ -29,6 +29,8 @@
       ? window.maybeFixVietnameseMojibake(String(value ?? ""))
       : String(value ?? "");
     return text
+      .replace(/\bu tin cc khu vc ngi mua, ngi thu v ch tin ang tm nhiu tit kim thi gian lc\.?/gi, "Ưu tiên các khu vực người mua, người thuê và chủ tin đang tìm nhiều để tiết kiệm thời gian lọc.")
+      .replace(/\bu tin cc khu vc ngi mua, ngi thu v ch tin/gi, "Ưu tiên các khu vực người mua, người thuê và chủ tin")
       .replace(/\bVic lm\b/gi, "Việc làm")
       .replace(/\bViec lm\b/gi, "Việc làm")
       .replace(/\bViệc lm\b/gi, "Việc làm")
