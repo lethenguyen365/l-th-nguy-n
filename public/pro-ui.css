@@ -4595,6 +4595,12 @@ body.pro-ui .package-quick-btn {
   color: #8a5a00 !important;
 }
 
+body.pro-ui #packagesSection,
+body.pro-ui #paymentPanel,
+body.pro-ui #walletSection {
+  display: none !important;
+}
+
 body.dark-mode.pro-ui .package-quick-btn,
 html[data-theme="dark"] body.pro-ui .package-quick-btn {
   background: #20314d !important;
