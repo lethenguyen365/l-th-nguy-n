@@ -4637,6 +4637,338 @@ body.dark-mode.pro-ui .account-management-card {
   }
 }
 
+/* Account modal polish */
+body.pro-ui #accountModal {
+  padding: 18px !important;
+}
+
+body.pro-ui #accountModal .account-modal-box {
+  width: min(980px, calc(100vw - 36px)) !important;
+  max-width: min(980px, calc(100vw - 36px)) !important;
+  max-height: min(88vh, 920px) !important;
+  overflow: auto !important;
+  padding: 22px !important;
+  border-radius: 28px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96)),
+    #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.95) !important;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.18) !important;
+}
+
+body.pro-ui #accountModal .modal-head {
+  position: sticky !important;
+  top: -22px !important;
+  z-index: 3 !important;
+  margin: -22px -22px 16px !important;
+  padding: 18px 22px 14px !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.82) !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+body.pro-ui #accountModal .modal-head h3 {
+  margin: 0 !important;
+  font-size: 18px !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
+}
+
+body.pro-ui #accountModal .modal-head button {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 999px !important;
+  background: #eef2f7 !important;
+  color: #334155 !important;
+  -webkit-text-fill-color: #334155 !important;
+  border: 1px solid rgba(203, 213, 225, 0.85) !important;
+  box-shadow: none !important;
+}
+
+body.pro-ui #accountModal .account-modal-content .account-section-embedded {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr) !important;
+  gap: 16px !important;
+  align-items: stretch !important;
+}
+
+body.pro-ui #accountModal .account-modal-content .panel,
+body.pro-ui #accountModal .account-management-card {
+  min-height: auto !important;
+  padding: 18px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(226, 232, 240, 0.88) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.92)),
+    #ffffff !important;
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.055) !important;
+}
+
+body.pro-ui #accountModal .tiny-title {
+  width: max-content !important;
+  max-width: 100% !important;
+  margin-bottom: 10px !important;
+  padding: 7px 12px !important;
+  border-radius: 999px !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  letter-spacing: -0.01em !important;
+}
+
+body.pro-ui #accountModal h2,
+body.pro-ui #accountModal .account-management-card h3 {
+  margin: 0 0 14px !important;
+  font-size: clamp(22px, 2.2vw, 30px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.045em !important;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+body.pro-ui #accountModal label {
+  margin-bottom: 7px !important;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  font-weight: 750 !important;
+  color: #334155 !important;
+  -webkit-text-fill-color: #334155 !important;
+}
+
+body.pro-ui #accountModal .form-grid {
+  gap: 14px !important;
+}
+
+body.pro-ui #accountModal input,
+body.pro-ui #accountModal textarea,
+body.pro-ui #accountModal select {
+  min-height: 46px !important;
+  padding: 12px 14px !important;
+  border-radius: 15px !important;
+  border: 1px solid rgba(203, 213, 225, 0.95) !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+body.pro-ui #accountModal textarea {
+  min-height: 98px !important;
+  resize: vertical !important;
+}
+
+body.pro-ui #accountModal input::placeholder,
+body.pro-ui #accountModal textarea::placeholder {
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
+}
+
+body.pro-ui #accountModal #profilePreview .info-list {
+  gap: 10px !important;
+}
+
+body.pro-ui #accountModal .info-card {
+  padding: 12px 14px !important;
+  border-radius: 16px !important;
+  background: #f8fafc !important;
+  border: 1px solid rgba(226, 232, 240, 0.88) !important;
+}
+
+body.pro-ui #accountModal .info-card strong {
+  margin-bottom: 5px !important;
+  color: #475569 !important;
+  -webkit-text-fill-color: #475569 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+body.pro-ui #accountModal .info-card div,
+body.pro-ui #accountModal .empty-state {
+  color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+  word-break: break-word !important;
+}
+
+body.pro-ui #accountModal .btn,
+body.pro-ui #accountModal button.btn {
+  min-height: 42px !important;
+  border-radius: 999px !important;
+  padding: 10px 18px !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+
+body.pro-ui #accountModal .account-management-grid {
+  gap: 16px !important;
+  margin-top: 16px !important;
+}
+
+body.pro-ui #accountModal .account-management-card {
+  padding: 16px !important;
+}
+
+body.pro-ui #accountModal .account-management-card h3 {
+  font-size: 22px !important;
+}
+
+body.pro-ui #accountModal .my-list,
+body.pro-ui #accountModal .mini-list {
+  gap: 10px !important;
+}
+
+body.pro-ui #accountModal .empty-state {
+  min-height: 58px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 16px !important;
+  background: #f8fafc !important;
+  border: 1px dashed rgba(148, 163, 184, 0.5) !important;
+  text-align: center !important;
+  font-weight: 700 !important;
+}
+
+html[data-theme="dark"] body.pro-ui #accountModal .account-modal-box,
+body.dark-mode.pro-ui #accountModal .account-modal-box {
+  background:
+    linear-gradient(180deg, rgba(15, 27, 47, 0.98), rgba(9, 20, 36, 0.98)),
+    #0f1b2f !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.42) !important;
+}
+
+html[data-theme="dark"] body.pro-ui #accountModal .modal-head,
+body.dark-mode.pro-ui #accountModal .modal-head {
+  background: rgba(15, 27, 47, 0.92) !important;
+  border-bottom-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+html[data-theme="dark"] body.pro-ui #accountModal .modal-head button,
+body.dark-mode.pro-ui #accountModal .modal-head button {
+  background: rgba(226, 232, 240, 0.12) !important;
+  color: #e5e7eb !important;
+  -webkit-text-fill-color: #e5e7eb !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+html[data-theme="dark"] body.pro-ui #accountModal .account-modal-content .panel,
+html[data-theme="dark"] body.pro-ui #accountModal .account-management-card,
+body.dark-mode.pro-ui #accountModal .account-modal-content .panel,
+body.dark-mode.pro-ui #accountModal .account-management-card {
+  background:
+    linear-gradient(180deg, rgba(19, 34, 57, 0.98), rgba(14, 27, 47, 0.96)),
+    #132239 !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] body.pro-ui #accountModal h2,
+html[data-theme="dark"] body.pro-ui #accountModal .account-management-card h3,
+body.dark-mode.pro-ui #accountModal h2,
+body.dark-mode.pro-ui #accountModal .account-management-card h3 {
+  color: #f8fbff !important;
+  -webkit-text-fill-color: #f8fbff !important;
+}
+
+html[data-theme="dark"] body.pro-ui #accountModal label,
+body.dark-mode.pro-ui #accountModal label {
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] body.pro-ui #accountModal input,
+html[data-theme="dark"] body.pro-ui #accountModal textarea,
+html[data-theme="dark"] body.pro-ui #accountModal select,
+body.dark-mode.pro-ui #accountModal input,
+body.dark-mode.pro-ui #accountModal textarea,
+body.dark-mode.pro-ui #accountModal select {
+  background: #17243a !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #f8fbff !important;
+  -webkit-text-fill-color: #f8fbff !important;
+}
+
+html[data-theme="dark"] body.pro-ui #accountModal .info-card,
+html[data-theme="dark"] body.pro-ui #accountModal .empty-state,
+body.dark-mode.pro-ui #accountModal .info-card,
+body.dark-mode.pro-ui #accountModal .empty-state {
+  background: rgba(15, 27, 47, 0.9) !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+html[data-theme="dark"] body.pro-ui #accountModal .info-card strong,
+body.dark-mode.pro-ui #accountModal .info-card strong {
+  color: #aebbd0 !important;
+  -webkit-text-fill-color: #aebbd0 !important;
+}
+
+html[data-theme="dark"] body.pro-ui #accountModal .info-card div,
+html[data-theme="dark"] body.pro-ui #accountModal .empty-state,
+body.dark-mode.pro-ui #accountModal .info-card div,
+body.dark-mode.pro-ui #accountModal .empty-state {
+  color: #e8eef8 !important;
+  -webkit-text-fill-color: #e8eef8 !important;
+}
+
+@media (max-width: 900px) {
+  body.pro-ui #accountModal .account-modal-content .account-section-embedded {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body.pro-ui #accountModal {
+    align-items: stretch !important;
+    padding: 0 !important;
+  }
+
+  body.pro-ui #accountModal .account-modal-box {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    padding: 16px !important;
+    border-radius: 0 !important;
+  }
+
+  body.pro-ui #accountModal .modal-head {
+    top: -16px !important;
+    margin: -16px -16px 14px !important;
+    padding: 16px !important;
+  }
+
+  body.pro-ui #accountModal .account-modal-content .panel,
+  body.pro-ui #accountModal .account-management-card {
+    padding: 15px !important;
+    border-radius: 20px !important;
+  }
+
+  body.pro-ui #accountModal h2,
+  body.pro-ui #accountModal .account-management-card h3 {
+    font-size: 22px !important;
+    line-height: 1.12 !important;
+  }
+
+  body.pro-ui #accountModal .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  body.pro-ui #accountModal input,
+  body.pro-ui #accountModal textarea,
+  body.pro-ui #accountModal select {
+    min-height: 44px !important;
+    font-size: 14px !important;
+  }
+
+  body.pro-ui #accountModal .account-management-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
 body.dark-mode.pro-ui .package-quick-btn,
 html[data-theme="dark"] body.pro-ui .package-quick-btn {
   background: #20314d !important;
