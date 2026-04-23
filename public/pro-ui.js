@@ -1,6 +1,9 @@
 (function () {
   "use strict";
 
+  const PRO_POSTS_PER_PAGE = 5;
+  let proListingPage = 1;
+
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
   const money = (value) => {
@@ -281,9 +284,47 @@
     target.innerHTML = '<div class="pro-skeleton"></div><div class="pro-skeleton"></div><div class="pro-skeleton"></div><div class="pro-skeleton"></div>';
   };
 
-  const proLoadPosts = async () => {
+  const ensurePostPager = () => {
+    const target = $("#postList");
+    if (!target) return null;
+    let pager = $("#postPager");
+    if (!pager) {
+      pager = document.createElement("nav");
+      pager.id = "postPager";
+      pager.className = "post-pagination";
+      pager.setAttribute("aria-label", "Chuyển mục tin đăng");
+      target.insertAdjacentElement("afterend", pager);
+    }
+    return pager;
+  };
+
+  const renderPostPager = (totalPosts) => {
+    const pager = ensurePostPager();
+    if (!pager) return;
+    const totalPages = Math.ceil(totalPosts / PRO_POSTS_PER_PAGE);
+    if (totalPages <= 1) {
+      pager.innerHTML = "";
+      pager.hidden = true;
+      return;
+    }
+    pager.hidden = false;
+    const start = (proListingPage - 1) * PRO_POSTS_PER_PAGE + 1;
+    const end = Math.min(proListingPage * PRO_POSTS_PER_PAGE, totalPosts);
+    const pageButtons = Array.from({ length: totalPages }, (_, index) => {
+      const page = index + 1;
+      return `<button class="post-page-btn${page === proListingPage ? " is-active" : ""}" type="button" onclick="goToPostPage(${page})" aria-current="${page === proListingPage ? "page" : "false"}">Mục ${page}</button>`;
+    }).join("");
+    pager.innerHTML = `
+      <button class="post-page-nav" type="button" onclick="goToPostPage(${proListingPage - 1})" ${proListingPage <= 1 ? "disabled" : ""} aria-label="Mục trước">‹</button>
+      <div class="post-page-set">${pageButtons}</div>
+      <button class="post-page-nav" type="button" onclick="goToPostPage(${proListingPage + 1})" ${proListingPage >= totalPages ? "disabled" : ""} aria-label="Mục sau">›</button>
+      <span class="post-page-summary">Hiển thị ${start}-${end} / ${totalPosts} tin</span>`;
+  };
+
+  const proLoadPosts = async (options = {}) => {
     const target = $("#postList");
     if (!target) return;
+    if (!options.keepPage) proListingPage = 1;
     renderLoading();
     try {
       const filters = getFilters();
@@ -301,10 +342,17 @@
             <p>Thử nới rộng khu vực, mức giá hoặc xóa bớt bộ lọc để xem nhiều tin hơn.</p>
             <button class="primary-btn" type="button" data-clear-filter="all">Xóa bộ lọc</button>
           </div>`;
+        renderPostPager(0);
         return;
       }
-      target.innerHTML = posts.map(renderCard).join("");
+      const totalPages = Math.max(1, Math.ceil(posts.length / PRO_POSTS_PER_PAGE));
+      proListingPage = Math.min(Math.max(1, proListingPage), totalPages);
+      const startIndex = (proListingPage - 1) * PRO_POSTS_PER_PAGE;
+      const pagePosts = posts.slice(startIndex, startIndex + PRO_POSTS_PER_PAGE);
+      target.innerHTML = pagePosts.map(renderCard).join("");
+      renderPostPager(posts.length);
     } catch (error) {
+      renderPostPager(0);
       target.innerHTML = `
         <div class="pro-empty-state">
           <h3>Không tải được danh sách tin</h3>
@@ -766,6 +814,13 @@
     setupFloatingActions();
     window.proLoadPosts = proLoadPosts;
     window.loadPosts = proLoadPosts;
+    window.goToPostPage = (page) => {
+      const posts = Array.isArray(window.__lastProPosts) ? window.__lastProPosts : [];
+      const totalPages = Math.max(1, Math.ceil(posts.length / PRO_POSTS_PER_PAGE));
+      proListingPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+      proLoadPosts({ keepPage: true });
+      $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
     window.viewDetail = proViewDetail;
     setTimeout(proLoadPosts, 80);
   };
