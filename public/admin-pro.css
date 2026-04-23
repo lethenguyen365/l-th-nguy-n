@@ -583,6 +583,10 @@ body.admin-body a {
   letter-spacing: -0.006em !important;
 }
 
+body.admin-body .admin-section[hidden] {
+  display: none !important;
+}
+
 /* Final admin UI polish: clearer typography, professional surfaces, mobile-first tables. */
 body.admin-body {
   --admin-bg: #eef3f8;
@@ -656,6 +660,28 @@ body.admin-body .admin-sidebar > a:hover {
   background: rgba(248, 184, 0, 0.14) !important;
   border-color: rgba(248, 184, 0, 0.28) !important;
   color: #ffffff !important;
+}
+
+body.admin-body .admin-sidebar > a.is-active {
+  background: linear-gradient(135deg, #f8b800, #ffd84d) !important;
+  border-color: rgba(248, 184, 0, 0.44) !important;
+  color: #172033 !important;
+  box-shadow: 0 14px 28px rgba(248, 184, 0, 0.18) !important;
+}
+
+body.admin-body .admin-section {
+  animation: adminSectionIn 0.24s ease both;
+}
+
+@keyframes adminSectionIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 body.admin-body .admin-top {

@@ -248,6 +248,42 @@ function boolLabel(value) {
   return value ? "Có" : "Không";
 }
 
+function initAdminSectionTabs() {
+  const sections = Array.from(document.querySelectorAll("[data-admin-section]"));
+  const navItems = Array.from(document.querySelectorAll("[data-admin-nav]"));
+  if (!sections.length || !navItems.length) return;
+
+  const validSections = new Set(sections.map((section) => section.dataset.adminSection));
+  const showSection = (target = "summary", updateHash = true) => {
+    const nextTarget = validSections.has(target) ? target : "summary";
+    sections.forEach((section) => {
+      const isActive = section.dataset.adminSection === nextTarget;
+      section.hidden = !isActive;
+      section.classList.toggle("is-active", isActive);
+    });
+    navItems.forEach((item) => {
+      const isActive = item.dataset.adminNav === nextTarget;
+      item.classList.toggle("is-active", isActive);
+      item.setAttribute("aria-current", isActive ? "page" : "false");
+    });
+    if (updateHash) history.replaceState(null, "", `#${nextTarget}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  navItems.forEach((item) => {
+    item.addEventListener("click", (event) => {
+      event.preventDefault();
+      showSection(item.dataset.adminNav);
+    });
+  });
+
+  window.addEventListener("hashchange", () => {
+    showSection(location.hash.replace("#", "") || "summary", false);
+  });
+
+  showSection(location.hash.replace("#", "") || "summary", false);
+}
+
 function updateAnnouncementPreview(value) {
   const cleanValue = settingValue("announcement", value) || "Chào mừng bạn đến với Việc Làm Nhà Đất";
   if (window.dailyAnnouncementPreview) dailyAnnouncementPreview.textContent = cleanValue;
@@ -528,6 +564,7 @@ async function logoutAdmin() {
   location.href = "/";
 }
 
+initAdminSectionTabs();
 loadSummary();
 loadUsers();
 loadPostsAdmin();

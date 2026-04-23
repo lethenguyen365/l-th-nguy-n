@@ -20,14 +20,14 @@
       <div class="admin-sublogo">AI vận hành · ví tiền · duyệt tin · báo cáo</div>
       <div class="admin-badge-row"><span>UI ULTRA</span><span>AI OPS</span><span>SMART MARKET</span></div>
       <a href="/">← Về trang chủ</a>
-      <a href="#summary">Tổng quan</a>
-      <a href="#users">Người dùng</a>
-      <a href="#posts">Tin đăng</a>
-      <a href="#payments">Thanh toán</a>
-      <a href="#topups">Nạp tiền</a>
-      <a href="#aiops">AI vận hành</a>
-      <a href="#announcementManager">Thông báo</a>
-      <a href="#settings">Cài đặt</a>
+      <a href="#summary" data-admin-nav="summary">Tổng quan</a>
+      <a href="#users" data-admin-nav="users">Người dùng</a>
+      <a href="#posts" data-admin-nav="posts">Tin đăng</a>
+      <a href="#payments" data-admin-nav="payments">Thanh toán</a>
+      <a href="#topups" data-admin-nav="topups">Nạp tiền</a>
+      <a href="#aiops" data-admin-nav="aiops">AI vận hành</a>
+      <a href="#announcementManager" data-admin-nav="announcementManager">Thông báo</a>
+      <a href="#settings" data-admin-nav="settings">Cài đặt</a>
     </aside>
 
     <main class="admin-main">
@@ -39,7 +39,7 @@
         <button class="btn btn-danger" onclick="logoutAdmin()">Đăng xuất</button>
       </section>
 
-      <section id="summary" class="stats-grid">
+      <section id="summary" class="stats-grid admin-section" data-admin-section="summary">
         <div class="stat-card"><div class="tiny-title">Người dùng</div><h2 id="sumUsers">0</h2></div>
         <div class="stat-card"><div class="tiny-title">Tin đăng</div><h2 id="sumPosts">0</h2></div>
         <div class="stat-card"><div class="tiny-title">Doanh thu</div><h2 id="sumRevenue">0 đ</h2></div>
@@ -47,27 +47,27 @@
         <div class="stat-card"><div class="tiny-title">Yêu thích</div><h2 id="sumFavorites">0</h2></div>
       </section>
 
-      <section id="users" class="admin-panel">
+      <section id="users" class="admin-panel admin-section" data-admin-section="users">
         <div class="section-header"><div><div class="tiny-title">Quản lý user</div><h2>Danh sách người dùng</h2></div></div>
         <div id="userTableWrap"></div>
       </section>
 
-      <section id="posts" class="admin-panel">
+      <section id="posts" class="admin-panel admin-section" data-admin-section="posts">
         <div class="section-header"><div><div class="tiny-title">Quản lý tin</div><h2>Danh sách tin đăng</h2></div></div>
         <div id="postTableWrap"></div>
       </section>
 
-      <section id="payments" class="admin-panel">
+      <section id="payments" class="admin-panel admin-section" data-admin-section="payments">
         <div class="section-header"><div><div class="tiny-title">Thanh toán gói</div><h2>Danh sách đăng ký gói</h2></div></div>
         <div id="subscriptionTableWrap"></div>
       </section>
 
-      <section id="topups" class="admin-panel">
+      <section id="topups" class="admin-panel admin-section" data-admin-section="topups">
         <div class="section-header"><div><div class="tiny-title">Ví người dùng</div><h2>Yêu cầu nạp tiền</h2></div></div>
         <div id="topupTableWrap"></div>
       </section>
 
-      <section id="aiops" class="admin-panel">
+      <section id="aiops" class="admin-panel admin-section" data-admin-section="aiops">
         <div class="section-header">
           <div>
             <div class="tiny-title">AI vận hành</div>
@@ -84,7 +84,7 @@
         <div id="aiActionsWrap" style="margin-top:16px"></div>
       </section>
 
-      <section id="announcementManager" class="admin-panel">
+      <section id="announcementManager" class="admin-panel admin-section" data-admin-section="announcementManager">
         <div class="section-header">
           <div>
             <div class="tiny-title">Thông báo hằng ngày</div>
@@ -113,7 +113,7 @@
         </div>
       </section>
 
-      <section id="settings" class="admin-panel">
+      <section id="settings" class="admin-panel admin-section" data-admin-section="settings">
         <div class="section-header"><div><div class="tiny-title">Cấu hình</div><h2>Thông tin website và QR thanh toán</h2></div></div>
         <form id="settingsForm" class="form-grid">
           <div><label>Tên website</label><input id="stSiteName" type="text" /></div>
@@ -131,6 +131,6 @@
     </main>
   </div>
 
-  <script src="admin.js?v=admin-mobile-polish-20260423"></script>
+  <script src="admin.js?v=admin-tabs-20260423"></script>
 </body>
 </html>
