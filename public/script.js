@@ -508,6 +508,10 @@ async function loadShowcasePosts() {
       cho_thue: {
         label: "Cho thuê",
         items: byCategory("cho thuê")
+      },
+      viec_lam: {
+        label: "Việc làm",
+        items: byCategory("việc làm")
       }
     };
 
@@ -539,7 +543,7 @@ async function loadShowcasePosts() {
 function prioritizeShowcasePosts(posts) {
   const featured = posts.filter((post) => Number(post.is_featured) === 1);
   const normal = posts.filter((post) => Number(post.is_featured) !== 1);
-  return [...featured, ...normal].slice(0, 12);
+  return [...featured, ...normal].slice(0, 36);
 }
 
 function bindShowcaseTabs() {

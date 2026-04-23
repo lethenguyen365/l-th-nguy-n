@@ -859,7 +859,7 @@ function forceVietnameseUiLabels(root = document){
 
   setText("#marketSection .tiny-title", "Khu vực hot");
   setText("#marketSection .section-intro p", "Chọn nhanh quận, phường hoặc điểm nóng quen thuộc để lọc tin theo khu vực có nhu cầu thật.");
-  const marketPills = ["Tất cả", "Nhà bán", "Đất nền", "Cho thuê", "Mặt bằng"];
+  const marketPills = ["Tất cả", "Nhà bán", "Đất nền", "Cho thuê", "Mặt bằng", "Việc làm"];
   scope.querySelectorAll("#marketSection .filter-pill").forEach((node, index) => {
     if (marketPills[index]) node.textContent = marketPills[index];
   });
@@ -916,7 +916,7 @@ function forceVietnameseUiLabels(root = document){
   setText(".content .section-header-block .tiny-title", "Tin bất động sản");
   setText(".content .section-header-block h2", "Tin đăng mới nhất khu vực TP.HCM");
   setText(".content .section-header-block .soft-badge", "Ưu tiên hiển thị tin nổi bật");
-  const featuredChips = ["NHÀ BÁN", "ĐẤT NỀN", "CHO THUÊ", "MẶT BẰNG"];
+  const featuredChips = ["NHÀ BÁN", "ĐẤT NỀN", "CHO THUÊ", "MẶT BẰNG", "VIỆC LÀM"];
   scope.querySelectorAll(".featured-chip").forEach((node, index) => {
     if (featuredChips[index]) node.textContent = featuredChips[index];
   });
