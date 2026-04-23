@@ -843,8 +843,10 @@ function forceVietnameseUiLabels(root = document){
   setText(".top-strip-inner span:nth-child(2)", "Chuyên đăng tin nhà đất TP.HCM");
   setText(".top-strip-inner span:nth-child(3)", "Trọng điểm: Gò Vấp, Quận 12, TP.HCM");
   setPlaceholder("#searchKeyword", "Tìm nhà bán, đất nền, căn hộ, mặt bằng, cho thuê...");
-  setText("#guestActions .btn.btn-light", "Đăng nhập");
-  setText("#guestActions .btn.btn-primary", "Đăng ký");
+  const guestButtons = document.querySelectorAll("#guestActions .btn");
+  if (guestButtons[0]) guestButtons[0].textContent = "Đăng tin";
+  if (guestButtons[1]) guestButtons[1].textContent = "Đăng nhập";
+  if (guestButtons[2]) guestButtons[2].textContent = "Đăng ký";
 
   const navText = ["🏠 Nhà bán", "🏙️ Đất nền", "🔑 Cho thuê", "🏢 Mặt bằng", "💼 Việc làm", "📍 Gò Vấp", "📍 Quận 12", "💎 Gói dịch vụ", "✏️ Đăng bài", "🗺️ Bản đồ"];
   scope.querySelectorAll(".main-nav a").forEach((node, index) => {
