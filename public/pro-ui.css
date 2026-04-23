@@ -4588,3 +4588,72 @@ body.dark-mode.pro-ui .pro-toast {
     transform: translateY(0) !important;
   }
 }
+
+body.pro-ui .package-quick-btn {
+  border-color: rgba(248, 184, 0, 0.34) !important;
+  background: #fff8df !important;
+  color: #8a5a00 !important;
+}
+
+body.dark-mode.pro-ui .package-quick-btn,
+html[data-theme="dark"] body.pro-ui .package-quick-btn {
+  background: #20314d !important;
+  border-color: rgba(248, 184, 0, 0.34) !important;
+  color: #ffe49b !important;
+  -webkit-text-fill-color: #ffe49b !important;
+}
+
+body.pro-ui #packagesModal .packages-modal-box {
+  width: min(1120px, calc(100vw - 32px)) !important;
+  max-height: min(86vh, 920px) !important;
+  overflow: auto !important;
+  padding: 24px !important;
+}
+
+body.pro-ui #packagesModal .modal-head {
+  align-items: flex-start !important;
+  gap: 14px !important;
+}
+
+body.pro-ui #packagesModal .modal-head h3 {
+  margin: 8px 0 0 !important;
+  color: var(--pro-ink) !important;
+  font-size: clamp(26px, 4vw, 42px) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.045em !important;
+}
+
+body.pro-ui .packages-modal-intro {
+  max-width: 720px !important;
+  margin: -4px 0 18px !important;
+  color: var(--pro-muted) !important;
+  font-weight: 600 !important;
+  line-height: 1.6 !important;
+}
+
+body.pro-ui .packages-modal-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+  gap: 16px !important;
+}
+
+html[data-theme="dark"] body.pro-ui #packagesModal .packages-modal-box,
+body.dark-mode.pro-ui #packagesModal .packages-modal-box {
+  background: linear-gradient(180deg, #101c30, #0b1628) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+@media (max-width: 680px) {
+  body.pro-ui #packagesModal .packages-modal-box {
+    width: 100vw !important;
+    max-height: 100vh !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    padding: 18px 14px 28px !important;
+  }
+
+  body.pro-ui .packages-modal-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

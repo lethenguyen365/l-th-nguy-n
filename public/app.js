@@ -387,6 +387,73 @@ function showToast(msg, type="success"){
   },2500);
 }
 
+function renderPricingCards(rows = []) {
+  const grouped = {
+    viec_lam: rows.filter(r => r.category === "viec_lam"),
+    nha_thue: rows.filter(r => r.category === "nha_thue"),
+    vip: rows.filter(r => r.category === "vip")
+  };
+
+  const renderCard = (pkg, groupTitle) => {
+    let badgeClass = "price-badge-free";
+    let badgeText = "Miễn phí";
+    let tip = "Phù hợp để bắt đầu đăng tin.";
+    if (pkg.feature_type === "featured") {
+      badgeClass = "price-badge-featured";
+      badgeText = "Nổi bật";
+      tip = "Tăng nhận diện, dễ được chú ý hơn.";
+    } else if (pkg.feature_type === "vip") {
+      badgeClass = "price-badge-vip";
+      badgeText = "VIP";
+      tip = "Ưu tiên hiển thị mạnh hơn, phù hợp cần chốt nhanh.";
+    } else if (pkg.feature_type === "push") {
+      badgeClass = "price-badge-push";
+      badgeText = "Đẩy tin";
+      tip = "Đưa tin lên đầu nhanh để tăng lượt xem.";
+    }
+
+    const amount = pkg.price === 0 ? "Miễn phí" : currency(pkg.price);
+    return `
+      <div class="price-card">
+        <div class="mini-badge ${badgeClass}">${badgeText}</div>
+        <h3>${groupTitle} - ${pkg.name}</h3>
+        <div class="price-head-row">
+          <div class="amount">${amount}</div>
+          <button class="btn btn-primary price-head-buy" onclick="buyMonetizePlan(${pkg.id})">Mua gói</button>
+        </div>
+        <div class="price-meta">
+          <div><strong>Thời gian:</strong> ${pkg.duration_days} ngày${pkg.feature_type === "push" ? " / lần" : ""}</div>
+          <div><strong>Hình thức:</strong> ${pkg.feature_type === "normal" ? "Tin thường" : pkg.feature_type === "featured" ? "Tin nổi bật" : pkg.feature_type === "vip" ? "Tin VIP" : "Đẩy tin"}</div>
+        </div>
+        <div class="price-tip">${tip}</div>
+        <div class="card-actions price-actions" style="margin-top:16px">
+          <button class="btn btn-primary full" onclick="buyMonetizePlan(${pkg.id})">Mua bằng ví</button>
+          <button class="btn btn-light full" onclick="createTopup()">Nạp tiền vào ví</button>
+        </div>
+      </div>
+    `;
+  };
+
+  return `
+    ${grouped.viec_lam.map(pkg => renderCard(pkg, "Việc làm")).join("")}
+    ${grouped.nha_thue.map(pkg => renderCard(pkg, "Nhà thuê")).join("")}
+    ${grouped.vip.map(pkg => renderCard(pkg, "Gói VIP nâng cao")).join("")}
+  `;
+}
+
+async function openPackagesModal() {
+  openModal("packagesModal");
+  const target = document.getElementById("packagesModalList");
+  if (!target) return;
+  if (!monetizePlanRows.length) {
+    target.innerHTML = `<div class="empty-state">Đang tải bảng giá...</div>`;
+    monetizePlanRows = await fetchJSON("/api/pricing-plans").catch(() => []);
+  }
+  target.innerHTML = monetizePlanRows.length
+    ? renderPricingCards(monetizePlanRows)
+    : `<div class="empty-state">Chưa tải được bảng giá. Vui lòng thử lại.</div>`;
+}
+
 function maybeFixVietnameseMojibake(value){
   if (typeof value !== "string") return value;
   const damageScore = (text) => {
@@ -1530,58 +1597,8 @@ async function viewDetail(id){
 
 async function loadPackages(){
   const rows = await fetchJSON("/api/pricing-plans");
-
-  const grouped = {
-    viec_lam: rows.filter(r => r.category === "viec_lam"),
-    nha_thue: rows.filter(r => r.category === "nha_thue"),
-    vip: rows.filter(r => r.category === "vip")
-  };
-
-  const renderCard = (pkg, groupTitle) => {
-    let badgeClass = "price-badge-free";
-    let badgeText = "Miễn phí";
-    let tip = "Phù hợp để bắt đầu đăng tin.";
-    if (pkg.feature_type === "featured") {
-      badgeClass = "price-badge-featured";
-      badgeText = "Nổi bật";
-      tip = "Tăng nhận diện, dễ được chú ý hơn.";
-    } else if (pkg.feature_type === "vip") {
-      badgeClass = "price-badge-vip";
-      badgeText = "VIP";
-      tip = "Ưu tiên hiển thị mạnh hơn, phù hợp cần chốt nhanh.";
-    } else if (pkg.feature_type === "push") {
-      badgeClass = "price-badge-push";
-      badgeText = "Đẩy tin";
-      tip = "Đưa tin lên đầu nhanh để tăng lượt xem.";
-    }
-
-    const amount = pkg.price === 0 ? "Miễn phí" : currency(pkg.price);
-    return `
-      <div class="price-card">
-        <div class="mini-badge ${badgeClass}">${badgeText}</div>
-        <h3>${groupTitle} - ${pkg.name}</h3>
-        <div class="price-head-row">
-          <div class="amount">${amount}</div>
-          <button class="btn btn-primary price-head-buy" onclick="buyMonetizePlan(${pkg.id})">Mua gói</button>
-        </div>
-        <div class="price-meta">
-          <div><strong>Thời gian:</strong> ${pkg.duration_days} ngày${pkg.feature_type === "push" ? " / lần" : ""}</div>
-          <div><strong>Hình thức:</strong> ${pkg.feature_type === "normal" ? "Tin thường" : pkg.feature_type === "featured" ? "Tin nổi bật" : pkg.feature_type === "vip" ? "Tin VIP" : "Đẩy tin"}</div>
-        </div>
-        <div class="price-tip">${tip}</div>
-        <div class="card-actions price-actions" style="margin-top:16px">
-          <button class="btn btn-primary full" onclick="buyMonetizePlan(${pkg.id})">Mua bằng ví</button>
-          <button class="btn btn-light full" onclick="createTopup()">Nạp tiền vào ví</button>
-        </div>
-      </div>
-    `;
-  };
-
-  packageList.innerHTML = `
-    ${grouped.viec_lam.map(pkg => renderCard(pkg, "Việc làm")).join("")}
-    ${grouped.nha_thue.map(pkg => renderCard(pkg, "Nhà thuê")).join("")}
-    ${grouped.vip.map(pkg => renderCard(pkg, "Gói VIP nâng cao")).join("")}
-  `;
+  monetizePlanRows = rows;
+  packageList.innerHTML = renderPricingCards(rows);
 }
 
 
