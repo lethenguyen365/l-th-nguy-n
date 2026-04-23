@@ -381,6 +381,8 @@ function normalizeAdminAiText(value = "") {
     .replace(/AI ch ng spam/gi, "AI chống spam")
     .replace(/AI g.i . VIP/gi, "AI gợi ý VIP")
     .replace(/AI nh.c gia h.n/gi, "AI nhắc gia hạn")
+    .replace(/AI nhắc gia han/gi, "AI nhắc gia hạn")
+    .replace(/AI nhac gia han/gi, "AI nhắc gia hạn")
     .replace(/^AI đã xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
     .replace(/^AI đã tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
     .replace(/^AI đã quét spam\.?$/i, "AI đã quét spam.")
@@ -389,8 +391,14 @@ function normalizeAdminAiText(value = "") {
     .replace(/Ch.a c. tin c.n g.i . VIP\./gi, "Chưa có tin cần gợi ý VIP.")
     .replace(/Nh.c n.p ti.n cho/gi, "Nhắc nạp tiền cho")
     .replace(/Nhc np tin cho/gi, "Nhắc nạp tiền cho")
+    .replace(/nhắc nhx/gi, "nhắc nhở")
+    .replace(/nhc nhx/gi, "nhắc nhở")
+    .replace(/nạp tin/gi, "nạp tiền")
+    .replace(/np tin/gi, "nạp tiền")
+    .replace(/gia hn/gi, "gia hạn")
     .replace(/v. s. d. th.p\./gi, "vì số dư thấp.")
     .replace(/\sv\s*d\s*thp\.?/gi, " vì số dư thấp.")
+    .replace(/Đã tạo\/gợi ý\s*(\d+)\s*nhắc nhở nạp tiền hoặc gia hạn\.?/gi, "Đã tạo/gợi ý $1 nhắc nhở nạp tiền hoặc gia hạn.")
     .replace(/to\/gi\s*\d+\s*nhc\s*nhx\s*np\s*tin\s*hoc\s*gia\s*hn\.?/gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn.")
     .replace(/to\/g.i \d+ nh.c nh. n.p ti.n ho.c gia h.n\./gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn.")
     .replace(/Qu.n 12/gi, "Quận 12")
@@ -2586,16 +2594,16 @@ app.post("/api/ai/renewal-reminders", requireAdmin, async (req, res) => {
     for (const u of users) {
       if (Number(u.wallet_balance || 0) < 20000) {
         await run(`INSERT INTO ai_actions (user_id, action_type, action_status, note) VALUES (?, 'renewal_reminder', 'done', ?)`,
-          [u.id, `Nháº¯c náº¡p tiá»n cho ${u.full_name || "user"} vÃ¬ sá»‘ dÆ° tháº¥p.`]);
+          [u.id, `Nhắc nạp tiền cho ${u.full_name || "user"} vì số dư thấp.`]);
         count += 1;
       }
     }
     await run(`INSERT INTO ai_reports (report_type, title, body) VALUES ('renewal', ?, ?)`,
-      ['AI nháº¯c gia háº¡n', `ÄÃ£ táº¡o/gá»£i Ã½ ${count} nháº¯c nhá»Ÿ náº¡p tiá»n hoáº·c gia háº¡n.`]);
+      ['AI nhắc gia hạn', `Đã tạo/gợi ý ${count} nhắc nhở nạp tiền hoặc gia hạn.`]);
 
-    res.json({ message: `AI Ä‘Ã£ xá»­ lÃ½ nháº¯c gia háº¡n cho ${count} tÃ i khoáº£n.` });
+    res.json({ message: `AI đã xử lý nhắc gia hạn cho ${count} tài khoản.` });
   } catch {
-    res.status(500).json({ message: "AI nháº¯c gia háº¡n lá»—i." });
+    res.status(500).json({ message: "AI nhắc gia hạn lỗi." });
   }
 });
 
@@ -2605,24 +2613,24 @@ app.post("/api/ai/vip-suggestions", requireAdmin, async (req, res) => {
     const suggestions = rows
       .filter(p => Number(p.views || 0) < 30 && Number(p.is_featured || 0) === 0)
       .slice(0, 10)
-      .map(p => `Tin #${p.id} - ${p.title} nÃªn gá»£i Ã½ gÃ³i VIP hoáº·c Ä‘áº©y tin.`);
+      .map(p => `Tin #${p.id} - ${p.title} nên gợi ý gói VIP hoặc đẩy tin.`);
 
     await run(`INSERT INTO ai_reports (report_type, title, body) VALUES ('vip', ?, ?)`,
-      ['AI gá»£i Ã½ VIP', suggestions.join("\n") || 'ChÆ°a cÃ³ tin cáº§n gá»£i Ã½ VIP.']);
+      ['AI gợi ý VIP', suggestions.join("\n") || 'Chưa có tin cần gợi ý VIP.']);
 
     res.json({
-      message: "AI Ä‘Ã£ táº¡o gá»£i Ã½ VIP.",
+      message: "AI đã tạo gợi ý VIP.",
       result: { suggestions }
     });
   } catch {
-    res.status(500).json({ message: "AI gá»£i Ã½ VIP lá»—i." });
+    res.status(500).json({ message: "AI gợi ý VIP lỗi." });
   }
 });
 
 app.post("/api/ai/spam-scan", requireAdmin, async (req, res) => {
   try {
     const posts = await all(`SELECT id, user_id, title, description FROM posts ORDER BY id DESC LIMIT 50`);
-    const spamWords = ["zalo", "telegram", "kiáº¿m tiá»n online", "click", "siÃªu lá»£i nhuáº­n"];
+    const spamWords = ["zalo", "telegram", "kiếm tiền online", "click", "siêu lợi nhuận"];
     const flagged = [];
 
     for (const p of posts) {
@@ -2636,11 +2644,11 @@ app.post("/api/ai/spam-scan", requireAdmin, async (req, res) => {
     }
 
     await run(`INSERT INTO ai_reports (report_type, title, body) VALUES ('spam', ?, ?)`,
-      ['AI chá»‘ng spam', flagged.join("\n") || 'KhÃ´ng phÃ¡t hiá»‡n tin spam rÃµ rÃ ng.']);
+      ['AI chống spam', flagged.join("\n") || 'Không phát hiện tin spam rõ ràng.']);
 
-    res.json({ message: "AI Ä‘Ã£ quÃ©t spam.", result: { flagged } });
+    res.json({ message: "AI đã quét spam.", result: { flagged } });
   } catch {
-    res.status(500).json({ message: "AI chá»‘ng spam lá»—i." });
+    res.status(500).json({ message: "AI chống spam lỗi." });
   }
 });
 

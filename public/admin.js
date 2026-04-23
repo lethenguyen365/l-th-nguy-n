@@ -101,6 +101,8 @@ function normalizeAdminText(value) {
     .replace(/AI ch\s*ng spam/gi, "AI chống spam")
     .replace(/AI g.i . VIP/gi, "AI gợi ý VIP")
     .replace(/AI nh.c gia h.n/gi, "AI nhắc gia hạn")
+    .replace(/AI nhắc gia han/gi, "AI nhắc gia hạn")
+    .replace(/AI nhac gia han/gi, "AI nhắc gia hạn")
     .replace(/^AI đã xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
     .replace(/^AI đã tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
     .replace(/^AI đã quét spam\.?$/i, "AI đã quét spam.")
@@ -111,8 +113,14 @@ function normalizeAdminText(value) {
     .replace(/to\/gi\s*\d+\s*nhc\s*nhx\s*np\s*tin\s*hoc\s*gia\s*hn\.?/gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn.")
     .replace(/Nh.c n.p ti.n cho/gi, "Nhắc nạp tiền cho")
     .replace(/Nhc np tin cho/gi, "Nhắc nạp tiền cho")
+    .replace(/nhắc nhx/gi, "nhắc nhở")
+    .replace(/nhc nhx/gi, "nhắc nhở")
+    .replace(/nạp tin/gi, "nạp tiền")
+    .replace(/np tin/gi, "nạp tiền")
+    .replace(/gia hn/gi, "gia hạn")
     .replace(/v. s. d. th.p\.?/gi, "vì số dư thấp.")
     .replace(/\sv\s*d\s*thp\.?/gi, " vì số dư thấp.")
+    .replace(/Đã tạo\/gợi ý\s*(\d+)\s*nhắc nhở nạp tiền hoặc gia hạn\.?/gi, "Đã tạo/gợi ý $1 nhắc nhở nạp tiền hoặc gia hạn.")
     .replace(/Qu.n 12/gi, "Quận 12")
     .replace(/G. V.p/gi, "Gò Vấp")
     .replace(/Th.nh L.c/gi, "Thạnh Lộc")
@@ -148,6 +156,8 @@ function normalizeAdminText(value) {
     [/AI ch ng spam/gi, "AI chống spam"],
     [/AI g.i . VIP/gi, "AI gợi ý VIP"],
     [/AI nh.c gia h.n/gi, "AI nhắc gia hạn"],
+    [/AI nhắc gia han/gi, "AI nhắc gia hạn"],
+    [/AI nhac gia han/gi, "AI nhắc gia hạn"],
     [/^AI đã xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản."],
     [/^AI ã xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản."],
     [/^AI đã tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP."],
@@ -160,8 +170,14 @@ function normalizeAdminText(value) {
     [/to\/gi\s*\d+\s*nhc\s*nhx\s*np\s*tin\s*hoc\s*gia\s*hn\.?/gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn."],
     [/Nh.c n.p ti.n cho/gi, "Nhắc nạp tiền cho"],
     [/Nhc np tin cho/gi, "Nhắc nạp tiền cho"],
+    [/nhắc nhx/gi, "nhắc nhở"],
+    [/nhc nhx/gi, "nhắc nhở"],
+    [/nạp tin/gi, "nạp tiền"],
+    [/np tin/gi, "nạp tiền"],
+    [/gia hn/gi, "gia hạn"],
     [/v. s. d. th.p\./gi, "vì số dư thấp."],
     [/\sv\s*d\s*thp\.?/gi, " vì số dư thấp."],
+    [/Đã tạo\/gợi ý\s*(\d+)\s*nhắc nhở nạp tiền hoặc gia hạn\.?/gi, "Đã tạo/gợi ý $1 nhắc nhở nạp tiền hoặc gia hạn."],
     [/Qu.n 12/gi, "Quận 12"],
     [/G. V.p/gi, "Gò Vấp"],
     [/Th.nh L.c/gi, "Thạnh Lộc"],
@@ -199,6 +215,8 @@ function normalizeAdminText(value) {
   text = text
     .replace(/^AI ch ng spam\.?$/i, "AI chống spam")
     .replace(/^AI nh.c gia h.n\.?$/i, "AI nhắc gia hạn")
+    .replace(/^AI nhắc gia han\.?$/i, "AI nhắc gia hạn")
+    .replace(/^AI nhac gia han\.?$/i, "AI nhắc gia hạn")
     .replace(/^AI g.i . VIP\.?$/i, "AI gợi ý VIP.")
     .replace(/^AI\s*ã\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
     .replace(/^AI\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
@@ -209,6 +227,7 @@ function normalizeAdminText(value) {
     .replace(/^Khng pht hi.?n tin spam r.? r.ng\.?$/i, "Không phát hiện tin spam rõ ràng.")
     .replace(/^Ch.a c. tin c.n g.i . VIP\.?$/i, "Chưa có tin cần gợi ý VIP.")
     .replace(/^to\/gi\s*\d+\s*nhc.*gia hn\.?$/i, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn.")
+    .replace(/^Đã tạo\/gợi ý\s*(\d+)\s*nhắc nhở nạp tiền hoặc gia hạn\.?$/i, "Đã tạo/gợi ý $1 nhắc nhở nạp tiền hoặc gia hạn.")
     .replace(/^Nh.c n.p ti.n cho\s+(.+?)\s+v.*th.p\.?$/i, "Nhắc nạp tiền cho $1 vì số dư thấp.");
 
   return text;
