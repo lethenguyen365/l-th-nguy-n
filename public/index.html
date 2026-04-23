@@ -8,9 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap&subset=vietnamese" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=font-repair-20260423" />
-  <link rel="stylesheet" href="theme.css?v=font-repair-20260423" />
-  <link rel="stylesheet" href="pro-ui.css?v=font-repair-20260423" />
+  <link rel="stylesheet" href="style.css?v=listing-tabs-20260423" />
+  <link rel="stylesheet" href="theme.css?v=listing-tabs-20260423" />
+  <link rel="stylesheet" href="pro-ui.css?v=listing-tabs-20260423" />
   <style>
     html[data-theme="dark"] #postForm input,
     html[data-theme="dark"] #postForm select,
@@ -351,16 +351,14 @@
         <div class="panel section-header-block">
           <div class="section-header">
             <div>
-              <div class="tiny-title">Tin bất động sản</div>
-              <h2>Tin đăng mới nhất khu vực TP.HCM</h2>
+              <div class="tiny-title">Danh sách theo mục</div>
+              <h2>Tin mới nhất khu vực TP.HCM</h2>
             </div>
-            <div class="soft-badge">Ưu tiên hiển thị tin nổi bật</div>
+            <div class="soft-badge">Mỗi mục hiển thị 5 tin / trang</div>
           </div>
-          <div class="featured-strip">
-            <div class="featured-chip">NHÃ€ BÃN</div>
-            <div class="featured-chip">Äáº¤T Ná»€N</div>
-            <div class="featured-chip">CHO THUÃŠ</div>
-            <div class="featured-chip">Máº¶T Báº°NG</div>
+          <div class="listing-category-tabs" id="listingCategoryTabs" aria-label="Chọn mục tin">
+            <button class="listing-category-tab is-active" type="button" data-listing-category="Nhà bán">Nhà bán</button>
+            <button class="listing-category-tab" type="button" data-listing-category="Việc làm">Việc làm</button>
           </div>
         </div>
         <div id="postList" class="cards-grid"></div>
@@ -843,8 +841,8 @@
   </div>
 
   <script src="script.js?v=remove-contact-section-20260423"></script>
-  <script src="app.js?v=font-repair-20260423"></script>
-  <script src="pro-ui.js?v=font-repair-20260423"></script>
+  <script src="app.js?v=listing-tabs-20260423"></script>
+  <script src="pro-ui.js?v=listing-tabs-20260423"></script>
 </body>
 </html>
 

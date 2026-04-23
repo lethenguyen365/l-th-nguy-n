@@ -203,6 +203,15 @@
       : "";
   };
 
+  const syncListingCategoryTabs = () => {
+    const current = $("#filterCategory")?.value || window.currentCategory || "Nhà bán";
+    $$(".listing-category-tab").forEach((button) => {
+      const active = button.dataset.listingCategory === current;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+  };
+
   const clearFilter = (key) => {
     if (key === "all") {
       ["filterKeyword", "searchKeyword", "filterCategory", "filterLocation", "filterMinPrice", "filterMaxPrice", "filterMinArea", "filterMaxArea", "filterBedrooms", "filterDirection", "filterLegal"].forEach((id) => {
@@ -327,6 +336,7 @@
     const target = $("#postList");
     if (!target) return;
     if (!options.keepPage) proListingPage = 1;
+    syncListingCategoryTabs();
     renderLoading();
     try {
       const filters = getFilters();
@@ -337,6 +347,7 @@
       posts = sortPosts(posts, filters.sort);
       window.__lastProPosts = posts;
       renderActiveFilters(filters);
+      syncListingCategoryTabs();
       if (!posts.length) {
         target.innerHTML = `
           <div class="pro-empty-state">
@@ -576,6 +587,17 @@
       sidebar.prepend(close);
     }
     document.addEventListener("click", (event) => {
+      const listingCategory = event.target.closest("[data-listing-category]");
+      if (listingCategory) {
+        const value = listingCategory.dataset.listingCategory || "Nhà bán";
+        const input = $("#filterCategory");
+        if (input) input.value = value;
+        window.currentCategory = value;
+        syncListingCategoryTabs();
+        window.proLoadPosts?.();
+        $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
       const clearBtn = event.target.closest("[data-clear-filter]");
       if (clearBtn) clearFilter(clearBtn.dataset.clearFilter);
       const quickLocation = event.target.closest("[data-pro-quick]");
@@ -591,6 +613,7 @@
         const input = $("#filterCategory");
         if (input) input.value = value;
         window.currentCategory = value;
+        syncListingCategoryTabs();
         window.proLoadPosts?.();
         $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }
@@ -630,6 +653,7 @@
       const input = $("#filterCategory");
       if (input) input.value = category || "";
       window.currentCategory = category || "";
+      syncListingCategoryTabs();
       window.proLoadPosts?.();
       $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
@@ -814,6 +838,11 @@
     enhancePostForm();
     setupShare();
     setupFloatingActions();
+    if ($("#filterCategory") && !$("#filterCategory").value && !window.currentCategory) {
+      $("#filterCategory").value = "Nhà bán";
+      window.currentCategory = "Nhà bán";
+    }
+    syncListingCategoryTabs();
     window.proLoadPosts = proLoadPosts;
     window.loadPosts = proLoadPosts;
     window.goToPostPage = (page) => {

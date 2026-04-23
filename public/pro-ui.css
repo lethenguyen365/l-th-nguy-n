@@ -3563,6 +3563,63 @@ body.pro-ui :where(p, li, span, small, label, input, select, textarea, td, th) {
   letter-spacing: -0.004em !important;
 }
 
+body.pro-ui .listing-category-tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+body.pro-ui .listing-category-tab {
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #243247;
+  font-family: "Be Vietnam Pro", "Inter", Arial, sans-serif !important;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+body.pro-ui .listing-category-tab:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 184, 0, 0.75);
+  background: #fff8dd;
+  color: #7a4f00;
+}
+
+body.pro-ui .listing-category-tab.is-active {
+  border-color: rgba(255, 184, 0, 0.95);
+  background: linear-gradient(180deg, #ffd34d 0%, #ffb800 100%);
+  color: #211700;
+  box-shadow: 0 12px 22px rgba(255, 184, 0, 0.2);
+}
+
+html[data-theme="dark"] body.pro-ui .listing-category-tab,
+body.dark-mode.pro-ui .listing-category-tab {
+  border-color: rgba(93, 120, 158, 0.86);
+  background: #15243b;
+  color: #e8eef8;
+}
+
+html[data-theme="dark"] body.pro-ui .listing-category-tab:hover,
+body.dark-mode.pro-ui .listing-category-tab:hover {
+  border-color: rgba(255, 196, 57, 0.9);
+  background: rgba(255, 196, 57, 0.14);
+  color: #ffe7a3;
+}
+
+html[data-theme="dark"] body.pro-ui .listing-category-tab.is-active,
+body.dark-mode.pro-ui .listing-category-tab.is-active {
+  border-color: rgba(255, 196, 57, 0.95);
+  background: linear-gradient(180deg, #ffd85a 0%, #ffb800 100%);
+  color: #081321;
+}
+
 body.pro-ui .page-noise {
   opacity: 0.34;
   pointer-events: none;
