@@ -51,6 +51,22 @@ function decodeMojibake(value) {
 function normalizeAdminText(value) {
   if (typeof value !== "string") return value;
   const rawText = String(value || "").trim();
+  const looseText = rawText
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
+    .toLowerCase();
+  if (/ai/.test(looseText) && /xu ly/.test(looseText) && /nhac gia han/.test(looseText)) {
+    const count = rawText.match(/\d+/)?.[0] || "0";
+    return `AI đã xử lý nhắc gia hạn cho ${count} tài khoản.`;
+  }
+  if (/ai/.test(looseText) && /tao/.test(looseText) && /goi y vip/.test(looseText)) {
+    return "AI đã tạo gợi ý VIP.";
+  }
+  if (/ai/.test(looseText) && /quet spam/.test(looseText)) {
+    return "AI đã quét spam.";
+  }
   let text = rawText
     .replace(/^AI\s*(?:�|ã|d|da|đã)?\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
     .replace(/^AI\s*(?:�|ã|d|da|đã)?\s*tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
@@ -220,6 +236,9 @@ function showAlert(message) {
     .replace(/^AI ch ng spam\.?$/i, "AI chống spam")
     .replace(/^AI nh.c gia h.n\.?$/i, "AI nhắc gia hạn")
     .replace(/^AI g.i . VIP\.?$/i, "AI gợi ý VIP.")
+    .replace(/^AI\s*ã\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
+    .replace(/^AI\s*ã\s*tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
+    .replace(/^AI\s*ã\s*quét spam\.?$/i, "AI đã quét spam.")
     .replace(/^AI\s*ã\s+xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
     .replace(/^AI\s*ã\s+tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
     .replace(/^AI\s*ã\s*quét spam\.?$/i, "AI đã quét spam.");
