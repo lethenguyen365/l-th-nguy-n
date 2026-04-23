@@ -633,6 +633,10 @@ function normalizeKnownVietnamese(key, value){
 function normalizeFrontendMessage(value){
   const text = typeof value === "string" ? maybeFixVietnameseMojibake(value).trim() : value;
   if (typeof text !== "string") return text;
+  if (/^B[ạa?n]*\s*ch[ưua?.]*\s*(đ|d|Đ|D)?[ăa]?ng\s*nh[ậa?p]*\.?$/i.test(text)) return "Bạn chưa đăng nhập.";
+  if (/^B[ạa?n]*\s*ch[ưua?.]*\s*(đ|d|Đ|D)?[ăa]?ng\s*nh[ậa?p].*y[êe]?u\s*th[íi]?ch/i.test(text)) {
+    return "Bạn chưa đăng nhập. Hãy đăng nhập để dùng yêu thích.";
+  }
   for (const [pattern, replacement] of FRONTEND_MESSAGE_FALLBACKS) {
     if (pattern.test(text)) return replacement;
   }
