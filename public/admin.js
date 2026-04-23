@@ -10,6 +10,9 @@ const ADMIN_TEXT_FIXUPS = [
   [/^AI gợi ý VIP\.?$/i, "AI gợi ý VIP."],
   [/^Chưa có tin cần gợi ý VIP\.?$/i, "Chưa có tin cần gợi ý VIP."],
   [/^AI đã tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP."],
+  [/^AI\s*(?:�|ã|d|da|đã)?\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản."],
+  [/^AI\s*(?:�|ã|d|da|đã)?\s*tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP."],
+  [/^AI\s*(?:�|ã|d|da|đã)?\s*quét spam\.?$/i, "AI đã quét spam."],
   [/^Đã cập nhật cài đặt\.?$/i, "Đã cập nhật cài đặt."],
   [/^Đã cập nhật thông báo\.?$/i, "Đã cập nhật thông báo."],
 ];
@@ -47,7 +50,13 @@ function decodeMojibake(value) {
 
 function normalizeAdminText(value) {
   if (typeof value !== "string") return value;
-  let text = decodeMojibake(value)
+  const rawText = String(value || "").trim();
+  let text = rawText
+    .replace(/^AI\s*(?:�|ã|d|da|đã)?\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
+    .replace(/^AI\s*(?:�|ã|d|da|đã)?\s*tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
+    .replace(/^AI\s*(?:�|ã|d|da|đã)?\s*quét spam\.?$/i, "AI đã quét spam.");
+
+  text = decodeMojibake(text)
     .replace(/á»‡/g, "ệ")
     .replace(/á»›/g, "ớ")
     .replace(/á»‹/g, "ị")
@@ -124,8 +133,11 @@ function normalizeAdminText(value) {
     [/AI g.i . VIP/gi, "AI gợi ý VIP"],
     [/AI nh.c gia h.n/gi, "AI nhắc gia hạn"],
     [/^AI đã xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản."],
+    [/^AI ã xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản."],
     [/^AI đã tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP."],
+    [/^AI ã tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP."],
     [/^AI đã quét spam\.?$/i, "AI đã quét spam."],
+    [/^AI ã quét spam\.?$/i, "AI đã quét spam."],
     [/Kh.ng ph.t hi.n tin spam r. r.ng\./gi, "Không phát hiện tin spam rõ ràng."],
     [/Ch.a c. tin c.n g.i . VIP\./gi, "Chưa có tin cần gợi ý VIP."],
     [/to\/g.i \d+ nh.c nh. n.p ti.n ho.c gia h.n\./gi, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn."],
@@ -173,8 +185,11 @@ function normalizeAdminText(value) {
     .replace(/^AI nh.c gia h.n\.?$/i, "AI nhắc gia hạn")
     .replace(/^AI g.i . VIP\.?$/i, "AI gợi ý VIP.")
     .replace(/^AI\s*ã\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
+    .replace(/^AI\s*xử lý nhắc gia hạn cho\s*(\d+)\s*tài khoản\.?$/i, "AI đã xử lý nhắc gia hạn cho $1 tài khoản.")
     .replace(/^AI\s*ã\s*tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
+    .replace(/^AI\s*tạo gợi ý VIP\.?$/i, "AI đã tạo gợi ý VIP.")
     .replace(/^AI\s*ã\s*quét spam\.?$/i, "AI đã quét spam.")
+    .replace(/^AI\s*quét spam\.?$/i, "AI đã quét spam.")
     .replace(/^Khng pht hi.?n tin spam r.? r.ng\.?$/i, "Không phát hiện tin spam rõ ràng.")
     .replace(/^Ch.a c. tin c.n g.i . VIP\.?$/i, "Chưa có tin cần gợi ý VIP.")
     .replace(/^to\/gi\s*\d+\s*nhc.*gia hn\.?$/i, "Đã tạo/gợi ý nhắc nhở nạp tiền hoặc gia hạn.")
