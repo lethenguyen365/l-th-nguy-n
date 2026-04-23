@@ -4595,6 +4595,95 @@ body.pro-ui .package-quick-btn {
   color: #8a5a00 !important;
 }
 
+body.pro-ui #postSection.post-form-collapsed {
+  display: none !important;
+}
+
+body.pro-ui #postLauncher.post-launcher-compact {
+  display: none !important;
+}
+
+body.pro-ui .post-launcher-panel {
+  padding: 22px !important;
+  border-radius: 28px !important;
+  background:
+    radial-gradient(circle at top left, rgba(248, 184, 0, 0.18), transparent 34%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.94)) !important;
+  border: 1px solid rgba(226, 232, 240, 0.92) !important;
+}
+
+body.pro-ui .post-launcher-content {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: 18px !important;
+  align-items: center !important;
+}
+
+body.pro-ui .post-launcher-content h2 {
+  margin: 8px 0 8px !important;
+  font-size: clamp(24px, 3vw, 38px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.045em !important;
+  color: var(--pro-ink) !important;
+}
+
+body.pro-ui .post-launcher-content p {
+  max-width: 680px !important;
+  margin: 0 !important;
+  color: var(--pro-muted) !important;
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+  font-weight: 650 !important;
+}
+
+body.pro-ui .post-section-tools {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+
+html[data-theme="dark"] body.pro-ui .post-launcher-panel,
+body.dark-mode.pro-ui .post-launcher-panel {
+  background:
+    radial-gradient(circle at top left, rgba(248, 184, 0, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(19, 34, 57, 0.98), rgba(14, 27, 47, 0.96)) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+html[data-theme="dark"] body.pro-ui .post-launcher-content h2,
+body.dark-mode.pro-ui .post-launcher-content h2 {
+  color: #f8fbff !important;
+  -webkit-text-fill-color: #f8fbff !important;
+}
+
+html[data-theme="dark"] body.pro-ui .post-launcher-content p,
+body.dark-mode.pro-ui .post-launcher-content p {
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+@media (max-width: 720px) {
+  body.pro-ui .post-launcher-panel {
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  body.pro-ui .post-launcher-content {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  body.pro-ui .post-launcher-content .btn {
+    width: 100% !important;
+  }
+
+  body.pro-ui .post-section-tools {
+    justify-content: flex-start !important;
+  }
+}
+
 body.pro-ui #packagesSection,
 body.pro-ui #paymentPanel,
 body.pro-ui #walletSection,

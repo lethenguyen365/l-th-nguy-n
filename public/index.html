@@ -8,9 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap&subset=vietnamese" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=vietnamese-text-fix-20260423" />
-  <link rel="stylesheet" href="theme.css?v=vietnamese-text-fix-20260423" />
-  <link rel="stylesheet" href="pro-ui.css?v=vietnamese-text-fix-20260423" />
+  <link rel="stylesheet" href="style.css?v=collapsible-post-form-20260423" />
+  <link rel="stylesheet" href="theme.css?v=collapsible-post-form-20260423" />
+  <link rel="stylesheet" href="pro-ui.css?v=collapsible-post-form-20260423" />
   <style>
     html[data-theme="dark"] #postForm input,
     html[data-theme="dark"] #postForm select,
@@ -502,13 +502,27 @@
           </div>
         </section>
 
-        <section class="panel" id="postSection">
+        <section class="panel post-launcher-panel" id="postLauncher">
+          <div class="post-launcher-content">
+            <div>
+              <div class="tiny-title">Đăng tin</div>
+              <h2>Sẵn sàng tạo tin mới?</h2>
+              <p>Form đăng tin đang được thu gọn để trang gọn hơn. Bấm nút bên dưới để mở form nhập thông tin, chọn ảnh và xem trước tin.</p>
+            </div>
+            <button class="btn btn-primary btn-lg" type="button" onclick="showPostForm()">Đăng tin ngay</button>
+          </div>
+        </section>
+
+        <section class="panel post-form-collapsed" id="postSection">
           <div class="section-header">
             <div>
               <div class="tiny-title">Đăng bài</div>
               <h2>Tạo hoặc cập nhật tin bất động sản</h2>
             </div>
-            <div class="soft-badge">Có upload ảnh từ máy</div>
+            <div class="post-section-tools">
+              <div class="soft-badge">Có upload ảnh từ máy</div>
+              <button class="btn btn-light btn-sm" type="button" onclick="hidePostForm()">Ẩn form</button>
+            </div>
           </div>
           <form id="postForm" class="form-grid" novalidate>
             <input id="editingPostId" type="hidden" />
@@ -860,9 +874,9 @@
     </div>
   </div>
 
-  <script src="script.js?v=vietnamese-text-fix-20260423"></script>
-  <script src="app.js?v=vietnamese-text-fix-20260423"></script>
-  <script src="pro-ui.js?v=vietnamese-text-fix-20260423"></script>
+  <script src="script.js?v=collapsible-post-form-20260423"></script>
+  <script src="app.js?v=collapsible-post-form-20260423"></script>
+  <script src="pro-ui.js?v=collapsible-post-form-20260423"></script>
 </body>
 </html>
 

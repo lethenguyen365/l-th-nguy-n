@@ -1511,7 +1511,25 @@ const currency = (v) => Number(v || 0).toLocaleString("vi-VN") + " đ";
 function openModal(id){ document.getElementById(id).classList.add("show"); }
 function closeModal(id){ document.getElementById(id).classList.remove("show"); }
 window.onclick = (e) => document.querySelectorAll(".modal").forEach(m => { if (e.target === m) m.classList.remove("show"); });
-function scrollToPost(){ document.getElementById("postSection").scrollIntoView({behavior:"smooth"}); }
+function showPostForm(){
+  const section = document.getElementById("postSection");
+  const launcher = document.getElementById("postLauncher");
+  if (!section) return;
+  section.classList.remove("post-form-collapsed");
+  section.classList.add("post-form-open");
+  launcher?.classList.add("post-launcher-compact");
+  section.scrollIntoView({ behavior:"smooth", block:"start" });
+}
+function hidePostForm(){
+  const section = document.getElementById("postSection");
+  const launcher = document.getElementById("postLauncher");
+  if (!section) return;
+  section.classList.add("post-form-collapsed");
+  section.classList.remove("post-form-open");
+  launcher?.classList.remove("post-launcher-compact");
+  launcher?.scrollIntoView({ behavior:"smooth", block:"center" });
+}
+function scrollToPost(){ showPostForm(); }
 function scrollToPackages(){ document.getElementById("packagesSection").scrollIntoView({behavior:"smooth"}); }
 function setQuickLocation(location){
   if (window.filterLocation) filterLocation.value = location;
