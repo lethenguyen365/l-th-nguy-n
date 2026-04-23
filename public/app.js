@@ -1889,6 +1889,12 @@ async function loadFavorites(){
 async function loadMySubscriptions(){
   try{
     const rows = await fetchJSON("/api/my-subscriptions");
+    const statusLabel = {
+      active: "Đang dùng",
+      expired: "Hết hạn",
+      pending: "Chờ duyệt",
+      rejected: "Từ chối"
+    };
     const renderTarget = (html) => {
       if (window.mySubscriptionList) mySubscriptionList.innerHTML = html;
       const accountTarget = document.getElementById("accountMySubscriptionList");
@@ -1902,7 +1908,7 @@ async function loadMySubscriptions(){
           <span>${currency(sub.price)} · ${sub.start_date} → ${sub.end_date}</span><br>
           <small>Nội dung CK: ${sub.payment_note}</small>
         </div>
-        <div class="status-badge status-${sub.status}">${sub.status}</div>
+        <div class="status-badge status-${sub.status}">${statusLabel[sub.status] || sub.status}</div>
       </div>`).join(""));
   }catch{
     const html = `<div class="empty-state">Bạn cần đăng nhập để xem lịch sử gói.</div>`;

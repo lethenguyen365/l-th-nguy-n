@@ -393,6 +393,77 @@ async function repairDatabaseText() {
   await repairTableText("ai_actions", "id", ["action_type", "action_status", "note"], normalizeAdminAiText);
 }
 
+const CANONICAL_PACKAGES = [
+  ["Nhà đất - Tin thường", 0, 7, 10, 0, "FREE", "Đăng tin nhà đất cơ bản trong 7 ngày"],
+  ["Nhà đất - Đẩy tin", 10000, 1, 10, 0, "BOOST", "Đẩy tin nhà đất lên đầu trong 1 lần"],
+  ["Nhà đất - Tin nổi bật", 20000, 7, 15, 1, "HOT", "Tăng hiển thị cho tin nhà đất trong 7 ngày"],
+  ["Nhà đất - VIP 7 ngày", 30000, 7, 20, 1, "VIP", "Ưu tiên hiển thị tin nhà đất trong 7 ngày"],
+  ["Nhà đất - VIP 15 ngày", 50000, 15, 30, 1, "VIP+", "Ưu tiên hiển thị tin nhà đất trong 15 ngày"],
+  ["Nhà đất - VIP 30 ngày", 80000, 30, 60, 1, "PRO", "Ưu tiên hiển thị tin nhà đất trong 30 ngày"],
+  ["Nhà thuê - Tin thường", 0, 7, 10, 0, "FREE", "Đăng tin cho thuê cơ bản trong 7 ngày"],
+  ["Nhà thuê - Đẩy tin", 5000, 1, 10, 0, "BOOST", "Đẩy tin cho thuê lên đầu trong 1 lần"],
+  ["Nhà thuê - Tin nổi bật", 15000, 7, 15, 1, "HOT", "Tăng hiển thị tin cho thuê trong 7 ngày"],
+  ["Nhà thuê - VIP 7 ngày", 25000, 7, 20, 1, "VIP", "Ưu tiên hiển thị tin cho thuê trong 7 ngày"],
+  ["Việc làm - Tin thường", 0, 7, 10, 0, "FREE", "Đăng tin việc làm cơ bản trong 7 ngày"],
+  ["Việc làm - Tin nổi bật", 10000, 7, 15, 1, "HOT", "Tăng hiển thị tin việc làm trong 7 ngày"],
+  ["Việc làm - VIP", 20000, 7, 20, 1, "VIP", "Ưu tiên hiển thị tin việc làm trong 7 ngày"],
+  ["Việc làm - Đẩy tin", 5000, 1, 10, 0, "BOOST", "Đẩy tin việc làm lên đầu trong 1 lần"]
+];
+
+const CANONICAL_PRICING_PLANS = [
+  ["viec_lam", "Tin thường", 0, 7, "normal"],
+  ["viec_lam", "Tin nổi bật", 10000, 7, "featured"],
+  ["viec_lam", "Tin VIP", 20000, 7, "vip"],
+  ["viec_lam", "Đẩy tin", 5000, 1, "push"],
+  ["nha_thue", "Tin thường", 0, 7, "normal"],
+  ["nha_thue", "Tin nổi bật", 15000, 7, "featured"],
+  ["nha_thue", "Tin VIP", 25000, 7, "vip"],
+  ["nha_thue", "Đẩy tin", 5000, 1, "push"],
+  ["vip", "VIP 3 ngày", 15000, 3, "vip"],
+  ["vip", "VIP 7 ngày", 25000, 7, "vip"],
+  ["vip", "VIP 15 ngày", 50000, 15, "vip"],
+  ["vip", "VIP 30 ngày", 80000, 30, "vip"]
+];
+
+async function ensureCanonicalPlans() {
+  const packageRows = await all(`SELECT id FROM packages ORDER BY id ASC`);
+
+  for (let index = 0; index < CANONICAL_PACKAGES.length; index += 1) {
+    const row = packageRows[index];
+    const pkg = CANONICAL_PACKAGES[index];
+    if (row) {
+      await run(
+        `UPDATE packages
+         SET name = ?, price = ?, duration_days = ?, post_limit = ?, can_feature = ?, featured_badge = ?, description = ?, is_active = 1
+         WHERE id = ?`,
+        [...pkg, row.id]
+      );
+    } else {
+      await run(
+        `INSERT INTO packages (name, price, duration_days, post_limit, can_feature, featured_badge, description, is_active)
+         VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
+        pkg
+      );
+    }
+  }
+
+  if (packageRows.length > CANONICAL_PACKAGES.length) {
+    const extraIds = packageRows.slice(CANONICAL_PACKAGES.length).map((row) => row.id);
+    for (const id of extraIds) {
+      await run(`UPDATE packages SET is_active = 0 WHERE id = ?`, [id]);
+    }
+  }
+
+  await run(`DELETE FROM pricing_plans`);
+  for (const plan of CANONICAL_PRICING_PLANS) {
+    await run(
+      `INSERT INTO pricing_plans (category, name, price, duration_days, feature_type, is_active)
+       VALUES (?, ?, ?, ?, ?, 1)`,
+      plan
+    );
+  }
+}
+
 function run(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.run(sql, params, function(err) { if (err) reject(err); else resolve(this); });
@@ -1343,7 +1414,7 @@ async function bootstrap() {
   }
 
   const packageRows = await all(`SELECT id, name FROM packages ORDER BY id ASC`);
-  const hasPortalPlans = packageRows.length === 14 && packageRows.some((pkg) => pkg.name === "NhÃ  Ä‘áº¥t - VIP 30 ngÃ y");
+  const hasPortalPlans = packageRows.length === 14;
   if (!hasPortalPlans) {
     await run(`DELETE FROM packages`);
     await run(`INSERT INTO packages (name, price, duration_days, post_limit, can_feature, featured_badge, description) VALUES
@@ -1483,6 +1554,7 @@ async function bootstrap() {
   const demoAdminUser = await get(`SELECT id FROM users WHERE role = 'admin' ORDER BY id ASC LIMIT 1`);
   if (demoAdminUser) await ensureExpandedDemoPosts(demoAdminUser.id);
   await repairDatabaseText();
+  await ensureCanonicalPlans();
 }
 
 app.post("/api/upload", requireLogin, upload.single("image"), async (req, res) => {
