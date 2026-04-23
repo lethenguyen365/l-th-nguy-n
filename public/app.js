@@ -761,6 +761,26 @@ function normalizeKnownVietnamese(key, value){
 function normalizeFrontendMessage(value){
   const text = typeof value === "string" ? maybeFixVietnameseMojibake(value).trim() : value;
   if (typeof text !== "string") return text;
+  const looseText = text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[đĐ]/g, "d")
+    .replace(/[^\w\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+  if (/ban can mua goi dang tin truoc khi dang bai/.test(looseText)) {
+    return "Bạn cần mua gói đăng tin trước khi đăng bài.";
+  }
+  if (/ban da het luot dang tin trong goi hien tai/.test(looseText)) {
+    return "Bạn đã hết lượt đăng tin trong gói hiện tại.";
+  }
+  if (/dang tin thanh cong/.test(looseText)) return "Đăng tin thành công.";
+  if (/dang tin that bai/.test(looseText)) return "Đăng tin thất bại.";
+  if (/vui long nhap day du thong tin/.test(looseText)) return "Vui lòng nhập đầy đủ thông tin.";
+  if (/khong tim thay bai dang/.test(looseText)) return "Không tìm thấy bài đăng.";
+  if (/cap nhat bai dang thanh cong/.test(looseText)) return "Cập nhật bài đăng thành công.";
+  if (/cap nhat bai dang that bai/.test(looseText)) return "Cập nhật bài đăng thất bại.";
   if (/^B[ạa?n]*\s*ch[ưua?.]*\s*(đ|d|Đ|D)?[ăa]?ng\s*nh[ậa?p]*\.?$/i.test(text)) return "Bạn chưa đăng nhập.";
   if (/^B[ạa?n]*\s*ch[ưua?.]*\s*(đ|d|Đ|D)?[ăa]?ng\s*nh[ậa?p].*y[êe]?u\s*th[íi]?ch/i.test(text)) {
     return "Bạn chưa đăng nhập. Hãy đăng nhập để dùng yêu thích.";

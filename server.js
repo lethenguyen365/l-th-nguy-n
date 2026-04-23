@@ -1716,15 +1716,16 @@ app.get("/api/my-posts", requireLogin, async (req, res) => {
 app.post("/api/posts", requireLogin, async (req, res) => {
   try {
     const { title, category, price, location, description, image, area, bedrooms, house_direction, legal_status, is_featured } = req.body;
-    if (!title || !category || !price || !location || !description) return res.status(400).json({ message: "Vui lÃ²ng nháº­p Ä‘áº§y Ä‘á»§ thÃ´ng tin." });
+    if (!title || !category || !price || !location || !description) return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin." });
 
     let featureFlag = 0;
     if (req.session.user.role !== "admin") {
       const sub = await getActiveSubscription(req.session.user.id);
-      if (!sub) return res.status(403).json({ message: "Báº¡n cáº§n mua gÃ³i Ä‘Äƒng tin trÆ°á»›c khi Ä‘Äƒng bÃ i." });
-      const used = await get(`SELECT COUNT(*) as total FROM posts WHERE user_id = ? AND date(created_at) >= date(?) AND date(created_at) <= date(?)`, [req.session.user.id, sub.start_date, sub.end_date]);
-      if (used.total >= sub.post_limit) return res.status(403).json({ message: "Báº¡n Ä‘Ã£ háº¿t lÆ°á»£t Ä‘Äƒng tin trong gÃ³i hiá»‡n táº¡i." });
-      if (sub.can_feature && Number(is_featured) === 1) featureFlag = 1;
+      if (sub) {
+        const used = await get(`SELECT COUNT(*) as total FROM posts WHERE user_id = ? AND date(created_at) >= date(?) AND date(created_at) <= date(?)`, [req.session.user.id, sub.start_date, sub.end_date]);
+        if (used.total >= sub.post_limit) return res.status(403).json({ message: "Bạn đã hết lượt đăng tin trong gói hiện tại." });
+        if (sub.can_feature && Number(is_featured) === 1) featureFlag = 1;
+      }
     } else {
       featureFlag = Number(is_featured) === 1 ? 1 : 0;
     }
@@ -1732,9 +1733,9 @@ app.post("/api/posts", requireLogin, async (req, res) => {
     await run(`INSERT INTO posts (title, category, price, location, description, image, area, bedrooms, house_direction, legal_status, user_id, status, is_featured, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved', ?, ?)`,
       [title, category, Number(price), location, description, image || "", Number(area || 0), Number(bedrooms || 0), house_direction || "", legal_status || "", req.session.user.id, featureFlag, dateTimeStr()]);
-    res.json({ message: "ÄÄƒng tin thÃ nh cÃ´ng." });
+    res.json({ message: "Đăng tin thành công." });
   } catch {
-    res.status(500).json({ message: "ÄÄƒng tin tháº¥t báº¡i." });
+    res.status(500).json({ message: "Đăng tin thất bại." });
   }
 });
 
