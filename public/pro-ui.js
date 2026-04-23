@@ -2,6 +2,8 @@
   "use strict";
 
   const PRO_POSTS_PER_PAGE = 5;
+  const LISTING_GROUP_REAL_ESTATE = "real-estate";
+  const LISTING_GROUP_JOBS = "jobs";
   let proListingPage = 1;
 
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -69,6 +71,28 @@
     return data;
   };
 
+  const isJobCategory = (category) => normalize(fixText(category || "")).includes("viec lam");
+
+  const getListingGroup = () => {
+    if (window.currentListingGroup === LISTING_GROUP_JOBS) return LISTING_GROUP_JOBS;
+    if (window.currentListingGroup === LISTING_GROUP_REAL_ESTATE) return LISTING_GROUP_REAL_ESTATE;
+    return isJobCategory($("#filterCategory")?.value || window.currentCategory || "")
+      ? LISTING_GROUP_JOBS
+      : LISTING_GROUP_REAL_ESTATE;
+  };
+
+  const getEffectiveCategory = () => {
+    if (window.currentListingGroup === LISTING_GROUP_REAL_ESTATE) return "";
+    if (window.currentListingGroup === LISTING_GROUP_JOBS) return "Việc làm";
+    return $("#filterCategory")?.value || window.currentCategory || "";
+  };
+
+  const filterByListingGroup = (posts) => {
+    const group = getListingGroup();
+    if (group === LISTING_GROUP_JOBS) return posts.filter((post) => isJobCategory(post.category));
+    return posts.filter((post) => !isJobCategory(post.category));
+  };
+
   const currentUser = () => {
     try {
       return JSON.parse(localStorage.getItem("currentUser") || "null");
@@ -103,7 +127,7 @@
   const buildQuery = () => {
     const params = new URLSearchParams();
     const keyword = ($("#filterKeyword")?.value || $("#searchKeyword")?.value || "").trim();
-    const category = $("#filterCategory")?.value || window.currentCategory || "";
+    const category = getEffectiveCategory();
     const sort = $("#sortSelect")?.value || "";
     if (keyword) params.set("q", keyword);
     if (category) params.set("category", category);
@@ -113,7 +137,7 @@
 
   const getFilters = () => ({
     keyword: ($("#filterKeyword")?.value || $("#searchKeyword")?.value || "").trim(),
-    category: $("#filterCategory")?.value || window.currentCategory || "",
+    category: getEffectiveCategory(),
     location: $("#filterLocation")?.value || "",
     minPrice: Number($("#filterMinPrice")?.value || 0),
     maxPrice: Number($("#filterMaxPrice")?.value || 0),
@@ -204,7 +228,7 @@
   };
 
   const syncListingCategoryTabs = () => {
-    const current = $("#filterCategory")?.value || window.currentCategory || "Nhà bán";
+    const current = getListingGroup();
     $$(".listing-category-tab").forEach((button) => {
       const active = button.dataset.listingCategory === current;
       button.classList.toggle("is-active", active);
@@ -219,6 +243,7 @@
         if (el) el.value = "";
       });
       window.currentCategory = "";
+      window.currentListingGroup = LISTING_GROUP_REAL_ESTATE;
       window.proLoadPosts?.();
       return;
     }
@@ -236,7 +261,10 @@
       const el = document.getElementById(id);
       if (el) el.value = "";
     });
-    if (key === "category") window.currentCategory = "";
+    if (key === "category") {
+      window.currentCategory = "";
+      window.currentListingGroup = LISTING_GROUP_REAL_ESTATE;
+    }
     window.proLoadPosts?.();
   };
 
@@ -336,14 +364,16 @@
     const target = $("#postList");
     if (!target) return;
     if (!options.keepPage) proListingPage = 1;
+    const keepScrollY = Number.isFinite(options.keepScrollY) ? options.keepScrollY : null;
     syncListingCategoryTabs();
-    renderLoading();
+    if (!options.skipLoading) renderLoading();
     try {
       const filters = getFilters();
       const query = buildQuery();
       let posts = await fetchJSONPro("/api/posts" + (query ? `?${query}` : ""));
       if (!Array.isArray(posts)) posts = posts.posts || [];
       posts = posts.filter((post) => passesClientFilters(post, filters));
+      posts = filterByListingGroup(posts);
       posts = sortPosts(posts, filters.sort);
       window.__lastProPosts = posts;
       renderActiveFilters(filters);
@@ -364,6 +394,9 @@
       const pagePosts = posts.slice(startIndex, startIndex + PRO_POSTS_PER_PAGE);
       target.innerHTML = pagePosts.map(renderCard).join("");
       renderPostPager(posts.length);
+      if (keepScrollY !== null) {
+        requestAnimationFrame(() => window.scrollTo({ top: keepScrollY, left: window.scrollX, behavior: "auto" }));
+      }
     } catch (error) {
       renderPostPager(0);
       target.innerHTML = `
@@ -589,13 +622,13 @@
     document.addEventListener("click", (event) => {
       const listingCategory = event.target.closest("[data-listing-category]");
       if (listingCategory) {
-        const value = listingCategory.dataset.listingCategory || "Nhà bán";
+        const value = listingCategory.dataset.listingCategory === LISTING_GROUP_JOBS ? LISTING_GROUP_JOBS : LISTING_GROUP_REAL_ESTATE;
         const input = $("#filterCategory");
-        if (input) input.value = value;
-        window.currentCategory = value;
+        if (input) input.value = value === LISTING_GROUP_JOBS ? "Việc làm" : "";
+        window.currentListingGroup = value;
+        window.currentCategory = value === LISTING_GROUP_JOBS ? "Việc làm" : "";
         syncListingCategoryTabs();
-        window.proLoadPosts?.();
-        $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.proLoadPosts?.({ keepScrollY: window.scrollY });
         return;
       }
       const clearBtn = event.target.closest("[data-clear-filter]");
@@ -613,6 +646,7 @@
         const input = $("#filterCategory");
         if (input) input.value = value;
         window.currentCategory = value;
+        window.currentListingGroup = isJobCategory(value) ? LISTING_GROUP_JOBS : "";
         syncListingCategoryTabs();
         window.proLoadPosts?.();
         $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -637,7 +671,14 @@
     });
     ["filterCategory", "filterLocation", "sortSelect", "filterMinPrice", "filterMaxPrice", "filterMinArea", "filterMaxArea", "filterBedrooms", "filterDirection", "filterLegal"].forEach((id) => {
       const input = document.getElementById(id);
-      if (input) input.addEventListener("change", () => window.proLoadPosts?.());
+      if (input) input.addEventListener("change", () => {
+        if (id === "filterCategory") {
+          window.currentCategory = input.value || "";
+          window.currentListingGroup = input.value ? (isJobCategory(input.value) ? LISTING_GROUP_JOBS : "") : LISTING_GROUP_REAL_ESTATE;
+          syncListingCategoryTabs();
+        }
+        window.proLoadPosts?.();
+      });
     });
     $("#proHeroSearchBtn")?.addEventListener("click", () => {
       const keyword = $("#proHeroKeyword")?.value || "";
@@ -839,8 +880,9 @@
     setupShare();
     setupFloatingActions();
     if ($("#filterCategory") && !$("#filterCategory").value && !window.currentCategory) {
-      $("#filterCategory").value = "Nhà bán";
-      window.currentCategory = "Nhà bán";
+      $("#filterCategory").value = "";
+      window.currentCategory = "";
+      window.currentListingGroup = LISTING_GROUP_REAL_ESTATE;
     }
     syncListingCategoryTabs();
     window.proLoadPosts = proLoadPosts;
@@ -848,8 +890,11 @@
     window.goToPostPage = (page) => {
       const posts = Array.isArray(window.__lastProPosts) ? window.__lastProPosts : [];
       const totalPages = Math.max(1, Math.ceil(posts.length / PRO_POSTS_PER_PAGE));
-      proListingPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
-      proLoadPosts({ keepPage: true });
+      const nextPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+      if (nextPage === proListingPage) return;
+      document.activeElement?.blur?.();
+      proListingPage = nextPage;
+      proLoadPosts({ keepPage: true, skipLoading: true, keepScrollY: window.scrollY });
     };
     window.viewDetail = proViewDetail;
     setTimeout(proLoadPosts, 80);
