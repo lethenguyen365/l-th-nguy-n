@@ -409,6 +409,327 @@ function all(sql, params = []) {
   });
 }
 
+const EXPANDED_DEMO_POSTS = [
+  {
+    title: "Tuyển sale bất động sản nhà phố Gò Vấp, nhận đào tạo từ đầu",
+    category: "Việc làm",
+    price: 15000000,
+    location: "Gò Vấp - Phường 10",
+    description: "Tuyển nhân viên kinh doanh nhà phố khu Gò Vấp. Có lương cứng, hoa hồng rõ ràng, được hướng dẫn nguồn hàng, kỹ năng gọi khách và quy trình chốt giao dịch.",
+    image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80",
+    area: 0,
+    bedrooms: 0,
+    house_direction: "",
+    legal_status: "Tin tuyển dụng",
+    is_featured: 1,
+    views: 312
+  },
+  {
+    title: "Tuyển cộng tác viên đăng tin nhà đất online tại Gò Vấp",
+    category: "Việc làm",
+    price: 8000000,
+    location: "Gò Vấp - Làm online",
+    description: "Cần cộng tác viên đăng tin, chăm sóc data khách thuê và khách mua nhà đất. Phù hợp sinh viên, nhân viên văn phòng muốn làm thêm theo thời gian linh hoạt.",
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
+    area: 0,
+    bedrooms: 0,
+    house_direction: "",
+    legal_status: "Làm bán thời gian",
+    is_featured: 0,
+    views: 184
+  },
+  {
+    title: "Tuyển chuyên viên tư vấn cho thuê phòng trọ và căn hộ Gò Vấp",
+    category: "Việc làm",
+    price: 12000000,
+    location: "Gò Vấp - Phường 5",
+    description: "Ưu tiên ứng viên giao tiếp tốt, biết dùng Zalo và Facebook. Công việc gồm tư vấn phòng, dẫn khách xem, cập nhật tình trạng phòng trống mỗi ngày.",
+    image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80",
+    area: 0,
+    bedrooms: 0,
+    house_direction: "",
+    legal_status: "Lương + hoa hồng",
+    is_featured: 0,
+    views: 168
+  },
+  {
+    title: "Tuyển nhân viên chăm sóc khách hàng bất động sản khu Quang Trung",
+    category: "Việc làm",
+    price: 11000000,
+    location: "Gò Vấp - Đường Quang Trung",
+    description: "Chăm sóc khách hàng có nhu cầu mua bán, cho thuê nhà đất. Có kịch bản tư vấn, data sẵn, môi trường làm việc ổn định tại văn phòng Gò Vấp.",
+    image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=80",
+    area: 0,
+    bedrooms: 0,
+    house_direction: "",
+    legal_status: "Văn phòng cố định",
+    is_featured: 0,
+    views: 146
+  },
+  {
+    title: "Tuyển thực tập sinh marketing đăng tin bất động sản Gò Vấp",
+    category: "Việc làm",
+    price: 6000000,
+    location: "Gò Vấp - Phường 7",
+    description: "Hỗ trợ viết nội dung tin đăng, chỉnh ảnh cơ bản, quản lý danh sách tin và đo hiệu quả hiển thị. Có phụ cấp và xác nhận thực tập.",
+    image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80",
+    area: 0,
+    bedrooms: 0,
+    house_direction: "",
+    legal_status: "Thực tập có phụ cấp",
+    is_featured: 0,
+    views: 121
+  },
+  {
+    title: "Tuyển trưởng nhóm kinh doanh nhà phố Gò Vấp",
+    category: "Việc làm",
+    price: 25000000,
+    location: "Gò Vấp - Phường 17",
+    description: "Cần trưởng nhóm có kinh nghiệm quản lý sale hoặc môi giới nhà phố. Hỗ trợ xây đội nhóm, quản lý chỉ tiêu, đào tạo thành viên mới và chăm sóc nguồn hàng.",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80",
+    area: 0,
+    bedrooms: 2,
+    house_direction: "",
+    legal_status: "Yêu cầu kinh nghiệm",
+    is_featured: 1,
+    views: 205
+  },
+  {
+    title: "Tuyển nhân viên khảo sát nguồn nhà Gò Vấp, có xe máy",
+    category: "Việc làm",
+    price: 9000000,
+    location: "Gò Vấp - Phường 14",
+    description: "Đi khảo sát nhà bán, phòng thuê, mặt bằng kinh doanh trong khu vực. Công việc phù hợp người rành đường Gò Vấp, chịu khó di chuyển và cập nhật thông tin chính xác.",
+    image: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
+    area: 0,
+    bedrooms: 0,
+    house_direction: "",
+    legal_status: "Cần xe máy",
+    is_featured: 0,
+    views: 133
+  },
+  {
+    title: "Tuyển telesale bất động sản ca hành chính tại Gò Vấp",
+    category: "Việc làm",
+    price: 10000000,
+    location: "Gò Vấp - Phường 3",
+    description: "Gọi tư vấn khách có nhu cầu mua bán và thuê nhà. Có data, có quản lý hỗ trợ, thu nhập gồm lương cứng, thưởng hiệu quả và hoa hồng giao dịch.",
+    image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1200&q=80",
+    area: 0,
+    bedrooms: 0,
+    house_direction: "",
+    legal_status: "Ca hành chính",
+    is_featured: 0,
+    views: 156
+  },
+  {
+    title: "Tuyển nhân viên dẫn khách xem phòng khu Nguyễn Oanh",
+    category: "Việc làm",
+    price: 9500000,
+    location: "Gò Vấp - Nguyễn Oanh",
+    description: "Phụ trách nhận lịch, dẫn khách xem phòng, cập nhật tình trạng phòng và hỗ trợ ký hợp đồng thuê. Ưu tiên người giao tiếp tốt, đúng giờ.",
+    image: "https://images.unsplash.com/photo-1551836022-4c4c79ecde51?auto=format&fit=crop&w=1200&q=80",
+    area: 0,
+    bedrooms: 0,
+    house_direction: "",
+    legal_status: "Có thưởng theo hợp đồng",
+    is_featured: 0,
+    views: 142
+  },
+  {
+    title: "Tuyển quản lý nội dung tin đăng bất động sản Gò Vấp",
+    category: "Việc làm",
+    price: 13000000,
+    location: "Gò Vấp - Văn phòng",
+    description: "Quản lý chất lượng tiêu đề, hình ảnh, mô tả và thông tin pháp lý của tin đăng. Yêu cầu cẩn thận, viết tiếng Việt rõ ràng, biết ưu tiên thông tin khách cần.",
+    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1200&q=80",
+    area: 0,
+    bedrooms: 1,
+    house_direction: "",
+    legal_status: "Kinh nghiệm nội dung",
+    is_featured: 0,
+    views: 118
+  },
+  {
+    title: "Bán nhà hẻm xe hơi đường Lê Đức Thọ, Gò Vấp",
+    category: "Nhà bán",
+    price: 7600000000,
+    location: "Gò Vấp - Phường 16",
+    description: "Nhà kết cấu chắc chắn, hẻm xe hơi thông thoáng, khu dân cư an ninh. Phù hợp gia đình cần ở gần trường học, chợ và trục Lê Đức Thọ.",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    area: 72,
+    bedrooms: 4,
+    house_direction: "Đông Nam",
+    legal_status: "Sổ hồng riêng",
+    is_featured: 1,
+    views: 288
+  },
+  {
+    title: "Bán nhà mới đường Phan Huy Ích, Gò Vấp, vào ở ngay",
+    category: "Nhà bán",
+    price: 6350000000,
+    location: "Gò Vấp - Phường 12",
+    description: "Nhà mới hoàn thiện, thiết kế hiện đại, phòng ngủ thoáng, bếp riêng. Hẻm sạch, gần chợ, siêu thị và tuyến kết nối Tân Bình.",
+    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
+    area: 61,
+    bedrooms: 3,
+    house_direction: "Tây Nam",
+    legal_status: "Hoàn công đầy đủ",
+    is_featured: 0,
+    views: 231
+  },
+  {
+    title: "Cho thuê căn hộ dịch vụ full nội thất gần Emart Gò Vấp",
+    category: "Cho thuê",
+    price: 7200000,
+    location: "Gò Vấp - Phường 5",
+    description: "Căn hộ dịch vụ đầy đủ nội thất, có thang máy, bảo vệ, giờ giấc tự do. Phù hợp nhân viên văn phòng, cặp đôi hoặc người cần thuê dài hạn.",
+    image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+    area: 32,
+    bedrooms: 1,
+    house_direction: "Nam",
+    legal_status: "Hợp đồng thuê rõ ràng",
+    is_featured: 0,
+    views: 197
+  },
+  {
+    title: "Cho thuê nhà nguyên căn gần chợ Hạnh Thông Tây, Gò Vấp",
+    category: "Cho thuê",
+    price: 16500000,
+    location: "Gò Vấp - Phường 11",
+    description: "Nhà nguyên căn sạch, có sân để xe, 3 phòng ngủ, phù hợp gia đình hoặc nhóm nhân viên. Khu dân cư đông, tiện đi Quang Trung và Nguyễn Văn Lượng.",
+    image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1200&q=80",
+    area: 78,
+    bedrooms: 3,
+    house_direction: "Bắc",
+    legal_status: "Hợp đồng thuê dài hạn",
+    is_featured: 0,
+    views: 174
+  },
+  {
+    title: "Bán nhà mặt tiền nhỏ đường Nguyễn Văn Khối, Gò Vấp",
+    category: "Nhà bán",
+    price: 11800000000,
+    location: "Gò Vấp - Phường 8",
+    description: "Vị trí mặt tiền dễ nhận diện, phù hợp vừa ở vừa kinh doanh nhỏ, mở văn phòng hoặc cho thuê lại. Pháp lý rõ ràng, thương lượng chính chủ.",
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    area: 88,
+    bedrooms: 4,
+    house_direction: "Đông",
+    legal_status: "Sổ hồng riêng",
+    is_featured: 1,
+    views: 266
+  },
+  {
+    title: "Cho thuê mặt bằng kinh doanh đường Quang Trung, Gò Vấp",
+    category: "Mặt bằng",
+    price: 24000000,
+    location: "Gò Vấp - Quang Trung",
+    description: "Mặt bằng tầng trệt sáng, dễ decor, khu vực đông dân cư và lưu lượng xe ổn định. Phù hợp spa, shop, văn phòng dịch vụ hoặc showroom nhỏ.",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+    area: 95,
+    bedrooms: 0,
+    house_direction: "Tây Bắc",
+    legal_status: "Hợp đồng kinh doanh",
+    is_featured: 0,
+    views: 219
+  },
+  {
+    title: "Bán đất hẻm ô tô gần công viên Làng Hoa, Gò Vấp",
+    category: "Đất nền",
+    price: 5450000000,
+    location: "Gò Vấp - Phường 8",
+    description: "Lô đất vuông vức, hẻm ô tô, khu dân cư hiện hữu. Phù hợp xây nhà ở hoặc giữ tài sản trung hạn tại khu vực Gò Vấp.",
+    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
+    area: 74,
+    bedrooms: 0,
+    house_direction: "Tây",
+    legal_status: "Sổ riêng",
+    is_featured: 0,
+    views: 188
+  },
+  {
+    title: "Bán nhà hẻm thông Nguyễn Oanh, Gò Vấp, gần trường học",
+    category: "Nhà bán",
+    price: 5900000000,
+    location: "Gò Vấp - Phường 6",
+    description: "Nhà hẻm thông, khu dân cư ổn định, gần trường học và chợ. Thiết kế 1 trệt 2 lầu, phù hợp gia đình trẻ cần mua ở thật.",
+    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80",
+    area: 56,
+    bedrooms: 3,
+    house_direction: "Đông Bắc",
+    legal_status: "Sổ hồng riêng",
+    is_featured: 0,
+    views: 203
+  },
+  {
+    title: "Cho thuê phòng studio gần Đại học Công nghiệp, Gò Vấp",
+    category: "Cho thuê",
+    price: 4800000,
+    location: "Gò Vấp - Phường 4",
+    description: "Studio sạch, có cửa sổ, nội thất cơ bản, khu an ninh, phù hợp sinh viên hoặc nhân viên văn phòng. Có khu để xe và lối đi riêng.",
+    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+    area: 24,
+    bedrooms: 1,
+    house_direction: "Nam",
+    legal_status: "Hợp đồng thuê",
+    is_featured: 0,
+    views: 162
+  },
+  {
+    title: "Bán nhà phố gần Cityland Park Hills, Gò Vấp",
+    category: "Nhà bán",
+    price: 9200000000,
+    location: "Gò Vấp - Phường 10",
+    description: "Nhà phố khu dân cư đẹp, đường trước nhà rộng, vị trí thuận tiện về Phan Văn Trị và Nguyễn Văn Lượng. Phù hợp ở lâu dài hoặc cho thuê.",
+    image: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=80",
+    area: 80,
+    bedrooms: 4,
+    house_direction: "Nam",
+    legal_status: "Hoàn công đầy đủ",
+    is_featured: 1,
+    views: 251
+  },
+  {
+    title: "Sang mặt bằng cà phê nhỏ gần Nguyễn Thái Sơn, Gò Vấp",
+    category: "Mặt bằng",
+    price: 13500000,
+    location: "Gò Vấp - Nguyễn Thái Sơn",
+    description: "Mặt bằng nhỏ đã có sẵn một phần setup, phù hợp mở cà phê, trà sữa hoặc văn phòng dịch vụ. Khu vực nhiều sinh viên và nhân viên văn phòng.",
+    image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+    area: 42,
+    bedrooms: 0,
+    house_direction: "Đông Nam",
+    legal_status: "Hợp đồng sang nhượng",
+    is_featured: 0,
+    views: 177
+  }
+];
+
+async function ensureExpandedDemoPosts(userId) {
+  for (const post of EXPANDED_DEMO_POSTS) {
+    const existed = await get(`SELECT id FROM posts WHERE title = ? LIMIT 1`, [post.title]);
+    if (existed) continue;
+    await run(`INSERT INTO posts (
+      title, category, price, location, description, image, area, bedrooms, house_direction, legal_status, user_id, is_featured, views, status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved')`, [
+      post.title,
+      post.category,
+      post.price,
+      post.location,
+      post.description,
+      post.image,
+      post.area,
+      post.bedrooms,
+      post.house_direction,
+      post.legal_status,
+      userId,
+      post.is_featured,
+      post.views
+    ]);
+  }
+}
+
 
 async function ensureDemoData() {
   let settingsRow = await get(`SELECT id FROM settings WHERE id = 1`);
@@ -991,6 +1312,8 @@ async function bootstrap() {
       ]);
   }
 
+  const demoAdminUser = await get(`SELECT id FROM users WHERE role = 'admin' ORDER BY id ASC LIMIT 1`);
+  if (demoAdminUser) await ensureExpandedDemoPosts(demoAdminUser.id);
   await repairDatabaseText();
 }
 
