@@ -781,6 +781,12 @@ function normalizeFrontendMessage(value){
   if (/khong tim thay bai dang/.test(looseText)) return "Không tìm thấy bài đăng.";
   if (/cap nhat bai dang thanh cong/.test(looseText)) return "Cập nhật bài đăng thành công.";
   if (/cap nhat bai dang that bai/.test(looseText)) return "Cập nhật bài đăng thất bại.";
+  if (/da mua goi bang so du thanh cong/.test(looseText)) return "Đã mua gói bằng số dư thành công.";
+  if (/so du khong du mua goi nay/.test(looseText)) return "Số dư không đủ mua gói này.";
+  if (/da tao yeu cau nap tien/.test(looseText)) return "Đã tạo yêu cầu nạp tiền.";
+  if (/goi nay hien chua ho tro mua tu dong bang vi/.test(looseText)) {
+    return "Gói này hiện chưa hỗ trợ mua tự động bằng ví. Bạn có thể thanh toán qua QR.";
+  }
   if (/^B[ạa?n]*\s*ch[ưua?.]*\s*(đ|d|Đ|D)?[ăa]?ng\s*nh[ậa?p]*\.?$/i.test(text)) return "Bạn chưa đăng nhập.";
   if (/^B[ạa?n]*\s*ch[ưua?.]*\s*(đ|d|Đ|D)?[ăa]?ng\s*nh[ậa?p].*y[êe]?u\s*th[íi]?ch/i.test(text)) {
     return "Bạn chưa đăng nhập. Hãy đăng nhập để dùng yêu thích.";
