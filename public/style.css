@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 :root{
-  --font-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --font-display:"Manrope","Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --app-font:"Poppins", Arial, sans-serif;
+  --font-body:"Poppins", Arial, sans-serif;
+  --font-display:"Poppins", Arial, sans-serif;
   --bg:#f4f7fb;
   --surface:#ffffff;
   --surface-soft:#f8fafc;
@@ -22,6 +25,31 @@
   --radius-lg:24px;
   --radius-md:18px;
 }
+
+html,
+body{
+  font-family:var(--app-font) !important;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+}
+
+body,
+button,
+input,
+select,
+textarea,
+nav,
+table,
+.card,
+.modal,
+.admin-body,
+.pro-ui{
+  font-family:var(--app-font) !important;
+}
+
+h1,h2,h3,h4,h5,h6{font-weight:600}
+button,.btn,[role="button"]{font-weight:600}
 
 /* Dark mode hard override for post form and highlight tabs. Kept in style.css for cache-safe fallback. */
 html[data-theme="dark"] #postForm input,
@@ -695,7 +723,7 @@ body.dark-mode :is(.showcase-panel, #marketSection) :is(.filter-pill.active, .ta
 }
 
 .admin-alert-title{
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:22px;
   font-weight:800;
   line-height:1.1;
@@ -1134,7 +1162,7 @@ header.topbar{
 }
 .topbar .brand-wrap{display:grid !important;grid-template-columns:76px minmax(0,1fr) !important;align-items:center !important;gap:14px !important;}
 .topbar .site-logo{width:76px !important;height:76px !important;min-width:76px !important;padding:10px !important;object-fit:contain !important;border-radius:18px !important;background:#fff !important;border:1px solid #e5eaf3 !important;box-shadow:0 10px 24px rgba(15,23,42,.08) !important;}
-.topbar .brand,#siteName{color:#2457d6 !important;font-family:Georgia,"Times New Roman","Be Vietnam Pro",serif !important;font-size:clamp(22px,2vw,28px) !important;line-height:1.05 !important;font-weight:900 !important;letter-spacing:-.035em !important;max-width:none !important;}
+.topbar .brand,#siteName{color:#2457d6 !important;font-family:"Poppins", Arial, sans-serif !important;font-size:clamp(22px,2vw,28px) !important;line-height:1.05 !important;font-weight:900 !important;letter-spacing:-.035em !important;max-width:none !important;}
 .topbar .brand-sub,#siteSlogan{display:block !important;margin-top:5px !important;color:#64748b !important;font-size:12.5px !important;line-height:1.35 !important;font-weight:600 !important;max-width:34ch !important;}
 .topbar .search-large{display:grid !important;grid-template-columns:minmax(0,1fr) 132px !important;align-items:center !important;gap:8px !important;min-height:54px !important;padding:6px !important;border-radius:16px !important;background:#f3f6fb !important;border:1px solid #dce4f0 !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9) !important;}
 .topbar .search-large input{width:100% !important;min-width:0 !important;min-height:42px !important;padding:0 18px !important;border:0 !important;outline:0 !important;background:transparent !important;color:#334155 !important;font-size:15px !important;font-weight:600 !important;}
@@ -1223,7 +1251,7 @@ header.topbar{
 .topbar .brand,
 #siteName{
   color:#2457d6 !important;
-  font-family:Georgia, "Times New Roman", "Be Vietnam Pro", serif !important;
+  font-family:"Poppins", Arial, sans-serif !important;
   font-size:clamp(22px, 2vw, 28px) !important;
   line-height:1.05 !important;
   font-weight:900 !important;
@@ -2664,7 +2692,7 @@ body{
   background:linear-gradient(180deg,#fff,#f8fafc);
   box-shadow:var(--shadow-sm);
 }
-.brand{font-family:"Manrope","Be Vietnam Pro",sans-serif;font-size:28px;font-weight:800;letter-spacing:-.05em}
+.brand{font-family:"Poppins", Arial, sans-serif;font-size:28px;font-weight:800;letter-spacing:-.05em}
 .brand-sub{font-size:13px;line-height:1.6;color:var(--text-soft);margin-top:4px}
 
 .search-large{
@@ -2756,7 +2784,7 @@ textarea{min-height:130px;resize:vertical}
 .market-card h3,
 .pricing-spotlight h3,
 .pricing-copy strong{
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   letter-spacing:-.055em;
 }
 .hero-slide-content h1{font-size:clamp(2.9rem,4.9vw,4.9rem);line-height:.95;max-width:10.8ch;margin:16px 0 18px}
@@ -2983,7 +3011,7 @@ textarea{min-height:130px;resize:vertical}
 .price-card .amount{font-size:30px;font-weight:900;color:var(--dark);margin:12px 0}
 .price-card ul{margin:10px 0 16px;padding-left:18px;line-height:1.75;color:var(--text-soft);font-size:14px}
 
-.pricing-title{font-family:"Manrope","Be Vietnam Pro",sans-serif;font-size:20px;font-weight:800;margin-bottom:14px;letter-spacing:-.03em}
+.pricing-title{font-family:"Poppins", Arial, sans-serif;font-size:20px;font-weight:800;margin-bottom:14px;letter-spacing:-.03em}
 .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .plan-card{
   min-height:136px;padding:16px;border-radius:18px;border:1px solid var(--line);
@@ -3002,7 +3030,7 @@ textarea{min-height:130px;resize:vertical}
   background:linear-gradient(135deg,rgba(255,191,0,.15),rgba(255,255,255,.96));
   border:1px solid rgba(245,158,11,.18);
   color:#6b4f00;
-  font-family:"Be Vietnam Pro","Manrope",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:14px;
   line-height:1.7;
   font-weight:600;
@@ -3142,7 +3170,7 @@ textarea{min-height:130px;resize:vertical}
   width:100%;
   min-height:48px;
   border-radius:999px;
-  font-family:"Be Vietnam Pro","Manrope",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:16px;
   font-weight:700;
   letter-spacing:-.01em;
@@ -3165,14 +3193,14 @@ textarea{min-height:130px;resize:vertical}
 }
 .payment-inline-note{
   margin-top:10px;
-  font-family:"Be Vietnam Pro","Manrope",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:14px;
   line-height:1.75;
   color:#596579;
   letter-spacing:-.01em;
 }
 .payment-info{
-  font-family:"Be Vietnam Pro","Manrope",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
 }
 .payment-info strong{
   color:#0f172a;
@@ -3438,7 +3466,7 @@ label{display:block;font-weight:700;margin-bottom:8px;color:#324155}
   border-radius:28px;
 }
 .admin-logo{
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:28px;
   font-weight:800;
   letter-spacing:-.05em;
@@ -3496,7 +3524,7 @@ label{display:block;font-weight:700;margin-bottom:8px;color:#324155}
   gap:16px;
 }
 .admin-top h1{
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:clamp(2rem,3vw,3rem);
   line-height:1.02;
   letter-spacing:-.05em;
@@ -3512,7 +3540,7 @@ label{display:block;font-weight:700;margin-bottom:8px;color:#324155}
   border-radius:22px;
 }
 .stat-card h2{
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:32px;
   line-height:1;
   letter-spacing:-.05em;
@@ -3770,7 +3798,7 @@ textarea{
   line-height:1.4;
 }
 .post-price{
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   letter-spacing:-.04em;
 }
 .post-meta,
@@ -3784,7 +3812,7 @@ textarea{
 .price-card .amount,
 .plan-price,
 .stat-card h2{
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   letter-spacing:-.05em;
 }
 .plan-card{
@@ -4900,7 +4928,7 @@ body{
   line-height:1.4;
 }
 .listing-price{
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:20px;
   font-weight:800;
   color:#d97706;
@@ -5459,7 +5487,7 @@ body{
 }
 .showcase-price{
   margin-top:8px;
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:18px;
   font-weight:800;
   color:#ef4444;
@@ -5787,7 +5815,7 @@ body{
   background:#fff;
   border:1px solid #d9e1ec;
   color:#334155;
-  font-family:"Be Vietnam Pro","Manrope",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:14px;
   font-weight:600;
   line-height:1;
@@ -5887,7 +5915,7 @@ body{
   border-radius:999px;
   background:#fff5d6;
   color:#7a5600;
-  font-family:"Be Vietnam Pro","Manrope",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:12px;
   font-weight:700;
 }
@@ -5897,7 +5925,7 @@ body{
 #marketSection .section-intro h2{
   margin:8px 0 0;
   max-width:12ch;
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:clamp(2rem,3vw,3rem);
   line-height:.98;
   letter-spacing:-.06em;
@@ -6587,7 +6615,7 @@ body::after{
 
 #postList .post-title,
 .listing-title{
-  font-family: "Manrope","Be Vietnam Pro",sans-serif !important;
+  font-family: "Poppins", Arial, sans-serif !important;
   font-size: 28px !important;
   line-height: 1.18 !important;
   letter-spacing: -.04em;
@@ -6638,7 +6666,7 @@ body::after{
 }
 
 .showcase-title{
-  font-family: "Manrope","Be Vietnam Pro",sans-serif !important;
+  font-family: "Poppins", Arial, sans-serif !important;
   font-size: 22px !important;
   line-height: 1.22 !important;
   letter-spacing: -.04em;
@@ -6668,7 +6696,7 @@ textarea{
 .section-header h2,
 .pricing-copy h2,
 .contact-copy h2{
-  font-family: "Manrope","Be Vietnam Pro",sans-serif;
+  font-family: "Poppins", Arial, sans-serif;
   letter-spacing: -.04em;
   color: #122033 !important;
 }
@@ -6888,7 +6916,7 @@ body{
   display:block;
   margin-bottom:6px;
   color:#132237;
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   letter-spacing:-.03em;
 }
 
@@ -6898,7 +6926,7 @@ body{
 .contact-copy h2,
 .market-card h3,
 .summary-card h3{
-  font-family:"Manrope","Be Vietnam Pro",sans-serif !important;
+  font-family:"Poppins", Arial, sans-serif !important;
   color: var(--lux-ink) !important;
   letter-spacing: -.05em !important;
 }
@@ -8082,7 +8110,7 @@ body{
 }
 
 .admin-popup-preview-message{
-  font-family:"Manrope","Be Vietnam Pro",sans-serif;
+  font-family:"Poppins", Arial, sans-serif;
   font-size:32px;
   line-height:1.18;
   letter-spacing:-.04em;

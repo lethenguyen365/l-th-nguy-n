@@ -208,7 +208,7 @@ header.topbar{
 .topbar .brand,
 #siteName{
   color:var(--ui-blue) !important;
-  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-family:"Poppins", Arial, sans-serif !important;
   font-size:clamp(22px,1.65vw,27px) !important;
   line-height:1.08 !important;
   font-weight:900 !important;
@@ -432,7 +432,7 @@ html[data-theme="dark"] .empty-state{
 html[data-theme="dark"],
 html[data-theme="dark"] body{
   color:#eef4ff !important;
-  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-family:"Poppins", Arial, sans-serif !important;
   text-rendering:optimizeLegibility;
   -webkit-font-smoothing:antialiased;
 }
@@ -452,7 +452,7 @@ html[data-theme="dark"] .pricing-title,
 html[data-theme="dark"] .modal-content h2,
 html[data-theme="dark"] .modal-content h3{
   color:#f8fbff !important;
-  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-family:"Poppins", Arial, sans-serif !important;
   font-weight:850 !important;
   letter-spacing:-.018em !important;
 }
@@ -473,7 +473,7 @@ html[data-theme="dark"] .field-hint,
 html[data-theme="dark"] .ai-tip-copy,
 html[data-theme="dark"] .contact-copy{
   color:#d7e2f2 !important;
-  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-family:"Poppins", Arial, sans-serif !important;
   font-weight:550 !important;
 }
 
@@ -487,7 +487,7 @@ html[data-theme="dark"] .main-nav a,
 html[data-theme="dark"] .btn,
 html[data-theme="dark"] button{
   color:#f4f8ff !important;
-  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-family:"Poppins", Arial, sans-serif !important;
   font-weight:800 !important;
 }
 
@@ -542,7 +542,7 @@ html[data-theme="dark"] textarea{
   background:#0b1324 !important;
   border-color:#33445f !important;
   color:#f6f9ff !important;
-  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-family:"Poppins", Arial, sans-serif !important;
   font-weight:650 !important;
 }
 
@@ -688,7 +688,7 @@ html[data-theme="dark"] :is(
   .faq-item
 ) :where(h1,h2,h3,h4,h5,h6,strong,b,label,div,p,span,small,li){
   color:#eaf1ff !important;
-  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-family:"Poppins", Arial, sans-serif !important;
 }
 
 html[data-theme="dark"] :is(
@@ -816,7 +816,7 @@ html[data-theme="dark"] .announcement-popup-card *,
 html[data-theme="dark"] .custom-alert *,
 html[data-theme="dark"] .modal-box *{
   color:#f8fbff !important;
-  font-family:"Be Vietnam Pro", "Manrope", sans-serif !important;
+  font-family:"Poppins", Arial, sans-serif !important;
 }
 
 html[data-theme="dark"] .announcement-popup-message,

@@ -12,7 +12,7 @@
   --admin-red: #dc2626;
   --admin-radius: 22px;
   --admin-shadow: 0 16px 42px rgba(15, 23, 42, 0.1);
-  --admin-font: "Be Vietnam Pro", "Inter", Arial, sans-serif;
+  --admin-font: "Poppins", Arial, sans-serif;
 }
 
 body.admin-body {
@@ -520,7 +520,7 @@ tbody tr:last-child td {
 
 /* Admin typography normalization: keep dashboard consistent with public site. */
 :root {
-  --admin-font: "Be Vietnam Pro", "Inter", Arial, sans-serif !important;
+  --admin-font: "Poppins", Arial, sans-serif !important;
 }
 
 body.admin-body,
