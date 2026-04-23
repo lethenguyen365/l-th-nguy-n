@@ -850,7 +850,6 @@
       const totalPages = Math.max(1, Math.ceil(posts.length / PRO_POSTS_PER_PAGE));
       proListingPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
       proLoadPosts({ keepPage: true });
-      $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
     window.viewDetail = proViewDetail;
     setTimeout(proLoadPosts, 80);
