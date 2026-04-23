@@ -308,6 +308,7 @@ function inferPaymentPlanMeta(code, price, days){
 
   return {
     code,
+    packageName: packageMatcherMap[normalized] || "",
     price: Number(price || 0),
     days: Number(days || 0),
     category,
@@ -1607,17 +1608,38 @@ async function loadPackages(){
 
 async function buyMonetizePlan(planId){
   try{
-    const posts = await fetchJSON("/api/my-posts");
-    if (!posts.length) return showToast("Bạn cần có ít nhất 1 tin đăng để áp dụng gói.");
-    const id = prompt("Nhập ID tin đăng muốn áp dụng bảng giá này:", posts[0].id || "");
-    if (!id) return;
-    const data = await fetchJSON(`/api/posts/${id}/monetize`, {
+    if (!monetizePlanRows.length) {
+      monetizePlanRows = await fetchJSON("/api/pricing-plans").catch(() => []);
+    }
+    if (!subscriptionPackageRows.length) {
+      subscriptionPackageRows = await fetchJSON("/api/packages").catch(() => []);
+    }
+    const plan = monetizePlanRows.find((item) => Number(item.id) === Number(planId));
+    if (!plan) return showToast("Không tìm thấy gói cần mua.");
+    const meta = inferPaymentPlanMeta(plan.code, plan.price, plan.duration_days);
+    const packageName = meta.packageName || plan.name || "";
+    if (!meta.packageId && !packageName) return showToast("Không tìm thấy gói đăng ký tương ứng.");
+
+    selectedPaymentPlan = {
+      name: packageName,
+      price: Number(plan.price || 0),
+      days: Number(plan.duration_days || 0),
+      packageId: meta.packageId || null,
+      pricingPlanId: plan.id
+    };
+
+    const data = await fetchJSON("/api/subscriptions/wallet", {
       method:"POST",
       headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ plan_id: planId })
+      body: JSON.stringify({
+        package_id: meta.packageId || null,
+        package_name: packageName,
+        price: Number(plan.price || 0),
+        duration_days: Number(plan.duration_days || 0)
+      })
     });
     showToast(data.message);
-    await Promise.all([checkMe(), loadMyPosts(), loadPosts(), loadWalletTransactions()]);
+    await Promise.all([loadMySubscriptions(), checkMe(), loadWalletTransactions()]);
   }catch(err){ showToast(err.message); }
 }
 
