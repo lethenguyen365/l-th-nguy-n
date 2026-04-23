@@ -4597,8 +4597,44 @@ body.pro-ui .package-quick-btn {
 
 body.pro-ui #packagesSection,
 body.pro-ui #paymentPanel,
-body.pro-ui #walletSection {
+body.pro-ui #walletSection,
+body.pro-ui #myPostsSection,
+body.pro-ui #mySubscriptionsSection {
   display: none !important;
+}
+
+body.pro-ui .account-management-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin-top: 18px !important;
+}
+
+body.pro-ui .account-management-card {
+  padding: 18px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  background: rgba(248, 250, 252, 0.92) !important;
+}
+
+body.pro-ui .account-management-card h3 {
+  margin: 10px 0 14px !important;
+  color: var(--pro-ink) !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+}
+
+html[data-theme="dark"] body.pro-ui .account-management-card,
+body.dark-mode.pro-ui .account-management-card {
+  background: #101c30 !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+@media (max-width: 760px) {
+  body.pro-ui .account-management-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 body.dark-mode.pro-ui .package-quick-btn,

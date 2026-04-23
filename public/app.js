@@ -1691,8 +1691,13 @@ async function buyPackageWithWallet(packageId){
 async function loadMyPosts(){
   try{
     const posts = await fetchJSON("/api/my-posts");
-    if (!posts.length){ myPostList.innerHTML = `<div class="empty-state">Bạn chưa có tin đăng nào.</div>`; return; }
-    myPostList.innerHTML = `<div class="my-list">${posts.map(post => `
+    const renderTarget = (html) => {
+      if (window.myPostList) myPostList.innerHTML = html;
+      const accountTarget = document.getElementById("accountMyPostList");
+      if (accountTarget) accountTarget.innerHTML = html;
+    };
+    if (!posts.length){ renderTarget(`<div class="empty-state">Bạn chưa có tin đăng nào.</div>`); return; }
+    renderTarget(`<div class="my-list">${posts.map(post => `
       <div class="list-row fade-in">
         <div>
           <strong>${post.title}</strong><br>
@@ -1703,9 +1708,12 @@ async function loadMyPosts(){
           <button class="btn btn-light" onclick='editPost(${JSON.stringify(post).replace(/'/g, "&apos;")})'>Sửa</button>
           <button class="btn btn-danger" onclick="deletePost(${post.id})">Xóa</button>
         </div>
-      </div>`).join("")}</div>`;
+      </div>`).join("")}</div>`);
   }catch{
-    myPostList.innerHTML = `<div class="empty-state">Bạn cần đăng nhập để xem tin của mình.</div>`;
+    const html = `<div class="empty-state">Bạn cần đăng nhập để xem tin của mình.</div>`;
+    if (window.myPostList) myPostList.innerHTML = html;
+    const accountTarget = document.getElementById("accountMyPostList");
+    if (accountTarget) accountTarget.innerHTML = html;
   }
 }
 
@@ -1802,8 +1810,13 @@ async function loadFavorites(){
 async function loadMySubscriptions(){
   try{
     const rows = await fetchJSON("/api/my-subscriptions");
-    if (!rows.length){ mySubscriptionList.innerHTML = `<div class="empty-state">Bạn chưa đăng ký gói nào.</div>`; return; }
-    mySubscriptionList.innerHTML = rows.map(sub => `
+    const renderTarget = (html) => {
+      if (window.mySubscriptionList) mySubscriptionList.innerHTML = html;
+      const accountTarget = document.getElementById("accountMySubscriptionList");
+      if (accountTarget) accountTarget.innerHTML = html;
+    };
+    if (!rows.length){ renderTarget(`<div class="empty-state">Bạn chưa đăng ký gói nào.</div>`); return; }
+    renderTarget(rows.map(sub => `
       <div class="sub-row fade-in">
         <div>
           <strong>${sub.package_name}</strong><br>
@@ -1811,9 +1824,12 @@ async function loadMySubscriptions(){
           <small>Nội dung CK: ${sub.payment_note}</small>
         </div>
         <div class="status-badge status-${sub.status}">${sub.status}</div>
-      </div>`).join("");
+      </div>`).join(""));
   }catch{
-    mySubscriptionList.innerHTML = `<div class="empty-state">Bạn cần đăng nhập để xem lịch sử gói.</div>`;
+    const html = `<div class="empty-state">Bạn cần đăng nhập để xem lịch sử gói.</div>`;
+    if (window.mySubscriptionList) mySubscriptionList.innerHTML = html;
+    const accountTarget = document.getElementById("accountMySubscriptionList");
+    if (accountTarget) accountTarget.innerHTML = html;
   }
 }
 

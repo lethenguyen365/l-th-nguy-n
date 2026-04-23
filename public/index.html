@@ -8,9 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap&subset=vietnamese" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=package-modal-20260423" />
-  <link rel="stylesheet" href="theme.css?v=package-modal-20260423" />
-  <link rel="stylesheet" href="pro-ui.css?v=package-modal-20260423" />
+  <link rel="stylesheet" href="style.css?v=account-sections-20260423" />
+  <link rel="stylesheet" href="theme.css?v=account-sections-20260423" />
+  <link rel="stylesheet" href="pro-ui.css?v=account-sections-20260423" />
   <style>
     html[data-theme="dark"] #postForm input,
     html[data-theme="dark"] #postForm select,
@@ -614,7 +614,7 @@
           <div id="walletHistory" class="empty-state">Đăng nhập để xem ví.</div>
         </section>
 
-        <section class="panel">
+        <section class="panel hidden" id="myPostsSection">
           <div class="section-header">
             <div>
               <div class="tiny-title">Quản lý cá nhân</div>
@@ -624,7 +624,7 @@
           <div id="myPostList"></div>
         </section>
 
-        <section class="panel">
+        <section class="panel hidden" id="mySubscriptionsSection">
           <div class="section-header">
             <div>
               <div class="tiny-title">Lịch sử gói</div>
@@ -807,6 +807,18 @@
         <button onclick="closeModal('accountModal')">×</button>
       </div>
       <div id="accountModalContent" class="account-modal-content"></div>
+      <div class="account-management-grid">
+        <section class="account-management-card">
+          <div class="tiny-title">Quản lý cá nhân</div>
+          <h3>Tin của tôi</h3>
+          <div id="accountMyPostList"></div>
+        </section>
+        <section class="account-management-card">
+          <div class="tiny-title">Lịch sử gói</div>
+          <h3>Gói đăng ký của tôi</h3>
+          <div id="accountMySubscriptionList"></div>
+        </section>
+      </div>
     </div>
   </div>
 
@@ -848,9 +860,9 @@
     </div>
   </div>
 
-  <script src="script.js?v=package-modal-20260423"></script>
-  <script src="app.js?v=package-modal-20260423"></script>
-  <script src="pro-ui.js?v=package-modal-20260423"></script>
+  <script src="script.js?v=account-sections-20260423"></script>
+  <script src="app.js?v=account-sections-20260423"></script>
+  <script src="pro-ui.js?v=account-sections-20260423"></script>
 </body>
 </html>
 
