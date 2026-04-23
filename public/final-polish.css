@@ -1249,3 +1249,123 @@ body.admin-body .btn{
     border-radius:16px !important;
   }
 }
+
+/* Mobile detail modal must scroll vertically instead of trapping content */
+body.pro-ui #detailModal.modal{
+  align-items:flex-start !important;
+  justify-content:center !important;
+  overflow-y:auto !important;
+  overscroll-behavior:contain !important;
+  -webkit-overflow-scrolling:touch !important;
+  padding:14px !important;
+}
+
+body.pro-ui #detailModal .modal-box{
+  display:flex !important;
+  flex-direction:column !important;
+  width:min(1120px, calc(100vw - 28px)) !important;
+  max-height:calc(100dvh - 28px) !important;
+  overflow:hidden !important;
+}
+
+body.pro-ui #detailModal .modal-head{
+  position:sticky !important;
+  top:0 !important;
+  z-index:5 !important;
+  flex:0 0 auto !important;
+  background:inherit !important;
+  border-bottom:1px solid var(--fp-line) !important;
+}
+
+body.pro-ui #detailModal #detailContent{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+
+@media (max-width:760px){
+  body.pro-ui #detailModal.modal{
+    padding:0 !important;
+  }
+
+  body.pro-ui #detailModal .modal-box{
+    width:100vw !important;
+    height:100dvh !important;
+    max-height:100dvh !important;
+    border-radius:0 !important;
+  }
+
+  body.pro-ui #detailModal .modal-head{
+    min-height:58px !important;
+    padding:14px 16px !important;
+    background:var(--fp-card) !important;
+  }
+
+  html[data-theme="dark"] body.pro-ui #detailModal .modal-head,
+  body.dark-mode.pro-ui #detailModal .modal-head{
+    background:var(--fp-card) !important;
+  }
+
+  body.pro-ui #detailModal #detailContent{
+    padding:14px !important;
+  }
+
+  body.pro-ui #detailModal .pro-detail{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:14px !important;
+    min-height:0 !important;
+    overflow:visible !important;
+  }
+
+  body.pro-ui #detailModal .pro-detail-gallery{
+    border-radius:22px !important;
+  }
+
+  body.pro-ui #detailModal .pro-detail-gallery img{
+    height:240px !important;
+    min-height:240px !important;
+    max-height:240px !important;
+    object-fit:cover !important;
+  }
+
+  body.pro-ui #detailModal .pro-detail-main,
+  body.pro-ui #detailModal .pro-detail-contact,
+  body.pro-ui #detailModal .pro-detail-info{
+    border-radius:22px !important;
+    padding:16px !important;
+  }
+
+  body.pro-ui #detailModal .pro-detail-contact{
+    position:static !important;
+    order:3 !important;
+  }
+
+  body.pro-ui #detailModal .pro-detail-title{
+    font-size:clamp(26px,8vw,36px) !important;
+    line-height:1.08 !important;
+  }
+
+  body.pro-ui #detailModal .pro-detail-price{
+    font-size:clamp(24px,8vw,34px) !important;
+  }
+
+  body.pro-ui #detailModal .pro-detail-info{
+    grid-template-columns:1fr 1fr !important;
+  }
+}
+
+@media (max-width:420px){
+  body.pro-ui #detailModal .pro-detail-gallery img{
+    height:210px !important;
+    min-height:210px !important;
+    max-height:210px !important;
+  }
+
+  body.pro-ui #detailModal .pro-detail-info{
+    grid-template-columns:1fr !important;
+  }
+}
