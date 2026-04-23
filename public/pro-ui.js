@@ -758,7 +758,6 @@
     injectHero();
     injectCategorySection();
     injectRegionSection();
-    injectTrustSection();
     enhanceCopy();
     setupFilters();
     enhancePackages();
