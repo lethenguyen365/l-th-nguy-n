@@ -318,6 +318,64 @@ function inferPaymentPlanMeta(code, price, days){
   };
 }
 
+function normalizePlanLookupText(value = "") {
+  return normalizeUiText(value)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function buildPackageNameFromPricingPlan(plan = {}) {
+  const groupLabel = plan.category === "viec_lam"
+    ? "Việc làm"
+    : plan.category === "nha_thue"
+      ? "Nhà thuê"
+      : "Nhà đất";
+  const featureLabel = plan.feature_type === "normal"
+    ? "Tin thường"
+    : plan.feature_type === "push"
+      ? "Đẩy tin"
+      : plan.feature_type === "featured"
+        ? "Tin nổi bật"
+        : plan.category === "viec_lam"
+          ? "VIP"
+          : `VIP ${Number(plan.duration_days || 7)} ngày`;
+  return `${groupLabel} - ${featureLabel}`;
+}
+
+function findPackageForPricingPlan(plan = {}) {
+  const rows = subscriptionPackageRows || [];
+  const price = Number(plan.price || 0);
+  const duration = Number(plan.duration_days || 0);
+  const expectedName = buildPackageNameFromPricingPlan(plan);
+  const expectedKey = normalizePlanLookupText(expectedName);
+  const groupTokens = {
+    viec_lam: ["viec lam"],
+    nha_thue: ["nha thue", "cho thue"],
+    vip: ["nha dat"]
+  }[plan.category] || [];
+  const featureTokens = {
+    normal: ["tin thuong"],
+    push: ["day tin"],
+    featured: ["tin noi bat"],
+    vip: ["vip", "pro"]
+  }[plan.feature_type] || [];
+
+  const sameMoney = (pkg) =>
+    Number(pkg.price || 0) === price &&
+    Number(pkg.duration_days || 0) === duration;
+  const nameOf = (pkg) => normalizePlanLookupText(pkg.name || "");
+  const hasGroup = (pkg) => groupTokens.some((token) => nameOf(pkg).includes(token));
+  const hasFeature = (pkg) => featureTokens.some((token) => nameOf(pkg).includes(token));
+
+  return rows.find((pkg) => sameMoney(pkg) && nameOf(pkg) === expectedKey)
+    || rows.find((pkg) => sameMoney(pkg) && hasGroup(pkg) && hasFeature(pkg))
+    || rows.find((pkg) => sameMoney(pkg) && hasFeature(pkg))
+    || rows.find((pkg) => sameMoney(pkg) && hasGroup(pkg))
+    || rows.find((pkg) => sameMoney(pkg))
+    || null;
+}
+
 function renderPaymentActions(){
   if (!selectedPaymentPlan) return "";
   const isFree = Number(selectedPaymentPlan.price || 0) <= 0;
@@ -1616,15 +1674,14 @@ async function buyMonetizePlan(planId){
     }
     const plan = monetizePlanRows.find((item) => Number(item.id) === Number(planId));
     if (!plan) return showToast("Không tìm thấy gói cần mua.");
-    const meta = inferPaymentPlanMeta(plan.code, plan.price, plan.duration_days);
-    const packageName = meta.packageName || plan.name || "";
-    if (!meta.packageId && !packageName) return showToast("Không tìm thấy gói đăng ký tương ứng.");
+    const matchedPackage = findPackageForPricingPlan(plan);
+    const packageName = matchedPackage?.name || buildPackageNameFromPricingPlan(plan);
 
     selectedPaymentPlan = {
       name: packageName,
       price: Number(plan.price || 0),
       days: Number(plan.duration_days || 0),
-      packageId: meta.packageId || null,
+      packageId: matchedPackage?.id || null,
       pricingPlanId: plan.id
     };
 
@@ -1632,7 +1689,7 @@ async function buyMonetizePlan(planId){
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({
-        package_id: meta.packageId || null,
+        package_id: matchedPackage?.id || null,
         package_name: packageName,
         price: Number(plan.price || 0),
         duration_days: Number(plan.duration_days || 0)
