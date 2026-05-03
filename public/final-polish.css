@@ -3145,3 +3145,51 @@ body.admin-body .btn-danger{
     border-radius:22px !important;
   }
 }
+
+/* Header auth buttons final contrast fix */
+body:not(.admin-body) #guestActions .btn{
+  min-width:116px !important;
+  font-weight:700 !important;
+}
+
+body:not(.admin-body) #guestActions .btn.btn-light{
+  background:linear-gradient(180deg,#ffffff,#f4f8ff) !important;
+  border:1px solid #d7e2f4 !important;
+  color:#19315c !important;
+  box-shadow:0 10px 22px rgba(15,23,42,.08) !important;
+}
+
+body:not(.admin-body) #guestActions .btn.btn-primary{
+  background:linear-gradient(135deg,#1d4ed8,#2563eb) !important;
+  border:1px solid rgba(37,99,235,.34) !important;
+  color:#ffffff !important;
+  box-shadow:0 14px 28px rgba(37,99,235,.24) !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body) #guestActions .btn.btn-light,
+body.dark-mode:not(.admin-body) #guestActions .btn.btn-light{
+  background:linear-gradient(180deg,#152742,#102036) !important;
+  border:1px solid #2c4466 !important;
+  color:#edf4ff !important;
+  box-shadow:0 10px 24px rgba(0,0,0,.22) !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body) #guestActions .btn.btn-primary,
+body.dark-mode:not(.admin-body) #guestActions .btn.btn-primary{
+  background:linear-gradient(135deg,#f6b80f,#ffcb38) !important;
+  border:1px solid rgba(246,184,15,.38) !important;
+  color:#1a2233 !important;
+  box-shadow:0 14px 30px rgba(246,184,15,.22) !important;
+}
+
+@media (max-width:760px){
+  body:not(.admin-body) #guestActions{
+    grid-template-columns:1fr 1fr !important;
+    gap:8px !important;
+  }
+
+  body:not(.admin-body) #guestActions .btn{
+    min-width:0 !important;
+    width:100% !important;
+  }
+}
