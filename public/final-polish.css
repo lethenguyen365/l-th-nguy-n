@@ -4094,3 +4094,37 @@ body.admin-body .btn{
     border-radius:18px !important;
   }
 }
+
+body.admin-body .table-wrap table tbody tr td,
+body.admin-body .admin-table tbody tr td,
+body.admin-body #userTableWrap table tbody tr td,
+body.admin-body #postTableWrap table tbody tr td,
+body.admin-body #subscriptionTableWrap table tbody tr td,
+body.admin-body #topupTableWrap table tbody tr td,
+body.admin-body #aiReportsWrap table tbody tr td,
+body.admin-body #aiActionsWrap table tbody tr td{
+  background:var(--admin-table-row) !important;
+  color:var(--admin-text-main) !important;
+}
+
+body.admin-body .table-wrap table tbody tr:nth-child(even) td,
+body.admin-body .admin-table tbody tr:nth-child(even) td,
+body.admin-body #userTableWrap table tbody tr:nth-child(even) td,
+body.admin-body #postTableWrap table tbody tr:nth-child(even) td,
+body.admin-body #subscriptionTableWrap table tbody tr:nth-child(even) td,
+body.admin-body #topupTableWrap table tbody tr:nth-child(even) td,
+body.admin-body #aiReportsWrap table tbody tr:nth-child(even) td,
+body.admin-body #aiActionsWrap table tbody tr:nth-child(even) td{
+  background:var(--admin-table-row-alt) !important;
+}
+
+body.admin-body .table-wrap table tbody tr:hover td,
+body.admin-body .admin-table tbody tr:hover td,
+body.admin-body #userTableWrap table tbody tr:hover td,
+body.admin-body #postTableWrap table tbody tr:hover td,
+body.admin-body #subscriptionTableWrap table tbody tr:hover td,
+body.admin-body #topupTableWrap table tbody tr:hover td,
+body.admin-body #aiReportsWrap table tbody tr:hover td,
+body.admin-body #aiActionsWrap table tbody tr:hover td{
+  background:var(--admin-table-hover) !important;
+}
