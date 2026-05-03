@@ -3721,3 +3721,100 @@ html[data-theme="dark"] body:not(.admin-body) .pro-preview-chip-hot{
 html[data-theme="dark"] body:not(.admin-body) .pro-preview-agent small{
   color:#a9b9d2 !important;
 }
+
+body:not(.admin-body) .packages-modal-box{
+  position:relative !important;
+  padding:28px 28px 24px !important;
+  overflow:visible !important;
+}
+
+body:not(.admin-body) .packages-modal-box .modal-head{
+  position:sticky !important;
+  top:0 !important;
+  z-index:3 !important;
+  display:grid !important;
+  grid-template-columns:minmax(0, 1fr) 56px !important;
+  gap:16px !important;
+  align-items:start !important;
+  padding:0 0 16px !important;
+  margin-bottom:14px !important;
+  background:inherit !important;
+  border-bottom:1px solid rgba(192, 204, 226, 0.4) !important;
+}
+
+body:not(.admin-body) .packages-modal-box .modal-head h3{
+  margin:0 !important;
+  padding-right:8px !important;
+  font-size:clamp(2.35rem, 4vw, 3.45rem) !important;
+  line-height:1.04 !important;
+  letter-spacing:-0.04em !important;
+}
+
+body:not(.admin-body) .packages-modal-box .modal-head > button{
+  width:48px !important;
+  height:48px !important;
+  min-width:48px !important;
+  padding:0 !important;
+  border-radius:16px !important;
+  border:1px solid #d7e1f0 !important;
+  background:linear-gradient(180deg, #ffffff, #f3f7ff) !important;
+  color:#17315f !important;
+  box-shadow:0 12px 24px rgba(15, 23, 42, 0.12) !important;
+  display:grid !important;
+  place-items:center !important;
+  place-self:start end !important;
+  font-size:1.5rem !important;
+  line-height:1 !important;
+}
+
+body:not(.admin-body) .packages-modal-intro{
+  margin:0 0 18px !important;
+  max-width:48rem !important;
+  line-height:1.45 !important;
+  color:#d6dff0 !important;
+}
+
+body:not(.admin-body) .packages-modal-grid{
+  padding-top:4px !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body) .packages-modal-box .modal-head{
+  border-bottom-color:rgba(111, 143, 194, 0.24) !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body) .packages-modal-box .modal-head > button{
+  background:linear-gradient(180deg, #152742, #102036) !important;
+  border-color:#2c4466 !important;
+  color:#edf4ff !important;
+  box-shadow:0 14px 28px rgba(0, 0, 0, 0.28) !important;
+}
+
+@media (max-width:760px){
+  body:not(.admin-body) .packages-modal-box{
+    padding:20px 16px 18px !important;
+  }
+
+  body:not(.admin-body) .packages-modal-box .modal-head{
+    grid-template-columns:minmax(0, 1fr) 44px !important;
+    gap:12px !important;
+    padding-bottom:12px !important;
+    margin-bottom:12px !important;
+  }
+
+  body:not(.admin-body) .packages-modal-box .modal-head h3{
+    font-size:clamp(2rem, 8vw, 2.65rem) !important;
+  }
+
+  body:not(.admin-body) .packages-modal-box .modal-head > button{
+    width:44px !important;
+    height:44px !important;
+    min-width:44px !important;
+    border-radius:14px !important;
+    font-size:1.35rem !important;
+  }
+
+  body:not(.admin-body) .packages-modal-intro{
+    margin-bottom:14px !important;
+    font-size:0.98rem !important;
+  }
+}
