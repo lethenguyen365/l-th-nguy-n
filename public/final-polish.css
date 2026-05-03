@@ -5034,6 +5034,52 @@ body.admin-body .admin-shell .btn:hover{
   }
 }
 
+@media (max-width: 760px){
+  html[data-theme="dark"] body.admin-body .admin-top,
+  html[data-theme="dark"] body.admin-body .admin-panel,
+  html[data-theme="dark"] body.admin-body .admin-section:not(.stats-grid),
+  body.dark-mode.admin-body .admin-top,
+  body.dark-mode.admin-body .admin-panel,
+  body.dark-mode.admin-body .admin-section:not(.stats-grid){
+    background:linear-gradient(180deg, rgba(20,32,53,.96), rgba(14,24,40,.98)) !important;
+    border-color:rgba(123,146,184,.18) !important;
+    box-shadow:0 18px 40px rgba(0,0,0,.28) !important;
+  }
+
+  html[data-theme="dark"] body.admin-body :is(.table-wrap,.admin-table-wrap,#userTableWrap,#postTableWrap,#subscriptionTableWrap,#topupTableWrap,#aiReportsWrap,#aiActionsWrap) tbody tr,
+  body.dark-mode.admin-body :is(.table-wrap,.admin-table-wrap,#userTableWrap,#postTableWrap,#subscriptionTableWrap,#topupTableWrap,#aiReportsWrap,#aiActionsWrap) tbody tr{
+    background:linear-gradient(180deg, rgba(19,31,52,.98), rgba(15,25,41,.98)) !important;
+    border-color:rgba(123,146,184,.16) !important;
+    box-shadow:0 14px 28px rgba(0,0,0,.24) !important;
+  }
+
+  html[data-theme="dark"] body.admin-body :is(.table-wrap,.admin-table-wrap,#userTableWrap,#postTableWrap,#subscriptionTableWrap,#topupTableWrap,#aiReportsWrap,#aiActionsWrap) tbody td,
+  body.dark-mode.admin-body :is(.table-wrap,.admin-table-wrap,#userTableWrap,#postTableWrap,#subscriptionTableWrap,#topupTableWrap,#aiReportsWrap,#aiActionsWrap) tbody td{
+    border-bottom-color:rgba(123,146,184,.10) !important;
+    color:#e6edf8 !important;
+  }
+
+  html[data-theme="dark"] body.admin-body :is(.table-wrap,.admin-table-wrap,#userTableWrap,#postTableWrap,#subscriptionTableWrap,#topupTableWrap,#aiReportsWrap,#aiActionsWrap) tbody td::before,
+  body.dark-mode.admin-body :is(.table-wrap,.admin-table-wrap,#userTableWrap,#postTableWrap,#subscriptionTableWrap,#topupTableWrap,#aiReportsWrap,#aiActionsWrap) tbody td::before{
+    color:#9fb0cd !important;
+  }
+
+  html[data-theme="dark"] body.admin-body .empty-state,
+  body.dark-mode.admin-body .empty-state{
+    background:rgba(20,32,53,.82) !important;
+    border-color:rgba(123,146,184,.16) !important;
+    color:#bfcbe0 !important;
+  }
+
+  html[data-theme="dark"] body.admin-body .tiny-title,
+  body.dark-mode.admin-body .tiny-title{
+    background:rgba(255,223,133,.14) !important;
+    border-color:rgba(255,223,133,.30) !important;
+    color:#ffe8a6 !important;
+    box-shadow:none !important;
+  }
+}
+
 /* ===== ADMIN MOBILE ULTRA COMPACT ===== */
 @media (max-width: 760px){
   body.admin-body{
