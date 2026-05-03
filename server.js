@@ -51,8 +51,26 @@ app.use(session({
   saveUninitialized: false,
   cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 }
 }));
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static(uploadDir));
+app.use(express.static(path.join(__dirname, "public"), {
+  etag: true,
+  lastModified: true,
+  maxAge: "7d",
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith(".html")) {
+      res.setHeader("Cache-Control", "no-cache");
+      return;
+    }
+    res.setHeader("Cache-Control", "public, max-age=604800, immutable");
+  }
+}));
+app.use("/uploads", express.static(uploadDir, {
+  etag: true,
+  lastModified: true,
+  maxAge: "30d",
+  setHeaders: (res) => {
+    res.setHeader("Cache-Control", "public, max-age=2592000, immutable");
+  }
+}));
 
 function vietnameseDamageScore(value = "") {
   const text = String(value || "");

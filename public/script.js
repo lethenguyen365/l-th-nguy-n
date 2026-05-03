@@ -3,6 +3,27 @@
   activeTab: "nha_ban"
 };
 
+const DEFAULT_SHOWCASE_IMAGE = "https://via.placeholder.com/800x600?text=No+Image";
+
+function optimizeImageUrl(src, width = 900, quality = 72) {
+  const fallback = width >= 1000
+    ? "https://via.placeholder.com/1200x800?text=No+Image"
+    : DEFAULT_SHOWCASE_IMAGE;
+  if (!src) return fallback;
+  try {
+    const url = new URL(src, window.location.origin);
+    if (url.hostname.includes("images.unsplash.com")) {
+      url.searchParams.set("auto", "format");
+      url.searchParams.set("fit", "crop");
+      url.searchParams.set("w", String(width));
+      url.searchParams.set("q", String(quality));
+    }
+    return url.toString();
+  } catch (_) {
+    return src;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initPremiumCopy();
   initRevealOnScroll();
@@ -655,12 +676,15 @@ function renderShowcaseCard(post) {
           <button class="showcase-heart" type="button" onclick="toggleFavorite(${Number(post.id)})" aria-label="Lưu tin">♡</button>
         </div>
         <div class="showcase-badge ${post.is_featured ? "featured" : ""}">${badge}</div>
-        <img
-          class="showcase-image"
-          src="${post.image || "https://via.placeholder.com/800x600?text=No+Image"}"
-          alt="${title}"
-          onerror="this.src='https://via.placeholder.com/800x600?text=No+Image'"
-        >
+          <img
+            class="showcase-image"
+            src="${optimizeImageUrl(post.image, 720, 70)}"
+            alt="${title}"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
+            onerror="this.src='${DEFAULT_SHOWCASE_IMAGE}'"
+          >
       </div>
       <div class="showcase-body">
         <div class="showcase-title">${title}</div>

@@ -10,6 +10,25 @@ let activeAnnouncementTimer = null;
 let lastAnnouncementPopupText = "";
 let announcementPopupBooted = false;
 let currentAnnouncementMessage = "";
+const DEFAULT_CARD_IMAGE = "https://via.placeholder.com/800x600?text=No+Image";
+const DEFAULT_DETAIL_IMAGE = "https://via.placeholder.com/1200x800?text=No+Image";
+
+function optimizeImageUrl(src, width = 900, quality = 72) {
+  const fallback = width >= 1000 ? DEFAULT_DETAIL_IMAGE : DEFAULT_CARD_IMAGE;
+  if (!src) return fallback;
+  try {
+    const url = new URL(src, window.location.origin);
+    if (url.hostname.includes("images.unsplash.com")) {
+      url.searchParams.set("auto", "format");
+      url.searchParams.set("fit", "crop");
+      url.searchParams.set("w", String(width));
+      url.searchParams.set("q", String(quality));
+    }
+    return url.toString();
+  } catch (_) {
+    return src;
+  }
+}
 
 function installDarkModeContrastPatch(){
   if (document.getElementById("runtimeDarkModeContrastPatch")) return;
@@ -1312,7 +1331,7 @@ function initHeroSlider(){
 function openDetailModal(post = {}){
   const modal = document.getElementById("detailModal");
   if (!modal) return;
-  const img = post.image || "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=80";
+  const img = optimizeImageUrl(post.image || "https://images.unsplash.com/photo-1560518883-ce09059eeffa", 1280, 78);
   const title = post.title || "Chi tiết tin đăng";
   const meta = post.category === "Việc làm"
     ? `${post.category || ""} · ${post.location || ""}`
@@ -1320,7 +1339,7 @@ function openDetailModal(post = {}){
   document.getElementById("detailGalleryMain").style.backgroundImage = `url('${img}')`;
   const thumbs = document.getElementById("detailGalleryThumbs");
   if (thumbs) {
-    const imgs = [img, img, img, img];
+    const imgs = Array.from({ length: 4 }, () => optimizeImageUrl(post.image || img, 240, 62));
     thumbs.innerHTML = imgs.map(src => `<div class="detail-thumb" style="background-image:url('${src}')"></div>`).join("");
   }
   document.getElementById("detailTitle").textContent = title;
@@ -1632,7 +1651,7 @@ async function loadPosts(){
     <div class="post-card fade-in">
       <div class="post-cover">
         ${post.is_featured ? `<div class="featured-label">TIN NỔI BẬT</div>` : ""}
-        <img class="post-image" src="${post.image || "https://via.placeholder.com/800x600?text=No+Image"}" alt="${post.title}" onerror="this.src='https://via.placeholder.com/800x600?text=No+Image'">
+        <img class="post-image" src="${optimizeImageUrl(post.image, 720, 70)}" alt="${post.title}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.src='${DEFAULT_CARD_IMAGE}'">
       </div>
       <div class="post-body">
         <div class="post-title">${post.title}</div>
@@ -1673,7 +1692,7 @@ async function viewDetail(id){
     detailContent.innerHTML = `
       <div class="detail-grid">
         <div class="detail-main">
-          <img class="detail-image" src="${post.image || "https://via.placeholder.com/900x700?text=No+Image"}" alt="${post.title}">
+          <img class="detail-image" src="${optimizeImageUrl(post.image, 1280, 78)}" alt="${post.title}" loading="eager" decoding="async" fetchpriority="high" onerror="this.src='${DEFAULT_DETAIL_IMAGE}'">
           <div class="info-card detail-description-card">
             <strong>Mô tả</strong>
             <div>${post.description}</div>
