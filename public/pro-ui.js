@@ -775,22 +775,37 @@
         ? `<img src="${escapeHtml(data.image)}" alt="${escapeHtml(title)}" onerror="this.closest('.pro-preview-image').classList.add('is-empty');this.remove();">`
         : "";
 
-      previewCard.innerHTML = `
-        <div class="pro-preview-image ${data.image ? "" : "is-empty"}">
-          ${imageBlock}
-          <span>${data.featured ? "Tin nổi bật" : "Ảnh tin đăng"}</span>
-        </div>
-        <div class="pro-preview-content">
-          <div class="pro-preview-title">${escapeHtml(title)}</div>
-          <div class="pro-preview-price">${escapeHtml(money(data.price))}</div>
-          <div class="pro-preview-meta">
-            <span>📍 ${escapeHtml(location)}</span>
-            <span>🏷 ${escapeHtml(category)}</span>
-            ${data.area ? `<span>📐 ${escapeHtml(data.area)} m²</span>` : ""}
-            ${data.bedrooms ? `<span>${category === "Việc làm" ? "💼" : "🛏"} ${escapeHtml(data.bedrooms)} ${category === "Việc làm" ? "năm KN" : "PN"}</span>` : ""}
+        previewCard.innerHTML = `
+          <div class="pro-preview-image ${data.image ? "" : "is-empty"}">
+            ${imageBlock}
+            <span>${data.featured ? "Tin nổi bật" : "Ảnh tin đăng"}</span>
           </div>
-          <p>${escapeHtml(description)}</p>
-        </div>`;
+          <div class="pro-preview-content">
+            <div class="pro-preview-badges">
+              <span class="pro-preview-chip pro-preview-chip-primary">${escapeHtml(category)}</span>
+              <span class="pro-preview-chip">${escapeHtml(location)}</span>
+              ${data.featured ? `<span class="pro-preview-chip pro-preview-chip-hot">Ưu tiên hiển thị</span>` : ""}
+            </div>
+            <div class="pro-preview-title">${escapeHtml(title)}</div>
+            <div class="pro-preview-price">${escapeHtml(money(data.price))}</div>
+            <div class="pro-preview-meta">
+              <span>📍 ${escapeHtml(location)}</span>
+              <span>🏷 ${escapeHtml(category)}</span>
+              ${data.area ? `<span>📐 ${escapeHtml(data.area)} m²</span>` : ""}
+              ${data.bedrooms ? `<span>${category === "Việc làm" ? "💼" : "🛏"} ${escapeHtml(data.bedrooms)} ${category === "Việc làm" ? "năm KN" : "PN"}</span>` : ""}
+            </div>
+            <p>${escapeHtml(description)}</p>
+            <div class="pro-preview-footer">
+              <div class="pro-preview-agent">
+                <span class="pro-preview-avatar">A</span>
+                <div>
+                  <strong>Người đăng</strong>
+                  <small>Phản hồi nhanh</small>
+                </div>
+              </div>
+              <button type="button" class="pro-preview-cta">Xem chi tiết</button>
+            </div>
+          </div>`;
     };
 
     window.updatePostPreview = renderPreview;

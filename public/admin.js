@@ -360,6 +360,36 @@ function tableWrap(headers, rows) {
   return `<div class="table-wrap"><table><thead><tr>${headers.map((h) => `<th>${normalizeAdminText(h)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
 }
 
+function renderAdminTable(target, key, headers, rows, filterValues = []) {
+  if (!target) return;
+  target.innerHTML = `
+    <div class="admin-table-toolbar">
+      <label class="admin-table-search">
+        <span>Tìm nhanh</span>
+        <input id="${key}Search" type="text" placeholder="Nhập từ khóa để lọc..." />
+      </label>
+      <div class="admin-table-count" id="${key}Count">${rows.length} mục</div>
+    </div>
+    ${tableWrap(headers, rows)}
+  `;
+  const input = target.querySelector(`#${key}Search`);
+  const count = target.querySelector(`#${key}Count`);
+  const tableRows = Array.from(target.querySelectorAll("tbody tr"));
+  const source = filterValues.length ? filterValues : rows.map((row) => String(row).replace(/<[^>]+>/g, " "));
+  if (!input) return;
+  input.addEventListener("input", () => {
+    const keyword = normalizeAdminText(input.value || "").toLowerCase();
+    let visible = 0;
+    tableRows.forEach((row, index) => {
+      const haystack = normalizeAdminText(source[index] || "").toLowerCase();
+      const match = !keyword || haystack.includes(keyword);
+      row.style.display = match ? "" : "none";
+      if (match) visible += 1;
+    });
+    if (count) count.textContent = `${visible}/${rows.length} mục`;
+  });
+}
+
 function formatAdminDateTime(value) {
   if (!value) return "";
   const text = String(value).trim();
@@ -401,10 +431,8 @@ async function loadSummary() {
 
 async function loadUsers() {
   const rows = await fetchJSON("/api/admin/users");
-  userTableWrap.innerHTML = tableWrap(
-    ["ID", "Họ tên", "Username", "Email", "Vai trò", "Trạng thái", "Hành động"],
-    rows.map(
-      (u) => `<tr>
+  const tableRows = rows.map(
+    (u) => `<tr>
         <td>${u.id}</td>
         <td>${normalizeAdminText(u.full_name || "")}</td>
         <td>${normalizeAdminText(u.username || "")}</td>
@@ -413,7 +441,13 @@ async function loadUsers() {
         <td>${userStatusLabel(u.is_active)}</td>
         <td><button class="btn btn-dark admin-action-btn" onclick="toggleUser(${u.id})">${u.is_active ? "Khóa" : "Mở khóa"}</button></td>
       </tr>`
-    )
+  );
+  renderAdminTable(
+    userTableWrap,
+    "userTable",
+    ["ID", "Họ tên", "Username", "Email", "Vai trò", "Trạng thái", "Hành động"],
+    tableRows,
+    rows.map((u) => `${u.id} ${u.full_name || ""} ${u.username || ""} ${u.email || ""} ${u.role || ""}`)
   );
 }
 
@@ -425,10 +459,8 @@ async function toggleUser(id) {
 
 async function loadPostsAdmin() {
   const rows = await fetchJSON("/api/admin/posts");
-  postTableWrap.innerHTML = tableWrap(
-    ["ID", "Tiêu đề", "User", "Danh mục", "Giá", "Views", "Ghim", "Xóa"],
-    rows.map(
-      (p) => `<tr>
+  const tableRows = rows.map(
+    (p) => `<tr>
         <td>${p.id}</td>
         <td>${normalizeAdminText(p.title || "")}</td>
         <td>${normalizeAdminText(p.full_name || "")} (@${normalizeAdminText(p.username || "")})</td>
@@ -438,7 +470,13 @@ async function loadPostsAdmin() {
         <td>${boolLabel(p.is_featured)}</td>
         <td><button class="btn btn-danger admin-action-btn" onclick="deletePostAdmin(${p.id})">Xóa</button></td>
       </tr>`
-    )
+  );
+  renderAdminTable(
+    postTableWrap,
+    "postTable",
+    ["ID", "Tiêu đề", "User", "Danh mục", "Giá", "Views", "Ghim", "Xóa"],
+    tableRows,
+    rows.map((p) => `${p.id} ${p.title || ""} ${p.full_name || ""} ${p.username || ""} ${p.category || ""} ${p.price || ""}`)
   );
 }
 
@@ -452,10 +490,8 @@ async function deletePostAdmin(id) {
 
 async function loadSubscriptions() {
   const rows = await fetchJSON("/api/admin/subscriptions");
-  subscriptionTableWrap.innerHTML = tableWrap(
-    ["ID", "User", "Gói", "Giá", "Thời hạn", "Trạng thái", "Nội dung CK", "Hành động"],
-    rows.map(
-      (s) => `<tr>
+  const tableRows = rows.map(
+    (s) => `<tr>
         <td>${s.id}</td>
         <td>${normalizeAdminText(s.full_name || "")} (@${normalizeAdminText(s.username || "")})</td>
         <td>${normalizeAdminText(s.package_name || "")}</td>
@@ -465,7 +501,13 @@ async function loadSubscriptions() {
         <td>${normalizeAdminText(s.payment_note || "")}</td>
         <td><div class="admin-action-row"><button class="btn btn-primary admin-action-btn" onclick="approveSub(${s.id})">Duyệt</button><button class="btn btn-danger admin-action-btn" onclick="rejectSub(${s.id})">Từ chối</button></div></td>
       </tr>`
-    )
+  );
+  renderAdminTable(
+    subscriptionTableWrap,
+    "subscriptionTable",
+    ["ID", "User", "Gói", "Giá", "Thời hạn", "Trạng thái", "Nội dung CK", "Hành động"],
+    tableRows,
+    rows.map((s) => `${s.id} ${s.full_name || ""} ${s.username || ""} ${s.package_name || ""} ${s.status || ""} ${s.payment_note || ""}`)
   );
 }
 
@@ -485,10 +527,8 @@ async function rejectSub(id) {
 
 async function loadTopups() {
   const rows = await fetchJSON("/api/admin/topups");
-  topupTableWrap.innerHTML = tableWrap(
-    ["ID", "User", "Số tiền", "Trạng thái", "Nội dung CK", "Hành động"],
-    rows.map(
-      (t) => `<tr>
+  const tableRows = rows.map(
+    (t) => `<tr>
         <td>${t.id}</td>
         <td>${normalizeAdminText(t.full_name || "")} (@${normalizeAdminText(t.username || "")})</td>
         <td>${currency(t.amount)}</td>
@@ -496,7 +536,13 @@ async function loadTopups() {
         <td>${normalizeAdminText(t.payment_note || "")}</td>
         <td><div class="admin-action-row"><button class="btn btn-primary admin-action-btn" onclick="approveTopup(${t.id})">Duyệt</button><button class="btn btn-danger admin-action-btn" onclick="rejectTopup(${t.id})">Từ chối</button></div></td>
       </tr>`
-    )
+  );
+  renderAdminTable(
+    topupTableWrap,
+    "topupTable",
+    ["ID", "User", "Số tiền", "Trạng thái", "Nội dung CK", "Hành động"],
+    tableRows,
+    rows.map((t) => `${t.id} ${t.full_name || ""} ${t.username || ""} ${t.amount || ""} ${t.status || ""} ${t.payment_note || ""}`)
   );
 }
 

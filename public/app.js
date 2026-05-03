@@ -1587,6 +1587,19 @@ function setQuickLocation(location){
   });
   if (typeof loadPosts === "function") loadPosts();
 }
+function clearAllFilters(){
+  [filterKeyword, filterCategory, filterLocation, filterMinPrice, filterMaxPrice, filterMinArea, filterMaxArea, filterBedrooms, filterDirection, filterLegal].forEach((field) => {
+    if (field) field.value = "";
+  });
+  if (sortSelect) sortSelect.value = "newest";
+  currentCategory = "";
+  document.querySelectorAll(".filter-pill,.quick-locations button,.showcase-tab,.tab-btn").forEach((btn) => btn.classList.remove("active"));
+  document.querySelectorAll(".filter-pill,.showcase-tab,.tab-btn").forEach((btn) => {
+    const text = btn.textContent.trim().toLowerCase();
+    if (text === "tất cả" || text === "nhà bán") return;
+  });
+  loadPosts();
+}
 
 async function checkMe(){
   const data = await fetchJSON("/api/me");
@@ -1646,24 +1659,42 @@ async function loadPosts(){
   const legal = filterLegal.value || "";
   const posts = await fetchJSON(`/api/posts?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(category)}&sort=${encodeURIComponent(sort)}&min_price=${encodeURIComponent(minPrice)}&max_price=${encodeURIComponent(maxPrice)}&min_area=${encodeURIComponent(minArea)}&max_area=${encodeURIComponent(maxArea)}&bedrooms=${encodeURIComponent(bedrooms)}&house_direction=${encodeURIComponent(direction)}&legal_status=${encodeURIComponent(legal)}`);
   const filteredPosts = location ? posts.filter(p => (p.location || "").toLowerCase().includes(location.toLowerCase())) : posts;
-  if (!filteredPosts.length){ postList.innerHTML = `<div class="empty-state">Không có tin đăng phù hợp.</div>`; return; }
+  if (!filteredPosts.length){
+    postList.innerHTML = `
+      <div class="empty-state listing-empty-state">
+        <strong>Chưa có tin phù hợp với bộ lọc hiện tại.</strong>
+        <span>Thử nới giá, đổi khu vực hoặc quay lại tất cả danh mục để xem thêm lựa chọn.</span>
+        <button class="btn btn-light" type="button" onclick="clearAllFilters()">Xóa bộ lọc</button>
+      </div>`;
+    return;
+  }
   postList.innerHTML = filteredPosts.map(post => `
-    <div class="post-card fade-in">
-      <div class="post-cover">
-        ${post.is_featured ? `<div class="featured-label">TIN NỔI BẬT</div>` : ""}
-        <img class="post-image" src="${optimizeImageUrl(post.image, 720, 70)}" alt="${post.title}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.src='${DEFAULT_CARD_IMAGE}'">
-      </div>
-      <div class="post-body">
-        <div class="post-title">${post.title}</div>
-        <div class="post-price">${currency(post.price)}</div>
-        <div class="post-meta">${post.category === "Việc làm" ? `${post.category} · ${post.location} · ${currency(post.price)} · ${post.views} lượt xem` : `${post.category} · ${post.location} · ${post.area || 0}m² · ${post.bedrooms || 0} PN · ${post.house_direction || "-"} · ${post.views} lượt xem`}</div>
-        <div class="post-desc">${post.description}</div>
-        <div class="post-seller"><strong>Người bán:</strong> ${post.full_name}<br><strong>SĐT:</strong> ${post.phone || "Chưa cập nhật"}</div>
-        <div class="card-actions">
-          <button class="btn btn-light" onclick="viewDetail(${post.id})">Xem chi tiết</button>
-          <button class="btn btn-primary" onclick="toggleFavorite(${post.id})">${post.is_favorite ? "Bỏ yêu thích" : "Yêu thích"}</button>
+      <div class="post-card fade-in">
+        <div class="post-cover">
+          ${post.is_featured ? `<div class="featured-label">TIN NỔI BẬT</div>` : ""}
+          <img class="post-image" src="${optimizeImageUrl(post.image, 720, 70)}" alt="${post.title}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.src='${DEFAULT_CARD_IMAGE}'">
         </div>
-      </div>
+        <div class="post-body">
+          <div class="listing-badge-row">
+            <span class="listing-chip listing-chip-primary">${post.category}</span>
+            <span class="listing-chip">${post.location}</span>
+            ${post.is_featured ? `<span class="listing-chip listing-chip-hot">Nổi bật</span>` : `<span class="listing-chip">Tin mới</span>`}
+          </div>
+          <div class="post-title">${post.title}</div>
+          <div class="post-price">${currency(post.price)}</div>
+          <div class="post-meta">${post.category === "Việc làm" ? `${post.category} · ${post.location} · ${currency(post.price)} · ${post.views} lượt xem` : `${post.category} · ${post.location} · ${post.area || 0}m² · ${post.bedrooms || 0} PN · ${post.house_direction || "-"} · ${post.views} lượt xem`}</div>
+          <div class="post-desc">${post.description}</div>
+          <div class="post-seller listing-seller-card">
+            <div class="listing-seller-avatar">${escapeHTML((post.full_name || "A").trim().charAt(0).toUpperCase())}</div>
+            <div>
+              <strong>${post.full_name || "Người đăng"}</strong><br><small>${post.phone || "Chưa cập nhật số điện thoại"}</small>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-light" onclick="viewDetail(${post.id})">Xem chi tiết</button>
+            <button class="btn btn-primary" onclick="toggleFavorite(${post.id})">${post.is_favorite ? "Bỏ yêu thích" : "Yêu thích"}</button>
+          </div>
+        </div>
     </div>`).join("");
 }
 
@@ -1690,31 +1721,44 @@ async function viewDetail(id){
       `;
 
     detailContent.innerHTML = `
-      <div class="detail-grid">
-        <div class="detail-main">
-          <img class="detail-image" src="${optimizeImageUrl(post.image, 1280, 78)}" alt="${post.title}" loading="eager" decoding="async" fetchpriority="high" onerror="this.src='${DEFAULT_DETAIL_IMAGE}'">
-          <div class="info-card detail-description-card">
-            <strong>Mô tả</strong>
-            <div>${post.description}</div>
+        <div class="detail-grid">
+          <div class="detail-main">
+            <img class="detail-image" src="${optimizeImageUrl(post.image, 1280, 78)}" alt="${post.title}" loading="eager" decoding="async" fetchpriority="high" onerror="this.src='${DEFAULT_DETAIL_IMAGE}'">
+            <div class="detail-inline-badges">
+              <span class="listing-chip listing-chip-primary">${post.category}</span>
+              <span class="listing-chip">Mã tin #${post.id}</span>
+              ${Number(post.is_featured) === 1 ? `<span class="listing-chip listing-chip-hot">Đã xác minh khu vực</span>` : ""}
+            </div>
+            <div class="info-card detail-description-card">
+              <strong>Mô tả</strong>
+              <div>${post.description}</div>
+            </div>
           </div>
-        </div>
-        <div class="detail-meta">
-          <div class="tiny-title">Chi tiết tin đăng</div>
-          <h2>${post.title}</h2>
-          <div class="post-price">${currency(post.price)}</div>
-          <div class="detail-primary-grid">
-            <div class="info-card detail-side-card"><strong>Danh mục</strong><div>${post.category}</div></div>
-            <div class="info-card detail-side-card"><strong>Khu vực</strong><div>${post.location}</div></div>
-            <div class="info-card detail-side-card"><strong>Người bán</strong><div>${post.full_name} · @${post.username}</div></div>
-            <div class="info-card detail-side-card"><strong>Điện thoại</strong><div>${post.phone || "Chưa cập nhật"}</div></div>
+          <div class="detail-meta">
+            <div class="tiny-title">Chi tiết tin đăng</div>
+            <h2>${post.title}</h2>
+            <div class="post-price">${currency(post.price)}</div>
+            <div class="detail-primary-grid">
+              <div class="info-card detail-side-card"><strong>Danh mục</strong><div>${post.category}</div></div>
+              <div class="info-card detail-side-card"><strong>Khu vực</strong><div>${post.location}</div></div>
+              <div class="info-card detail-side-card"><strong>Người bán</strong><div>${post.full_name} · @${post.username}</div></div>
+              <div class="info-card detail-side-card"><strong>Điện thoại</strong><div>${post.phone || "Chưa cập nhật"}</div></div>
+            </div>
+            ${detailFacts}
+            <div class="detail-contact-card">
+              <div class="detail-contact-avatar">${escapeHTML((post.full_name || "A").trim().charAt(0).toUpperCase())}</div>
+              <div class="detail-contact-copy">
+                <strong>${post.full_name || "Người đăng"}</strong>
+                <small>Người đăng đã xác minh khu vực. Liên hệ trực tiếp để hỏi giá, lịch xem và tình trạng tin.</small>
+              </div>
+            </div>
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="startChat(${post.id}, ${post.user_id})">Nhắn người bán</button>
+              <button class="btn btn-light" onclick="window.location.href='tel:${post.phone || "0900000000"}'">Gọi ngay</button>
+              <button class="btn btn-light" onclick="toggleFavorite(${post.id})">${post.is_favorite ? "Bỏ yêu thích" : "Yêu thích"}</button>
+            </div>
           </div>
-          ${detailFacts}
-          <div class="card-actions">
-            <button class="btn btn-primary" onclick="startChat(${post.id}, ${post.user_id})">Nhắn người bán</button>
-            <button class="btn btn-light" onclick="toggleFavorite(${post.id})">${post.is_favorite ? "Bỏ yêu thích" : "Yêu thích"}</button>
-          </div>
-        </div>
-      </div>`;
+        </div>`;
     openModal("detailModal");
     await loadPosts();
   }catch(err){ showToast(err.message); }
