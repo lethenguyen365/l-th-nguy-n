@@ -25,6 +25,7 @@
       <a href="#users" data-admin-nav="users">Người dùng</a>
       <a href="#posts" data-admin-nav="posts">Tin đăng</a>
       <a href="#payments" data-admin-nav="payments">Thanh toán</a>
+      <a href="#packages" data-admin-nav="packages">Giá gói</a>
       <a href="#topups" data-admin-nav="topups">Nạp tiền</a>
       <a href="#aiops" data-admin-nav="aiops">AI vận hành</a>
       <a href="#announcementManager" data-admin-nav="announcementManager">Thông báo</a>
@@ -61,6 +62,12 @@
       <section id="payments" class="admin-panel admin-section" data-admin-section="payments">
         <div class="section-header"><div><div class="tiny-title">Thanh toán gói</div><h2>Danh sách đăng ký gói</h2></div></div>
         <div id="subscriptionTableWrap"></div>
+      </section>
+
+      <section id="packages" class="admin-panel admin-section" data-admin-section="packages">
+        <div class="section-header"><div><div class="tiny-title">Quản lý giá</div><h2>Điều chỉnh giá các gói đăng ký</h2></div></div>
+        <div class="admin-help-text" style="margin-bottom:16px">Sửa giá trực tiếp tại đây để phần gói ngoài website và khu đăng ký gói trong hệ thống cập nhật theo cùng một mức giá.</div>
+        <div id="adminPricingEditor" class="admin-package-editor"></div>
       </section>
 
       <section id="topups" class="admin-panel admin-section" data-admin-section="topups">
@@ -129,10 +136,6 @@
           <div class="full-col"><button class="btn btn-primary" type="submit">Lưu cài đặt</button></div>
         </form>
 
-        <div class="section-header" style="margin-top:28px"><div><div class="tiny-title">Quản lý giá</div><h2>Điều chỉnh giá các gói đăng ký</h2></div></div>
-        <div class="admin-help-text" style="margin-bottom:16px">Sửa giá trực tiếp tại đây để phần gói ngoài website và khu đăng ký gói trong hệ thống cập nhật theo cùng một mức giá.</div>
-        <div id="adminPricingEditor" class="admin-package-editor"></div>
-
         <div class="section-header" style="margin-top:28px"><div><div class="tiny-title">Bảo mật</div><h2>Đổi tài khoản và mật khẩu admin</h2></div></div>
         <form id="adminCredentialsForm" class="form-grid">
           <div>
@@ -164,6 +167,6 @@
     </main>
   </div>
 
-  <script src="admin.js?v=admin-package-pricing-20260504"></script>
+  <script src="admin.js?v=admin-package-section-20260504"></script>
 </body>
 </html>
