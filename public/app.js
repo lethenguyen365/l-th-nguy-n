@@ -1618,7 +1618,7 @@ async function checkMe(){
   const data = await fetchJSON("/api/me");
   if (!data.user){
     guestActions.classList.remove("hidden"); userActions.classList.add("hidden");
-    accountBox.innerHTML = `<div class="empty-state">Bạn chưa đăng nhập. Hãy tạo tài khoản để mua gói và đăng tin.</div>`;
+    if (window.accountBox) accountBox.innerHTML = `<div class="empty-state">Bạn chưa đăng nhập. Hãy tạo tài khoản để mua gói và đăng tin.</div>`;
     profilePreview.innerHTML = `<div class="empty-state">Đăng nhập để xem hồ sơ và gói hiện tại.</div>`;
     myPostList.innerHTML = `<div class="empty-state">Bạn cần đăng nhập để xem tin của mình.</div>`;
     mySubscriptionList.innerHTML = `<div class="empty-state">Bạn chưa có gói đăng ký nào.</div>`;
@@ -1628,17 +1628,19 @@ async function checkMe(){
   }
   data.user = sanitizeUserProfile(data.user);
   guestActions.classList.add("hidden"); userActions.classList.remove("hidden");
-  welcomeUser.textContent = `Xin chào, ${data.user.full_name}`;
+  welcomeUser.textContent = `Xin chào, ${data.user.full_name} · ${currency(data.user.wallet_balance || 0)}`;
   if (data.user.role === "admin") adminLink.classList.remove("hidden"); else adminLink.classList.add("hidden");
 
-  accountBox.innerHTML = `<div class="info-list">
-    <div class="info-card"><strong>${data.user.full_name}</strong><br>@${data.user.username}</div>
-    <div class="info-card"><strong>Vai trò:</strong> ${data.user.role}</div>
-    <div class="info-card"><strong>Số dư ví:</strong> ${currency(data.user.wallet_balance || 0)}</div>
-    <div class="info-card"><button class="btn btn-primary" type="button" onclick="createTopup()">Nạp tiền</button></div>
-    <div class="info-card"><strong>Email:</strong> ${data.user.email || "Chưa cập nhật"}</div>
-    <div class="info-card"><strong>SĐT:</strong> ${data.user.phone || "Chưa cập nhật"}</div>
-  </div>`;
+  if (window.accountBox) {
+    accountBox.innerHTML = `<div class="info-list">
+      <div class="info-card"><strong>${data.user.full_name}</strong><br>@${data.user.username}</div>
+      <div class="info-card"><strong>Vai trò:</strong> ${data.user.role}</div>
+      <div class="info-card"><strong>Số dư ví:</strong> ${currency(data.user.wallet_balance || 0)}</div>
+      <div class="info-card"><button class="btn btn-primary" type="button" onclick="createTopup()">Nạp tiền</button></div>
+      <div class="info-card"><strong>Email:</strong> ${data.user.email || "Chưa cập nhật"}</div>
+      <div class="info-card"><strong>SĐT:</strong> ${data.user.phone || "Chưa cập nhật"}</div>
+    </div>`;
+  }
 
   profileFullName.value = data.user.full_name || "";
   profileEmail.value = data.user.email || "";

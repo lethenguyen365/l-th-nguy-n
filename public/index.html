@@ -99,6 +99,7 @@
         <button class="welcome-pill" id="welcomeUser" type="button" onclick="openModal('accountModal')"></button>
         <a href="/admin" id="adminLink" class="btn btn-dark hidden">Quản trị</a>
         <button class="btn btn-light package-quick-btn" onclick="openPackagesModal()">Đăng tin</button>
+        <button class="btn btn-light" type="button" onclick="createTopup()">Nạp tiền</button>
         <button class="btn btn-danger" onclick="logout()">Đăng xuất</button>
       </div>
     </header>
@@ -253,16 +254,6 @@
 
     <main class="layout">
       <aside class="sidebar">
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <div class="tiny-title">Tài khoản</div>
-              <h3>Hồ sơ người dùng</h3>
-            </div>
-          </div>
-          <div id="accountBox"></div>
-        </div>
-
         <div class="panel">
           <div class="panel-head">
             <div>
