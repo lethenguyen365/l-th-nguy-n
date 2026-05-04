@@ -5304,3 +5304,87 @@ body.admin-body .admin-popup-preview-close{
     line-height:1.35 !important;
   }
 }
+
+/* ===== FINAL ADMIN DARK SURFACE LOCK ===== */
+body.admin-body .admin-main{
+  gap:18px !important;
+}
+
+body.admin-body :is(.admin-panel,.admin-section:not(.stats-grid),.admin-top,.stat-card,.admin-announcement-form,.admin-announcement-preview){
+  background:
+    radial-gradient(circle at top right, rgba(59,130,246,.08), transparent 34%),
+    linear-gradient(180deg, #1b2940 0%, #121c2e 100%) !important;
+  border:1px solid rgba(92,119,166,.26) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 18px 38px rgba(3,8,20,.28) !important;
+}
+
+body.admin-body :is(.admin-panel,.admin-section:not(.stats-grid)) .section-header{
+  background:transparent !important;
+  border-bottom:1px solid rgba(115,143,188,.2) !important;
+}
+
+body.admin-body :is(.admin-panel,.admin-section:not(.stats-grid)) .section-header h2{
+  color:#eef4ff !important;
+}
+
+body.admin-body :is(.admin-panel,.admin-section:not(.stats-grid)) .tiny-title{
+  background:rgba(255,209,102,.12) !important;
+  color:#ffe7a6 !important;
+  border-color:rgba(255,209,102,.28) !important;
+}
+
+body.admin-body .admin-table-toolbar{
+  background:linear-gradient(180deg, rgba(41,60,91,.94), rgba(24,37,60,.94)) !important;
+  border:1px solid rgba(92,119,166,.2) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03) !important;
+}
+
+body.admin-body .admin-table-search input{
+  background:#22314a !important;
+  color:#edf4ff !important;
+  border-color:rgba(107,131,177,.26) !important;
+}
+
+body.admin-body .admin-table-search input::placeholder{
+  color:#93a6c7 !important;
+}
+
+body.admin-body :is(tbody td,.admin-table td){
+  background:#17253b !important;
+}
+
+body.admin-body tbody tr:nth-child(odd) td{
+  background:#17253b !important;
+}
+
+body.admin-body tbody tr:nth-child(even) td{
+  background:#1b2940 !important;
+}
+
+body.admin-body tbody tr:hover td{
+  background:#22324c !important;
+}
+
+body.admin-body .admin-popup-preview-shell{
+  background:linear-gradient(180deg,#22314a,#18253b) !important;
+  border-color:rgba(92,119,166,.24) !important;
+}
+
+@media (max-width: 760px){
+  body.admin-body .admin-main{
+    gap:12px !important;
+  }
+
+  body.admin-body :is(.admin-panel,.admin-section:not(.stats-grid),.admin-top,.stat-card,.admin-announcement-form,.admin-announcement-preview){
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.03),
+      0 12px 26px rgba(3,8,20,.22) !important;
+  }
+
+  body.admin-body .admin-table-toolbar{
+    padding:12px !important;
+    border-radius:14px !important;
+  }
+}
