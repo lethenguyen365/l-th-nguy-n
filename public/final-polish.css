@@ -5388,3 +5388,17 @@ body.admin-body .admin-popup-preview-shell{
     border-radius:14px !important;
   }
 }
+
+body.admin-body :is(#users,#posts,#payments,#topups,#aiops,#announcementManager,#settings){
+  background:
+    radial-gradient(circle at top right, rgba(59,130,246,.08), transparent 34%),
+    linear-gradient(180deg, #1a2740 0%, #121c2e 100%) !important;
+  border:1px solid rgba(92,119,166,.26) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 18px 38px rgba(3,8,20,.28) !important;
+}
+
+body.admin-body :is(#users,#posts,#payments,#topups,#aiops,#announcementManager,#settings) > .section-header{
+  background:transparent !important;
+}
