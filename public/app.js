@@ -472,9 +472,9 @@ function showToast(msg, type="success"){
 
 function renderPricingCards(rows = []) {
   const grouped = {
-    viec_lam: rows.filter(r => r.category === "viec_lam"),
+    nha_dat: rows.filter(r => r.category === "vip"),
     nha_thue: rows.filter(r => r.category === "nha_thue"),
-    vip: rows.filter(r => r.category === "vip")
+    viec_lam: rows.filter(r => r.category === "viec_lam")
   };
 
   const renderCard = (pkg, groupTitle) => {
@@ -518,9 +518,9 @@ function renderPricingCards(rows = []) {
   };
 
   return `
-    ${grouped.viec_lam.map(pkg => renderCard(pkg, "Việc làm")).join("")}
+    ${grouped.nha_dat.map(pkg => renderCard(pkg, "Nhà bán · Đất nền")).join("")}
     ${grouped.nha_thue.map(pkg => renderCard(pkg, "Nhà thuê")).join("")}
-    ${grouped.vip.map(pkg => renderCard(pkg, "Gói VIP nâng cao")).join("")}
+    ${grouped.viec_lam.map(pkg => renderCard(pkg, "Việc làm")).join("")}
   `;
 }
 

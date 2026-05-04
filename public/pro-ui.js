@@ -337,6 +337,36 @@
     return pager;
   };
 
+  const captureListingScrollState = () => {
+    const pager = $("#postPager");
+    const list = $("#postList");
+    const anchor = pager || list;
+    if (!anchor) return null;
+    return {
+      anchorId: pager ? "postPager" : "postList",
+      viewportTop: anchor.getBoundingClientRect().top,
+      fallbackScrollY: window.scrollY,
+    };
+  };
+
+  const restoreListingScrollState = (state) => {
+    if (!state) return;
+    const syncScroll = () => {
+      const anchor = document.getElementById(state.anchorId) || $("#postPager") || $("#postList");
+      if (!anchor) return;
+      const delta = anchor.getBoundingClientRect().top - state.viewportTop;
+      const targetY = Math.max(0, window.scrollY + delta);
+      if (Math.abs(delta) > 1 || Math.abs(window.scrollY - state.fallbackScrollY) > 1) {
+        window.scrollTo({ top: targetY, left: window.scrollX, behavior: "auto" });
+      }
+    };
+    requestAnimationFrame(() => {
+      syncScroll();
+      setTimeout(syncScroll, 90);
+      setTimeout(syncScroll, 220);
+    });
+  };
+
   const renderPostPager = (totalPosts) => {
     const pager = ensurePostPager();
     if (!pager) return;
@@ -364,7 +394,7 @@
     const target = $("#postList");
     if (!target) return;
     if (!options.keepPage) proListingPage = 1;
-    const keepScrollY = Number.isFinite(options.keepScrollY) ? options.keepScrollY : null;
+    const scrollState = options.scrollState || null;
     syncListingCategoryTabs();
     if (!options.skipLoading) renderLoading();
     try {
@@ -394,9 +424,7 @@
       const pagePosts = posts.slice(startIndex, startIndex + PRO_POSTS_PER_PAGE);
       target.innerHTML = pagePosts.map(renderCard).join("");
       renderPostPager(posts.length);
-      if (keepScrollY !== null) {
-        requestAnimationFrame(() => window.scrollTo({ top: keepScrollY, left: window.scrollX, behavior: "auto" }));
-      }
+      restoreListingScrollState(scrollState);
     } catch (error) {
       renderPostPager(0);
       target.innerHTML = `
@@ -905,9 +933,9 @@
       const totalPages = Math.max(1, Math.ceil(posts.length / PRO_POSTS_PER_PAGE));
       const nextPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
       if (nextPage === proListingPage) return;
-      document.activeElement?.blur?.();
+      const scrollState = captureListingScrollState();
       proListingPage = nextPage;
-      proLoadPosts({ keepPage: true, skipLoading: true, keepScrollY: window.scrollY });
+      proLoadPosts({ keepPage: true, skipLoading: true, scrollState });
     };
     window.viewDetail = proViewDetail;
     setTimeout(proLoadPosts, 80);
