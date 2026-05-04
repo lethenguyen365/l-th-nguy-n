@@ -517,7 +517,6 @@
         <div>
           <span class="section-pill">Danh mục trọng điểm</span>
           <h2>Tìm nhanh đúng loại nhu cầu</h2>
-          <p>Lọc trước theo nhóm tin phổ biến để xem đúng danh sách phù hợp, ít nhiễu và dễ liên hệ hơn.</p>
         </div>
       </div>
       <div class="pro-category-rail">
@@ -548,7 +547,6 @@
         <div>
           <span class="section-pill">Khu vực đang được quan tâm</span>
           <h2>Lọc nhanh theo nơi có nhu cầu thật</h2>
-          <p>Ưu tiên các khu vực người mua, người thuê và chủ tin đang tìm nhiều để tiết kiệm thời gian lọc.</p>
         </div>
       </div>
       <div class="pro-category-rail">

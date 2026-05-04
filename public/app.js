@@ -1038,7 +1038,6 @@ function forceVietnameseUiLabels(root = document){
   });
 
   setText(".showcase-panel .tiny-title", "Tin nổi bật ngoài trang chủ");
-  setText(".showcase-panel h2", "Tin demo và tin nổi bật được hiển thị ngay khi khách vừa vào website");
   setText(".showcase-panel .soft-badge", "Ưu tiên các tin đã duyệt và có sức hút cao");
 
   setText("#marketSection .tiny-title", "Khu vực hot");
