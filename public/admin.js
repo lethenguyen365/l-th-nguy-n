@@ -629,6 +629,123 @@ async function loadAdminCredentials() {
   clearAdminCredentialInputs();
 }
 
+function packageGroupLabel(category) {
+  switch (String(category || "")) {
+    case "viec_lam":
+      return "Việc làm";
+    case "nha_thue":
+      return "Nhà thuê";
+    case "vip":
+      return "VIP nâng cao";
+    default:
+      return normalizeAdminText(category || "");
+  }
+}
+
+function renderAdminPricingEditor(pricingRows = [], packageRows = []) {
+  if (!window.adminPricingEditor) return;
+
+  const pricingHtml = pricingRows.length
+    ? pricingRows.map((row) => `
+        <form class="admin-package-card" data-pricing-form="${row.id}">
+          <div class="admin-package-card-head">
+            <div>
+              <div class="admin-package-eyebrow">${packageGroupLabel(row.category)}</div>
+              <h3>${normalizeAdminText(row.name || "")}</h3>
+            </div>
+            <span class="admin-package-duration">${Number(row.duration_days || 0)} ngày${row.feature_type === "push" ? " / lần" : ""}</span>
+          </div>
+          <label>Giá hiển thị ngoài website</label>
+          <div class="admin-package-input-row">
+            <input type="number" min="0" step="1000" value="${Number(row.price || 0)}" data-pricing-price="${row.id}" />
+            <button class="btn btn-primary" type="submit">Lưu giá</button>
+          </div>
+        </form>
+      `).join("")
+    : `<div class="empty-state">Chưa tải được bảng giá hiển thị.</div>`;
+
+  const packageHtml = packageRows.length
+    ? packageRows.map((row) => `
+        <form class="admin-package-card admin-package-card-soft" data-package-form="${row.id}">
+          <div class="admin-package-card-head">
+            <div>
+              <div class="admin-package-eyebrow">Gói hệ thống</div>
+              <h3>${normalizeAdminText(row.name || "")}</h3>
+            </div>
+            <span class="admin-package-duration">${Number(row.duration_days || 0)} ngày</span>
+          </div>
+          <label>Giá đăng ký / duyệt gói</label>
+          <div class="admin-package-input-row">
+            <input type="number" min="0" step="1000" value="${Number(row.price || 0)}" data-package-price="${row.id}" />
+            <button class="btn btn-light" type="submit">Lưu giá</button>
+          </div>
+        </form>
+      `).join("")
+    : `<div class="empty-state">Chưa tải được danh sách gói hệ thống.</div>`;
+
+  adminPricingEditor.innerHTML = `
+    <div class="admin-package-grid">
+      <div class="admin-package-group">
+        <div class="tiny-title">Giá ngoài website</div>
+        <div class="admin-package-list">${pricingHtml}</div>
+      </div>
+      <div class="admin-package-group">
+        <div class="tiny-title">Giá đăng ký trong hệ thống</div>
+        <div class="admin-package-list">${packageHtml}</div>
+      </div>
+    </div>
+  `;
+
+  adminPricingEditor.querySelectorAll("[data-pricing-form]").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const id = form.getAttribute("data-pricing-form");
+      const input = form.querySelector(`[data-pricing-price="${id}"]`);
+      const price = Number(input?.value || 0);
+      if (Number.isNaN(price) || price < 0) {
+        showAlert("Giá gói phải lớn hơn hoặc bằng 0.");
+        return;
+      }
+      const data = await fetchJSON(`/api/admin/pricing-plans/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ price }),
+      });
+      showAlert(data.message || "Đã cập nhật giá gói.");
+      await loadAdminPackages();
+    });
+  });
+
+  adminPricingEditor.querySelectorAll("[data-package-form]").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const id = form.getAttribute("data-package-form");
+      const input = form.querySelector(`[data-package-price="${id}"]`);
+      const price = Number(input?.value || 0);
+      if (Number.isNaN(price) || price < 0) {
+        showAlert("Giá gói phải lớn hơn hoặc bằng 0.");
+        return;
+      }
+      const data = await fetchJSON(`/api/admin/packages/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ price }),
+      });
+      showAlert(data.message || "Đã cập nhật giá gói.");
+      await loadAdminPackages();
+    });
+  });
+}
+
+async function loadAdminPackages() {
+  if (!window.adminPricingEditor) return;
+  const [pricingRows, packageRows] = await Promise.all([
+    fetchJSON("/api/admin/pricing-plans").catch(() => []),
+    fetchJSON("/api/admin/packages").catch(() => []),
+  ]);
+  renderAdminPricingEditor(pricingRows, packageRows);
+}
+
 settingsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = await fetchJSON("/api/admin/settings", {
@@ -732,3 +849,4 @@ loadTopups();
 loadAiOps();
 loadSettings();
 loadAdminCredentials();
+loadAdminPackages();

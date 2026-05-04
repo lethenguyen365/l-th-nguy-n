@@ -546,17 +546,18 @@ const CANONICAL_PRICING_PLANS = [
 ];
 
 async function ensureCanonicalPlans() {
-  const packageRows = await all(`SELECT id FROM packages ORDER BY id ASC`);
+  const packageRows = await all(`SELECT id, price FROM packages ORDER BY id ASC`);
 
   for (let index = 0; index < CANONICAL_PACKAGES.length; index += 1) {
     const row = packageRows[index];
     const pkg = CANONICAL_PACKAGES[index];
     if (row) {
+      const nextPrice = Number.isFinite(Number(row.price)) ? Number(row.price) : Number(pkg[1] || 0);
       await run(
         `UPDATE packages
          SET name = ?, price = ?, duration_days = ?, post_limit = ?, can_feature = ?, featured_badge = ?, description = ?, is_active = 1
          WHERE id = ?`,
-        [...pkg, row.id]
+        [pkg[0], nextPrice, pkg[2], pkg[3], pkg[4], pkg[5], pkg[6], row.id]
       );
     } else {
       await run(
@@ -574,14 +575,78 @@ async function ensureCanonicalPlans() {
     }
   }
 
-  await run(`DELETE FROM pricing_plans`);
-  for (const plan of CANONICAL_PRICING_PLANS) {
-    await run(
-      `INSERT INTO pricing_plans (category, name, price, duration_days, feature_type, is_active)
-       VALUES (?, ?, ?, ?, ?, 1)`,
-      plan
-    );
+  const pricingRows = await all(`SELECT id, price FROM pricing_plans ORDER BY id ASC`);
+  for (let index = 0; index < CANONICAL_PRICING_PLANS.length; index += 1) {
+    const row = pricingRows[index];
+    const plan = CANONICAL_PRICING_PLANS[index];
+    if (row) {
+      const nextPrice = Number.isFinite(Number(row.price)) ? Number(row.price) : Number(plan[2] || 0);
+      await run(
+        `UPDATE pricing_plans
+         SET category = ?, name = ?, price = ?, duration_days = ?, feature_type = ?, is_active = 1
+         WHERE id = ?`,
+        [plan[0], plan[1], nextPrice, plan[3], plan[4], row.id]
+      );
+    } else {
+      await run(
+        `INSERT INTO pricing_plans (category, name, price, duration_days, feature_type, is_active)
+         VALUES (?, ?, ?, ?, ?, 1)`,
+        plan
+      );
+    }
   }
+
+  if (pricingRows.length > CANONICAL_PRICING_PLANS.length) {
+    const extraIds = pricingRows.slice(CANONICAL_PRICING_PLANS.length).map((row) => row.id);
+    for (const id of extraIds) {
+      await run(`UPDATE pricing_plans SET is_active = 0 WHERE id = ?`, [id]);
+    }
+  }
+}
+
+function getPricingPlanSyncTargetFromPackageName(packageName = "") {
+  const source = String(packageName || "").trim().toLowerCase();
+  const normalized = source
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d");
+
+  if (normalized.includes("viec lam - tin thuong")) return { category: "viec_lam", name: "Tin thường" };
+  if (normalized.includes("viec lam - tin noi bat")) return { category: "viec_lam", name: "Tin nổi bật" };
+  if (normalized.includes("viec lam - vip")) return { category: "viec_lam", name: "Tin VIP" };
+  if (normalized.includes("viec lam - day tin")) return { category: "viec_lam", name: "Đẩy tin" };
+  if (normalized.includes("nha thue - tin thuong")) return { category: "nha_thue", name: "Tin thường" };
+  if (normalized.includes("nha thue - tin noi bat")) return { category: "nha_thue", name: "Tin nổi bật" };
+  if (normalized.includes("nha thue - vip")) return { category: "nha_thue", name: "Tin VIP" };
+  if (normalized.includes("nha thue - day tin")) return { category: "nha_thue", name: "Đẩy tin" };
+  if (normalized.includes("vip 3 ngay")) return { category: "vip", name: "VIP 3 ngày" };
+  if (normalized.includes("vip 7 ngay")) return { category: "vip", name: "VIP 7 ngày" };
+  if (normalized.includes("vip 15 ngay")) return { category: "vip", name: "VIP 15 ngày" };
+  if (normalized.includes("vip 30 ngay")) return { category: "vip", name: "VIP 30 ngày" };
+  return null;
+}
+
+async function syncPricingPlanFromPackage(packageRow, nextPrice) {
+  const syncTarget = getPricingPlanSyncTargetFromPackageName(packageRow?.name || "");
+  if (!syncTarget) return;
+  await run(`UPDATE pricing_plans SET price = ? WHERE category = ? AND name = ?`, [
+    Number(nextPrice || 0),
+    syncTarget.category,
+    syncTarget.name,
+  ]);
+}
+
+async function syncPackageFromPricingPlan(planRow, nextPrice) {
+  const category = String(planRow?.category || "");
+  const name = String(planRow?.name || "");
+  let packageName = "";
+
+  if (category === "viec_lam") packageName = `Việc làm - ${name === "Tin VIP" ? "VIP" : name}`;
+  if (category === "nha_thue") packageName = `Nhà thuê - ${name}`;
+  if (category === "vip") packageName = `Nhà đất - ${name}`;
+  if (!packageName) return;
+
+  await run(`UPDATE packages SET price = ? WHERE name = ?`, [Number(nextPrice || 0), packageName]);
 }
 
 function run(sql, params = []) {
@@ -1745,6 +1810,42 @@ app.put("/api/profile", requireLogin, async (req, res) => {
 
 app.get("/api/packages", async (req, res) => {
   res.json(sanitizeJsonPayload(await all(`SELECT * FROM packages WHERE is_active = 1 ORDER BY price ASC`)));
+});
+
+app.get("/api/admin/packages", requireAdmin, async (req, res) => {
+  res.json(sanitizeJsonPayload(await all(`SELECT id, name, price, duration_days, featured_badge, is_active FROM packages WHERE is_active = 1 ORDER BY id ASC`)));
+});
+
+app.put("/api/admin/packages/:id", requireAdmin, async (req, res) => {
+  const price = Number(req.body?.price ?? 0);
+  if (!Number.isFinite(price) || price < 0) {
+    return res.status(400).json({ message: "Giá gói không hợp lệ." });
+  }
+  const packageRow = await get(`SELECT id, name FROM packages WHERE id = ?`, [req.params.id]);
+  if (!packageRow) {
+    return res.status(404).json({ message: "Không tìm thấy gói đăng ký." });
+  }
+  await run(`UPDATE packages SET price = ? WHERE id = ?`, [price, req.params.id]);
+  await syncPricingPlanFromPackage(packageRow, price);
+  res.json({ message: "Đã cập nhật giá gói đăng ký." });
+});
+
+app.get("/api/admin/pricing-plans", requireAdmin, async (req, res) => {
+  res.json(sanitizeJsonPayload(await all(`SELECT id, category, name, price, duration_days, feature_type, is_active FROM pricing_plans WHERE is_active = 1 ORDER BY category ASC, price ASC, id ASC`)));
+});
+
+app.put("/api/admin/pricing-plans/:id", requireAdmin, async (req, res) => {
+  const price = Number(req.body?.price ?? 0);
+  if (!Number.isFinite(price) || price < 0) {
+    return res.status(400).json({ message: "Giá gói không hợp lệ." });
+  }
+  const planRow = await get(`SELECT id, category, name FROM pricing_plans WHERE id = ?`, [req.params.id]);
+  if (!planRow) {
+    return res.status(404).json({ message: "Không tìm thấy bảng giá gói." });
+  }
+  await run(`UPDATE pricing_plans SET price = ? WHERE id = ?`, [price, req.params.id]);
+  await syncPackageFromPricingPlan(planRow, price);
+  res.json({ message: "Đã cập nhật giá hiển thị ngoài website." });
 });
 
 app.get("/api/posts", async (req, res) => {

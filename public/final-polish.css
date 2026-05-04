@@ -5963,6 +5963,84 @@ body.admin-body .card-actions{
   flex-wrap:wrap !important;
 }
 
+body.admin-body .admin-package-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+  gap:18px !important;
+}
+
+body.admin-body .admin-package-group,
+body.admin-body .admin-package-list{
+  display:grid !important;
+  gap:12px !important;
+}
+
+body.admin-body .admin-package-card{
+  padding:16px !important;
+  border-radius:20px !important;
+  border:1px solid rgba(115,143,188,.2) !important;
+  background:
+    radial-gradient(circle at top right, rgba(59,130,246,.06), transparent 34%),
+    linear-gradient(180deg, rgba(22,35,56,.96), rgba(18,30,48,.98)) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03) !important;
+}
+
+body.admin-body .admin-package-card-soft{
+  background:
+    radial-gradient(circle at top right, rgba(245,158,11,.05), transparent 34%),
+    linear-gradient(180deg, rgba(22,35,56,.96), rgba(18,30,48,.98)) !important;
+}
+
+body.admin-body .admin-package-card-head{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  margin-bottom:12px !important;
+}
+
+body.admin-body .admin-package-card-head h3{
+  margin:4px 0 0 !important;
+  font-size:1.05rem !important;
+  line-height:1.35 !important;
+  color:var(--adm-unified-text) !important;
+}
+
+body.admin-body .admin-package-eyebrow{
+  font-size:.78rem !important;
+  font-weight:700 !important;
+  letter-spacing:.03em !important;
+  text-transform:uppercase !important;
+  color:var(--admin-text-muted) !important;
+}
+
+body.admin-body .admin-package-duration{
+  flex-shrink:0 !important;
+  padding:7px 10px !important;
+  border-radius:999px !important;
+  background:rgba(255,255,255,.04) !important;
+  border:1px solid rgba(115,143,188,.16) !important;
+  color:var(--admin-text-muted) !important;
+  font-size:.82rem !important;
+  font-weight:700 !important;
+}
+
+body.admin-body .admin-package-card label{
+  display:block !important;
+  margin-bottom:8px !important;
+}
+
+body.admin-body .admin-package-input-row{
+  display:grid !important;
+  grid-template-columns:minmax(0, 1fr) auto !important;
+  gap:10px !important;
+  align-items:center !important;
+}
+
+body.admin-body .admin-package-input-row input{
+  min-width:0 !important;
+}
+
 body.admin-body .admin-announcement-grid{
   gap:18px !important;
 }
@@ -6056,6 +6134,10 @@ body.admin-body #adminCredentialsForm .btn{
   body.admin-body .stat-card{
     padding:16px !important;
     border-radius:22px !important;
+  }
+
+  body.admin-body .admin-package-grid{
+    grid-template-columns:1fr !important;
   }
 
   body.admin-body .admin-table-toolbar{
