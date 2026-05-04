@@ -320,7 +320,9 @@ function initAdminSectionTabs() {
       item.setAttribute("aria-current", isActive ? "page" : "false");
     });
     if (updateHash) history.replaceState(null, "", `#${nextTarget}`);
-    window.scrollTo({ top: 0, behavior: window.matchMedia("(max-width: 768px)").matches ? "auto" : "smooth" });
+    if (!window.matchMedia("(max-width: 768px)").matches) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   navItems.forEach((item) => {
