@@ -337,6 +337,23 @@
     return pager;
   };
 
+  const isCompactViewport = () => window.matchMedia("(max-width: 768px)").matches;
+
+  const maybeFocusMarketSection = () => {
+    if (isCompactViewport()) return;
+    $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const loadPostsKeepingViewport = (options = {}) => {
+    const scrollState = captureListingScrollState();
+    window.proLoadPosts?.({
+      ...options,
+      keepPage: options.keepPage ?? false,
+      scrollState: isCompactViewport() ? scrollState : options.scrollState || null,
+      skipLoading: isCompactViewport() ? true : options.skipLoading,
+    });
+  };
+
   const captureListingScrollState = () => {
     const pager = $("#postPager");
     const list = $("#postList");
@@ -654,7 +671,7 @@
         window.currentListingGroup = value;
         window.currentCategory = value === LISTING_GROUP_JOBS ? "Việc làm" : "";
         syncListingCategoryTabs();
-        window.proLoadPosts?.({ keepScrollY: window.scrollY });
+        loadPostsKeepingViewport();
         return;
       }
       const clearBtn = event.target.closest("[data-clear-filter]");
@@ -663,8 +680,8 @@
       if (quickLocation) {
         const input = $("#filterLocation");
         if (input) input.value = quickLocation.dataset.proQuick;
-        window.proLoadPosts?.();
-        $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        loadPostsKeepingViewport();
+        maybeFocusMarketSection();
       }
       const quickCategory = event.target.closest("[data-pro-category]");
       if (quickCategory) {
@@ -674,8 +691,8 @@
         window.currentCategory = value;
         window.currentListingGroup = isJobCategory(value) ? LISTING_GROUP_JOBS : "";
         syncListingCategoryTabs();
-        window.proLoadPosts?.();
-        $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        loadPostsKeepingViewport();
+        maybeFocusMarketSection();
       }
     });
 
@@ -691,7 +708,7 @@
             const target = document.getElementById(targetId);
             if (target && target !== input) target.value = keyword;
           });
-          window.proLoadPosts?.();
+          loadPostsKeepingViewport();
         }, 280);
       });
     });
@@ -703,7 +720,7 @@
           window.currentListingGroup = input.value ? (isJobCategory(input.value) ? LISTING_GROUP_JOBS : "") : LISTING_GROUP_REAL_ESTATE;
           syncListingCategoryTabs();
         }
-        window.proLoadPosts?.();
+        loadPostsKeepingViewport();
       });
     });
     $("#proHeroSearchBtn")?.addEventListener("click", () => {
@@ -712,8 +729,8 @@
         const el = document.getElementById(id);
         if (el) el.value = keyword;
       });
-      window.proLoadPosts?.();
-      $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      loadPostsKeepingViewport();
+      maybeFocusMarketSection();
     });
 
     window.setCategory = (category) => {
@@ -721,8 +738,8 @@
       if (input) input.value = category || "";
       window.currentCategory = category || "";
       syncListingCategoryTabs();
-      window.proLoadPosts?.();
-      $("#marketSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      loadPostsKeepingViewport();
+      maybeFocusMarketSection();
     };
   };
 
