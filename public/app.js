@@ -768,7 +768,7 @@ function normalizeKnownVietnamese(key, value){
   if (key === "site_slogan" && (hasBrokenVietnamese(text) || /N\?n t\?ng|b\?t \?ng s\?n|G\? V\?p/i.test(text) || /N.n t.ng .*TP\.HCM/i.test(text))) {
     return FRONTEND_TEXT_FALLBACKS.site_slogan;
   }
-  if (key === "announcement" && (hasBrokenVietnamese(text) || /Ch\?o m\?ng/i.test(text) || /Ch.o m.ng b.n .*Vi.c L.m Nh. .*t/i.test(text))) {
+  if (key === "announcement" && hasBrokenVietnamese(text)) {
     return FRONTEND_TEXT_FALLBACKS.announcement;
   }
   if (key === "bio" && (hasBrokenVietnamese(text) || /T\?i kho\?n/i.test(text))) {
