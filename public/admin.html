@@ -128,10 +128,38 @@
           <div class="full-col"><label>Thông báo đầu trang</label><input id="stAnnouncement" type="text" /></div>
           <div class="full-col"><button class="btn btn-primary" type="submit">Lưu cài đặt</button></div>
         </form>
+
+        <div class="section-header" style="margin-top:28px"><div><div class="tiny-title">Bảo mật</div><h2>Đổi tài khoản và mật khẩu admin</h2></div></div>
+        <form id="adminCredentialsForm" class="form-grid">
+          <div>
+            <label>Tài khoản admin</label>
+            <input id="adminUsername" type="text" autocomplete="username" />
+          </div>
+          <div>
+            <label>Email admin</label>
+            <input id="adminEmail" type="email" autocomplete="email" />
+          </div>
+          <div>
+            <label>Mật khẩu hiện tại</label>
+            <input id="adminCurrentPassword" type="password" autocomplete="current-password" />
+          </div>
+          <div>
+            <label>Mật khẩu mới</label>
+            <input id="adminNewPassword" type="password" autocomplete="new-password" placeholder="Để trống nếu không đổi" />
+          </div>
+          <div class="full-col">
+            <label>Nhập lại mật khẩu mới</label>
+            <input id="adminConfirmPassword" type="password" autocomplete="new-password" placeholder="Nhập lại mật khẩu mới" />
+          </div>
+          <div class="full-col card-actions">
+            <button class="btn btn-primary" type="submit">Lưu tài khoản admin</button>
+            <button class="btn btn-light" type="button" id="resetAdminCredentialsBtn">Tải lại dữ liệu hiện tại</button>
+          </div>
+        </form>
       </section>
     </main>
   </div>
 
-  <script src="admin.js?v=full-ui-phase2-20260503"></script>
+  <script src="admin.js?v=admin-account-security-20260504"></script>
 </body>
 </html>

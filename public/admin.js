@@ -342,6 +342,12 @@ function updateAnnouncementPreview(value) {
   if (window.dailyAnnouncementPreview) dailyAnnouncementPreview.textContent = cleanValue;
 }
 
+function clearAdminCredentialInputs() {
+  if (window.adminCurrentPassword) adminCurrentPassword.value = "";
+  if (window.adminNewPassword) adminNewPassword.value = "";
+  if (window.adminConfirmPassword) adminConfirmPassword.value = "";
+}
+
 function collectSettingsPayload() {
   return {
     site_name: stSiteName.value,
@@ -616,6 +622,13 @@ async function loadSettings() {
   updateAnnouncementPreview(stAnnouncement.value);
 }
 
+async function loadAdminCredentials() {
+  const admin = await fetchJSON("/api/admin/account");
+  if (window.adminUsername) adminUsername.value = normalizeAdminText(admin.username || "");
+  if (window.adminEmail) adminEmail.value = normalizeAdminText(admin.email || "");
+  clearAdminCredentialInputs();
+}
+
 settingsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = await fetchJSON("/api/admin/settings", {
@@ -626,6 +639,53 @@ settingsForm.addEventListener("submit", async (e) => {
   showAlert(data.message || "Đã cập nhật cài đặt.");
   await loadSettings();
 });
+
+if (window.adminCredentialsForm) {
+  adminCredentialsForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const username = normalizeAdminText(adminUsername.value || "").trim();
+    const email = normalizeAdminText(adminEmail.value || "").trim();
+    const currentPassword = adminCurrentPassword.value || "";
+    const newPassword = adminNewPassword.value || "";
+    const confirmPassword = adminConfirmPassword.value || "";
+
+    if (!username || !email || !currentPassword) {
+      showAlert("Vui lòng nhập tài khoản, email và mật khẩu hiện tại.");
+      return;
+    }
+
+    if (newPassword || confirmPassword) {
+      if (newPassword.length < 6) {
+        showAlert("Mật khẩu mới cần từ 6 ký tự trở lên.");
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        showAlert("Mật khẩu mới nhập lại chưa khớp.");
+        return;
+      }
+    }
+
+    const data = await fetchJSON("/api/admin/account", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username,
+        email,
+        current_password: currentPassword,
+        new_password: newPassword,
+      }),
+    });
+
+    showAlert(data.message || "Đã cập nhật tài khoản admin.");
+    await loadAdminCredentials();
+  });
+}
+
+if (window.resetAdminCredentialsBtn) {
+  resetAdminCredentialsBtn.addEventListener("click", () => {
+    loadAdminCredentials();
+  });
+}
 
 if (window.dailyAnnouncement) {
   dailyAnnouncement.addEventListener("input", () => {
@@ -671,3 +731,4 @@ loadSubscriptions();
 loadTopups();
 loadAiOps();
 loadSettings();
+loadAdminCredentials();

@@ -2740,6 +2740,58 @@ app.get("/api/admin/settings", requireAdmin, async (req, res) => {
   res.json(normalizeSettingsRow(await get(`SELECT * FROM settings WHERE id = 1`)));
 });
 
+app.get("/api/admin/account", requireAdmin, async (req, res) => {
+  const admin = await get(`SELECT id, username, email FROM users WHERE id = ? AND role = 'admin'`, [req.session.user.id]);
+  if (!admin) return res.status(404).json({ message: "Không tìm thấy tài khoản admin." });
+  res.json(admin);
+});
+
+app.put("/api/admin/account", requireAdmin, async (req, res) => {
+  try {
+    const { username, email, current_password, new_password } = req.body;
+    const nextUsername = String(username || "").trim();
+    const nextEmail = String(email || "").trim();
+    const currentPassword = String(current_password || "");
+    const newPassword = String(new_password || "");
+
+    if (!nextUsername || !nextEmail || !currentPassword) {
+      return res.status(400).json({ message: "Vui lòng nhập tài khoản, email và mật khẩu hiện tại." });
+    }
+
+    const admin = await get(`SELECT * FROM users WHERE id = ? AND role = 'admin'`, [req.session.user.id]);
+    if (!admin) return res.status(404).json({ message: "Không tìm thấy tài khoản admin." });
+
+    const ok = await bcrypt.compare(currentPassword, admin.password);
+    if (!ok) return res.status(400).json({ message: "Mật khẩu hiện tại không đúng." });
+
+    const duplicated = await get(
+      `SELECT id FROM users WHERE (username = ? OR email = ?) AND id != ? LIMIT 1`,
+      [nextUsername, nextEmail, admin.id]
+    );
+    if (duplicated) {
+      return res.status(400).json({ message: "Tài khoản hoặc email này đã tồn tại." });
+    }
+
+    let nextPasswordHash = admin.password;
+    if (newPassword) {
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: "Mật khẩu mới cần từ 6 ký tự trở lên." });
+      }
+      nextPasswordHash = await bcrypt.hash(newPassword, 10);
+    }
+
+    await run(
+      `UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?`,
+      [nextUsername, nextEmail, nextPasswordHash, admin.id]
+    );
+
+    req.session.user = { id: admin.id, role: "admin" };
+    res.json({ message: "Đã cập nhật tài khoản admin." });
+  } catch {
+    res.status(500).json({ message: "Không thể cập nhật tài khoản admin." });
+  }
+});
+
 app.put("/api/admin/settings", requireAdmin, async (req, res) => {
   const { site_name, site_slogan, qr_image, bank_name, bank_account_name, bank_account_number, transfer_note_prefix, hero_banner, announcement } = req.body;
   const nextSiteName = normalizeSettingText("site_name", site_name);
