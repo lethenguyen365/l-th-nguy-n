@@ -1628,7 +1628,10 @@ async function checkMe(){
   }
   data.user = sanitizeUserProfile(data.user);
   guestActions.classList.add("hidden"); userActions.classList.remove("hidden");
-  welcomeUser.textContent = `Xin chào, ${data.user.full_name} · ${currency(data.user.wallet_balance || 0)}`;
+  welcomeUser.innerHTML = `
+    <span class="welcome-name">Xin chào, ${escapeHTML(data.user.full_name || "bạn")}</span>
+    <span class="welcome-balance">${escapeHTML(currency(data.user.wallet_balance || 0))}</span>
+  `;
   if (data.user.role === "admin") adminLink.classList.remove("hidden"); else adminLink.classList.add("hidden");
 
   if (window.accountBox) {
