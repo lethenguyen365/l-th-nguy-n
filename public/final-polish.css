@@ -5505,6 +5505,21 @@ body.pro-ui .theme-toggle{
   width:46px !important;
   min-width:46px !important;
   padding:0 !important;
+  display:grid !important;
+  place-items:center !important;
+  line-height:1 !important;
+  text-align:center !important;
+}
+
+body.pro-ui .theme-toggle span,
+body.pro-ui .theme-toggle i,
+body.pro-ui .theme-toggle svg{
+  margin:0 auto !important;
+  display:block !important;
+}
+
+body.pro-ui .main-nav a{
+  line-height:1 !important;
 }
 
 body.pro-ui .home-announcement{
