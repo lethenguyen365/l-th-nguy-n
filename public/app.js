@@ -140,7 +140,12 @@ function setSiteTheme(theme){
   setTimeout(applyDarkModeInlineFormFix, 120);
 
   document.querySelectorAll(".theme-toggle").forEach((button) => {
-    button.textContent = mode === "dark" ? "☀️" : "🌙";
+    const icon = button.querySelector(".theme-toggle-icon");
+    if (icon) {
+      icon.textContent = mode === "dark" ? "☀️" : "🌙";
+    } else {
+      button.textContent = mode === "dark" ? "☀️" : "🌙";
+    }
     button.setAttribute("aria-label", mode === "dark" ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối");
     button.setAttribute("title", mode === "dark" ? "Chế độ sáng" : "Chế độ tối");
   });
