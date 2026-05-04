@@ -5516,9 +5516,11 @@ body.pro-ui .theme-toggle .theme-toggle-icon{
   height:20px !important;
   display:grid !important;
   place-items:center !important;
-  font-size:18px !important;
+  font-size:21px !important;
   line-height:1 !important;
   margin:0 auto !important;
+  font-family:"Poppins", Arial, sans-serif !important;
+  transform:translateY(-1px) !important;
 }
 
 body.pro-ui .theme-toggle span,
@@ -5530,6 +5532,28 @@ body.pro-ui .theme-toggle svg{
 
 body.pro-ui .main-nav a{
   line-height:1 !important;
+}
+
+body.pro-ui .pro-filter-chip{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  padding:8px 12px 8px 14px !important;
+}
+
+body.pro-ui .pro-filter-chip button{
+  width:30px !important;
+  min-width:30px !important;
+  height:30px !important;
+  margin-left:2px !important;
+  padding:0 !important;
+  display:grid !important;
+  place-items:center !important;
+  line-height:1 !important;
+  text-align:center !important;
+  font-size:18px !important;
+  font-weight:700 !important;
+  border-radius:50% !important;
 }
 
 body.pro-ui .home-announcement{
