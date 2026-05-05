@@ -6304,3 +6304,399 @@ body.dark-mode.pro-ui .welcome-pill .welcome-balance{
     width:100% !important;
   }
 }
+
+/* Final marketplace premium pass */
+body:not(.admin-body).pro-ui{
+  background:
+    radial-gradient(circle at top left, rgba(251, 191, 36, .12), transparent 28%),
+    radial-gradient(circle at top right, rgba(37, 99, 235, .10), transparent 34%),
+    linear-gradient(180deg, #f8fbff 0%, #f6f7fb 52%, #eff3fb 100%) !important;
+}
+
+body:not(.admin-body).pro-ui .page-noise{
+  opacity:.42 !important;
+}
+
+body:not(.admin-body).pro-ui .top-strip{
+  backdrop-filter:blur(16px) !important;
+  background:linear-gradient(90deg, #7c3aed 0%, #6d28d9 100%) !important;
+  box-shadow:0 10px 28px rgba(76, 29, 149, .18) !important;
+}
+
+body:not(.admin-body).pro-ui .top-strip-inner{
+  letter-spacing:.02em !important;
+  font-weight:700 !important;
+}
+
+body:not(.admin-body).pro-ui :is(.site-shell > .topbar, header.topbar){
+  border:1px solid rgba(203, 213, 225, .72) !important;
+  box-shadow:0 18px 44px rgba(15, 23, 42, .10), 0 3px 12px rgba(37, 99, 235, .06) !important;
+}
+
+body:not(.admin-body).pro-ui .brand-wrap{
+  gap:16px !important;
+}
+
+body:not(.admin-body).pro-ui .topbar .site-logo{
+  box-shadow:0 16px 30px rgba(15, 23, 42, .10) !important;
+}
+
+body:not(.admin-body).pro-ui :is(.topbar .brand,#siteName){
+  text-shadow:0 2px 0 rgba(255,255,255,.4) !important;
+}
+
+body:not(.admin-body).pro-ui .search-large{
+  border:1px solid rgba(191, 219, 254, .85) !important;
+  box-shadow:0 12px 30px rgba(37, 99, 235, .10), inset 0 1px 0 rgba(255,255,255,.75) !important;
+}
+
+body:not(.admin-body).pro-ui .search-large input{
+  color:#0f172a !important;
+  font-weight:500 !important;
+}
+
+body:not(.admin-body).pro-ui :is(.btn,.welcome-pill,.theme-toggle){
+  transition:transform .18s ease, box-shadow .18s ease, background-color .18s ease, border-color .18s ease !important;
+}
+
+body:not(.admin-body).pro-ui :is(.btn,.theme-toggle):hover{
+  transform:translateY(-1px) !important;
+  box-shadow:0 14px 28px rgba(15, 23, 42, .12) !important;
+}
+
+body:not(.admin-body).pro-ui .btn-primary{
+  background:linear-gradient(135deg, #2563eb 0%, #365ee9 52%, #294eda 100%) !important;
+  box-shadow:0 16px 30px rgba(37, 99, 235, .22) !important;
+}
+
+body:not(.admin-body).pro-ui .btn-danger{
+  background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  box-shadow:0 14px 28px rgba(239, 68, 68, .18) !important;
+}
+
+body:not(.admin-body).pro-ui .btn-light{
+  background:linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%) !important;
+  border-color:#d8e1f2 !important;
+}
+
+body:not(.admin-body).pro-ui .theme-toggle{
+  box-shadow:0 12px 24px rgba(15, 23, 42, .10) !important;
+}
+
+body:not(.admin-body).pro-ui .home-announcement{
+  border:1px solid rgba(250, 204, 21, .28) !important;
+  box-shadow:0 18px 36px rgba(250, 204, 21, .10), 0 6px 14px rgba(15, 23, 42, .05) !important;
+}
+
+body:not(.admin-body).pro-ui .home-announcement-text{
+  font-weight:700 !important;
+}
+
+body:not(.admin-body).pro-ui .main-nav{
+  border:1px solid rgba(203, 213, 225, .78) !important;
+  box-shadow:0 18px 40px rgba(15, 23, 42, .08) !important;
+}
+
+body:not(.admin-body).pro-ui .main-nav a{
+  min-height:54px !important;
+  font-weight:700 !important;
+}
+
+body:not(.admin-body).pro-ui .main-nav .nav-cta{
+  box-shadow:0 14px 28px rgba(37, 99, 235, .18) !important;
+}
+
+body:not(.admin-body).pro-ui :is(.commercial-hero,.hero-section,.market-section,.panel,.showcase-panel,.packages-section,.post-section,.site-footer){
+  border:1px solid rgba(214, 223, 237, .84) !important;
+  box-shadow:0 20px 44px rgba(15, 23, 42, .08), 0 3px 12px rgba(15, 23, 42, .04) !important;
+}
+
+body:not(.admin-body).pro-ui :is(.hero-slide-content h1,.hero-left h1,.section-intro h2,.showcase-panel h2,.posts-feed-shell h2){
+  letter-spacing:-.04em !important;
+}
+
+body:not(.admin-body).pro-ui :is(.filter-pill,.showcase-tab,.tab-btn,.quick-locations button,.category-tab,.listing-category-tab){
+  min-height:46px !important;
+  font-weight:700 !important;
+  border-color:#d8e1f2 !important;
+}
+
+body:not(.admin-body).pro-ui :is(.showcase-card,.post-card,.pricing-card,.info-card,.detail-description-card,.detail-side-card,.listing-card,.pro-listing-card){
+  border:1px solid rgba(222, 229, 241, .92) !important;
+  box-shadow:0 18px 40px rgba(15, 23, 42, .08), 0 2px 8px rgba(15, 23, 42, .03) !important;
+}
+
+body:not(.admin-body).pro-ui :is(.showcase-card,.post-card,.pricing-card,.listing-card,.pro-listing-card):hover{
+  box-shadow:0 24px 50px rgba(15, 23, 42, .12), 0 8px 20px rgba(37, 99, 235, .10) !important;
+}
+
+body:not(.admin-body).pro-ui :is(.showcase-title,.listing-title,.post-title,.pro-listing-title){
+  color:#172554 !important;
+  letter-spacing:-.02em !important;
+}
+
+body:not(.admin-body).pro-ui :is(.showcase-location,.post-location,.listing-location,.pro-listing-location,.post-desc,.listing-meta,.detail-meta){
+  color:#5f6f86 !important;
+}
+
+body:not(.admin-body).pro-ui :is(.showcase-price,.post-price,.listing-price,.pro-listing-price,.detail-price){
+  text-shadow:none !important;
+}
+
+body:not(.admin-body).pro-ui .announcement-popup-card{
+  background:linear-gradient(180deg, #ffffff 0%, #f8fbff 100%) !important;
+  border:1px solid rgba(219, 229, 243, .95) !important;
+  box-shadow:0 30px 80px rgba(15, 23, 42, .24) !important;
+}
+
+body:not(.admin-body).pro-ui .announcement-popup-message{
+  line-height:1.2 !important;
+  letter-spacing:-.03em !important;
+}
+
+body:not(.admin-body).pro-ui :is(input,select,textarea){
+  border-color:#d5deee !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7), 0 8px 18px rgba(15, 23, 42, .04) !important;
+}
+
+body:not(.admin-body).pro-ui :is(input,select,textarea):focus{
+  border-color:#6aa2ff !important;
+  box-shadow:0 0 0 4px rgba(96, 165, 250, .14), 0 12px 26px rgba(37, 99, 235, .10) !important;
+}
+
+body:not(.admin-body).pro-ui .site-footer{
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.96), rgba(242,246,255,.95)) !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body).pro-ui,
+body.dark-mode.pro-ui{
+  background:
+    radial-gradient(circle at top left, rgba(96, 165, 250, .12), transparent 28%),
+    radial-gradient(circle at top right, rgba(251, 191, 36, .10), transparent 32%),
+    linear-gradient(180deg, #08101e 0%, #0b1324 54%, #0d1629 100%) !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body).pro-ui :is(.site-shell > .topbar, header.topbar,.main-nav,.commercial-hero,.hero-section,.market-section,.panel,.showcase-panel,.packages-section,.post-section,.site-footer,.announcement-popup-card,.showcase-card,.post-card,.pricing-card,.detail-side-card,.detail-description-card,.listing-card,.pro-listing-card),
+body.dark-mode.pro-ui :is(.site-shell > .topbar, header.topbar,.main-nav,.commercial-hero,.hero-section,.market-section,.panel,.showcase-panel,.packages-section,.post-section,.site-footer,.announcement-popup-card,.showcase-card,.post-card,.pricing-card,.detail-side-card,.detail-description-card,.listing-card,.pro-listing-card){
+  background:
+    linear-gradient(180deg, rgba(19, 31, 52, .98), rgba(12, 22, 38, .98)) !important;
+  border-color:rgba(56, 76, 109, .92) !important;
+  box-shadow:0 22px 48px rgba(2, 6, 23, .40), inset 0 1px 0 rgba(255,255,255,.03) !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body).pro-ui :is(.showcase-title,.listing-title,.post-title,.pro-listing-title,.brand,#siteName,.section-intro h2,.hero-left h1,.showcase-panel h2,.posts-feed-shell h2),
+body.dark-mode.pro-ui :is(.showcase-title,.listing-title,.post-title,.pro-listing-title,.brand,#siteName,.section-intro h2,.hero-left h1,.showcase-panel h2,.posts-feed-shell h2){
+  color:#f8fbff !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body).pro-ui :is(.showcase-location,.post-location,.listing-location,.pro-listing-location,.post-desc,.listing-meta,.detail-meta,.home-announcement-text),
+body.dark-mode.pro-ui :is(.showcase-location,.post-location,.listing-location,.pro-listing-location,.post-desc,.listing-meta,.detail-meta,.home-announcement-text){
+  color:#aebbd0 !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body).pro-ui .search-large,
+body.dark-mode.pro-ui .search-large{
+  border-color:rgba(73, 97, 138, .95) !important;
+  box-shadow:0 18px 36px rgba(2, 6, 23, .35), inset 0 1px 0 rgba(255,255,255,.03) !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body).pro-ui .search-large input,
+body.dark-mode.pro-ui .search-large input{
+  color:#f8fbff !important;
+}
+
+html[data-theme="dark"] body:not(.admin-body).pro-ui :is(input,select,textarea),
+body.dark-mode.pro-ui :is(input,select,textarea){
+  border-color:#49618a !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 8px 18px rgba(2, 6, 23, .16) !important;
+}
+
+body.admin-body{
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, .12), transparent 26%),
+    radial-gradient(circle at top right, rgba(251, 191, 36, .10), transparent 22%),
+    linear-gradient(180deg, #081120 0%, #0b1324 50%, #0d1628 100%) !important;
+}
+
+body.admin-body .admin-sidebar{
+  background:linear-gradient(180deg, rgba(12, 22, 38, .98), rgba(9, 17, 31, .98)) !important;
+  border-color:rgba(50, 69, 102, .9) !important;
+  box-shadow:0 24px 46px rgba(2, 6, 23, .34) !important;
+}
+
+body.admin-body .admin-logo{
+  letter-spacing:-.04em !important;
+}
+
+body.admin-body .admin-sidebar a{
+  min-height:54px !important;
+  border-color:rgba(49, 67, 98, .78) !important;
+  background:rgba(20, 31, 52, .66) !important;
+}
+
+body.admin-body .admin-sidebar a:hover{
+  transform:translateX(2px) !important;
+  background:rgba(28, 42, 68, .92) !important;
+}
+
+body.admin-body .admin-top{
+  background:linear-gradient(180deg, rgba(21, 33, 55, .98), rgba(16, 25, 44, .98)) !important;
+  border-color:rgba(55, 75, 110, .88) !important;
+  box-shadow:0 24px 52px rgba(2, 6, 23, .34) !important;
+}
+
+body.admin-body .admin-top h1{
+  letter-spacing:-.05em !important;
+  text-wrap:balance !important;
+}
+
+body.admin-body .stat-card,
+body.admin-body .admin-panel,
+body.admin-body .admin-announcement-form,
+body.admin-body .admin-announcement-preview,
+body.admin-body .admin-popup-preview-card,
+body.admin-body .admin-pricing-card{
+  background:linear-gradient(180deg, rgba(22, 34, 56, .98), rgba(15, 24, 42, .98)) !important;
+  border-color:rgba(57, 76, 110, .88) !important;
+  box-shadow:0 22px 46px rgba(2, 6, 23, .28) !important;
+}
+
+body.admin-body .section-header{
+  align-items:flex-end !important;
+  gap:14px !important;
+}
+
+body.admin-body .section-header h2{
+  letter-spacing:-.04em !important;
+  text-wrap:balance !important;
+}
+
+body.admin-body .admin-panel :is(input,select,textarea){
+  background:linear-gradient(180deg, #223250, #1d2a44) !important;
+  border-color:#4a6185 !important;
+  color:#f8fbff !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 8px 16px rgba(2, 6, 23, .12) !important;
+}
+
+body.admin-body .admin-panel :is(input,select,textarea)::placeholder{
+  color:#a4b3cb !important;
+}
+
+body.admin-body .admin-panel .btn-primary{
+  background:linear-gradient(135deg, #2563eb 0%, #315de7 100%) !important;
+  box-shadow:0 14px 30px rgba(37, 99, 235, .22) !important;
+}
+
+body.admin-body .admin-panel .btn-danger{
+  background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+}
+
+body.admin-body :is(table thead th){
+  background:rgba(34, 49, 79, .96) !important;
+}
+
+body.admin-body :is(table tbody tr:nth-child(odd) td){
+  background:rgba(23, 35, 58, .98) !important;
+}
+
+body.admin-body :is(table tbody tr:nth-child(even) td){
+  background:rgba(18, 29, 49, .98) !important;
+}
+
+body.admin-body :is(table tbody tr:hover td){
+  background:rgba(30, 45, 72, .98) !important;
+}
+
+body.admin-body .admin-table-toolbar{
+  background:rgba(25, 37, 61, .82) !important;
+  border-color:rgba(57, 76, 110, .76) !important;
+}
+
+body.admin-body .admin-help-text{
+  color:#aebbd0 !important;
+}
+
+@media (max-width: 768px){
+  body:not(.admin-body).pro-ui .top-strip{
+    display:none !important;
+  }
+
+  body:not(.admin-body).pro-ui :is(.site-shell > .topbar, header.topbar){
+    padding:14px !important;
+  }
+
+  body:not(.admin-body).pro-ui :is(.commercial-hero,.hero-section,.market-section,.panel,.showcase-panel,.packages-section,.post-section,.site-footer){
+    border-radius:24px !important;
+  }
+
+  body:not(.admin-body).pro-ui :is(.showcase-card,.post-card,.pricing-card,.listing-card,.pro-listing-card){
+    border-radius:22px !important;
+  }
+
+  body.admin-body .admin-top,
+  body.admin-body .admin-panel,
+  body.admin-body .stat-card{
+    border-radius:22px !important;
+  }
+}
+
+@media (max-width: 430px){
+  body:not(.admin-body).pro-ui .topbar .site-logo{
+    width:62px !important;
+    height:62px !important;
+  }
+
+  body:not(.admin-body).pro-ui :is(.topbar .brand,#siteName){
+    font-size:clamp(1.45rem,7.2vw,1.9rem) !important;
+  }
+
+  body:not(.admin-body).pro-ui .topbar .search-large{
+    grid-template-columns:minmax(0,1fr) 110px !important;
+  }
+
+  body:not(.admin-body).pro-ui :is(#guestActions,#userActions,.top-actions){
+    gap:8px !important;
+  }
+
+  body:not(.admin-body).pro-ui :is(.btn,.welcome-pill,.theme-toggle){
+    min-height:42px !important;
+    font-size:.92rem !important;
+  }
+
+  body:not(.admin-body).pro-ui .main-nav{
+    padding:10px !important;
+    gap:8px !important;
+  }
+
+  body:not(.admin-body).pro-ui .main-nav a{
+    min-height:42px !important;
+    font-size:.95rem !important;
+  }
+
+  body:not(.admin-body).pro-ui :is(.commercial-hero,.hero-section,.market-section,.panel,.showcase-panel,.packages-section,.post-section,.site-footer){
+    padding:16px !important;
+  }
+
+  body.admin-body .admin-sidebar{
+    gap:8px !important;
+  }
+
+  body.admin-body .admin-sidebar a{
+    min-height:46px !important;
+    font-size:.92rem !important;
+    border-radius:16px !important;
+  }
+
+  body.admin-body .admin-top{
+    padding:16px !important;
+  }
+
+  body.admin-body .admin-top h1{
+    font-size:clamp(1.8rem,9vw,2.35rem) !important;
+  }
+
+  body.admin-body .section-header h2{
+    font-size:clamp(1.75rem,8vw,2.15rem) !important;
+  }
+}
