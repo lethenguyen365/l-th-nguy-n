@@ -5965,7 +5965,7 @@ body.admin-body .card-actions{
 
 body.admin-body .admin-package-grid{
   display:grid !important;
-  grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+  grid-template-columns:1fr !important;
   gap:18px !important;
 }
 
@@ -5973,6 +5973,11 @@ body.admin-body .admin-package-group,
 body.admin-body .admin-package-list{
   display:grid !important;
   gap:12px !important;
+}
+
+body.admin-body .admin-package-list{
+  grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+  align-items:start !important;
 }
 
 body.admin-body .admin-package-card{
@@ -6137,6 +6142,10 @@ body.admin-body #adminCredentialsForm .btn{
   }
 
   body.admin-body .admin-package-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  body.admin-body .admin-package-list{
     grid-template-columns:1fr !important;
   }
 
