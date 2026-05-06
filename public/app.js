@@ -2103,13 +2103,35 @@ registerForm.addEventListener("submit", async (e) => {
 
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+  const submitButton = loginForm.querySelector('button[type="submit"], .btn-primary');
+  const originalLabel = submitButton ? submitButton.textContent : "";
   try{
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Đang đăng nhập...";
+    }
     const data = await fetchJSON("/api/login", {
       method:"POST", headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({ username: loginUsername.value, password: loginPassword.value })
     });
-    showToast(data.message); closeModal("loginModal"); e.target.reset(); await checkMe(); await loadPosts();
+    showToast(data.message);
+    closeModal("loginModal");
+    e.target.reset();
+    if (data?.user?.role === "admin") {
+      setTimeout(() => {
+        location.href = "/admin";
+      }, 120);
+      return;
+    }
+    await checkMe();
+    await loadPosts();
   }catch(err){ showToast(err.message); }
+  finally{
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = originalLabel || "Đăng nhập";
+    }
+  }
 });
 
 async function logout(){ await fetchJSON("/api/logout", { method:"POST" }); location.reload(); }
