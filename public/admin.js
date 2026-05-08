@@ -575,20 +575,50 @@ async function loadAiOps() {
   ]);
 
   aiOpsSummary.innerHTML = `
-    <div class="info-list">
-      <div class="info-card"><strong>Báo cáo AI</strong><div>${reports.length}</div></div>
-      <div class="info-card"><strong>Hành động AI</strong><div>${actions.length}</div></div>
+    <div class="admin-ai-summary-grid">
+      <div class="admin-ai-stat-card">
+        <div class="admin-ai-stat-label">Báo cáo AI</div>
+        <div class="admin-ai-stat-value">${reports.length}</div>
+        <div class="admin-ai-stat-note">Tổng số báo cáo đã tạo</div>
+      </div>
+      <div class="admin-ai-stat-card">
+        <div class="admin-ai-stat-label">Hành động AI</div>
+        <div class="admin-ai-stat-value">${actions.length}</div>
+        <div class="admin-ai-stat-note">Lịch sử thao tác đã lưu</div>
+      </div>
     </div>`;
 
-  aiReportsWrap.innerHTML = tableWrap(
-    ["ID", "Loại", "Tiêu đề", "Nội dung", "Thời gian"],
-    reports.map((r) => `<tr><td>${r.id}</td><td>${normalizeAdminText(r.report_type || "")}</td><td>${normalizeAdminText(r.title || "")}</td><td>${normalizeAdminText(r.body || "")}</td><td>${formatAdminDateTime(r.created_at)}</td></tr>`)
-  );
+  aiReportsWrap.innerHTML = `
+    <div class="admin-ai-panel">
+      <div class="admin-ai-panel-head">
+        <div>
+          <div class="tiny-title">Báo cáo</div>
+          <h3>Danh sách báo cáo AI</h3>
+        </div>
+        <span class="admin-ai-count">${reports.length} mục</span>
+      </div>
+      ${tableWrap(
+        ["ID", "Loại", "Tiêu đề", "Nội dung", "Thời gian"],
+        reports.map((r) => `<tr><td>${r.id}</td><td>${normalizeAdminText(r.report_type || "")}</td><td>${normalizeAdminText(r.title || "")}</td><td>${normalizeAdminText(r.body || "")}</td><td>${formatAdminDateTime(r.created_at)}</td></tr>`)
+      )}
+    </div>
+  `;
 
-  aiActionsWrap.innerHTML = tableWrap(
-    ["ID", "Post", "User", "Loại", "Trạng thái", "Ghi chú", "Thời gian"],
-    actions.map((a) => `<tr><td>${a.id}</td><td>${a.post_id || ""}</td><td>${a.user_id || ""}</td><td>${normalizeAdminText(a.action_type || "")}</td><td>${normalizeAdminText(a.action_status || "")}</td><td>${normalizeAdminText(a.note || "")}</td><td>${formatAdminDateTime(a.created_at)}</td></tr>`)
-  );
+  aiActionsWrap.innerHTML = `
+    <div class="admin-ai-panel">
+      <div class="admin-ai-panel-head">
+        <div>
+          <div class="tiny-title">Hành động</div>
+          <h3>Lịch sử xử lý AI</h3>
+        </div>
+        <span class="admin-ai-count">${actions.length} mục</span>
+      </div>
+      ${tableWrap(
+        ["ID", "Post", "User", "Loại", "Trạng thái", "Ghi chú", "Thời gian"],
+        actions.map((a) => `<tr><td>${a.id}</td><td>${a.post_id || ""}</td><td>${a.user_id || ""}</td><td>${normalizeAdminText(a.action_type || "")}</td><td>${normalizeAdminText(a.action_status || "")}</td><td>${normalizeAdminText(a.note || "")}</td><td>${formatAdminDateTime(a.created_at)}</td></tr>`)
+      )}
+    </div>
+  `;
 }
 
 async function runAiRenewal() {

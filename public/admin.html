@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css?v=poppins-encoding-20260423" />
   <link rel="stylesheet" href="admin-pro.css?v=poppins-encoding-20260423" />
-  <link rel="stylesheet" href="final-polish.css?v=premium-pass-20260506" />
+  <link rel="stylesheet" href="final-polish.css?v=ai-ops-polish-20260508" />
 </head>
 <body class="admin-body">
   <div class="admin-orb admin-orb-1"></div>
@@ -83,16 +83,21 @@
           <div>
             <div class="tiny-title">AI vận hành</div>
             <h2>Duyệt tin · Chống spam · Gợi ý VIP · Báo cáo</h2>
+            <div class="admin-help-text">Chạy nhanh từng tác vụ AI và theo dõi báo cáo, lịch sử xử lý ngay trong một màn hình gọn.</div>
           </div>
-          <div class="card-actions">
+          <div class="card-actions admin-ai-toolbar">
             <button class="btn btn-primary" type="button" onclick="runAiRenewal()">Nhắc gia hạn</button>
             <button class="btn btn-light" type="button" onclick="runAiVip()">Gợi ý VIP</button>
             <button class="btn btn-light" type="button" onclick="runAiSpam()">Quét spam</button>
           </div>
         </div>
-        <div id="aiOpsSummary" class="empty-state">Chạy công cụ AI để tạo báo cáo.</div>
-        <div id="aiReportsWrap" style="margin-top:16px"></div>
-        <div id="aiActionsWrap" style="margin-top:16px"></div>
+        <div class="admin-ai-shell">
+          <div id="aiOpsSummary" class="admin-ai-summary">Chạy công cụ AI để tạo báo cáo.</div>
+          <div class="admin-ai-grid">
+            <div id="aiReportsWrap"></div>
+            <div id="aiActionsWrap"></div>
+          </div>
+        </div>
       </section>
 
       <section id="announcementManager" class="admin-panel admin-section" data-admin-section="announcementManager">
@@ -170,6 +175,6 @@
     </main>
   </div>
 
-  <script src="admin.js?v=remove-public-price-block-20260506"></script>
+  <script src="admin.js?v=ai-ops-polish-20260508"></script>
 </body>
 </html>
